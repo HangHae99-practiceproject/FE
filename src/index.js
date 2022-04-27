@@ -7,17 +7,22 @@ import { store } from './app/store';
 import { Provider } from 'react-redux'
 import CustomRouter from './customRouter'
 import { createBrowserHistory } from "history";
+import GlobalStyle from './Styles/GlobalStyle';
 
 
 const history = createBrowserHistory();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-  <Provider store={store}>
-    <CustomRouter history={history}>
-      <App />
-    </CustomRouter>
-  </Provider>
+  <React.StrictMode>
+    <Provider store={store}>
+      <GlobalStyle>
+      <CustomRouter history={history}>
+        <App />
+      </CustomRouter>
+      </GlobalStyle>
+    </Provider>
+  </React.StrictMode>
 );
 
 
