@@ -1,20 +1,17 @@
-import './App.css';
 import { Route, Routes} from 'react-router-dom'
-import {React, useEffect} from 'react';
+import React from 'react';
 
 //pages
-import Main from './pages/Main';
-import Signin from './pages/signin';
-import Signup from './pages/signup';
-
-
-// import { Counter } from './features/counter/Counter';
+import Signin from './pages/Signin';
+import Signup from './pages/Signup';
+import Home from './pages/Home';
 
 function App() {
+
   return (
     <React.Fragment>
       <Routes>
-        <Route path='/*' element={<Main/>} />
+        <Route path='/*' element={<Home/>} />
         <Route path='/signin/*' element={<Signin/>} />
         <Route path='/signup/*' element={<Signup/>} />
       </Routes>

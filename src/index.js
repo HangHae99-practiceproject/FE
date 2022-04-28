@@ -3,12 +3,11 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { store } from './app/store';
-import { Provider } from 'react-redux'
-import CustomRouter from './customRouter'
+import { Provider } from 'react-redux';
+import { store } from './redux/configureStore';
+import CustomRouter from './customRouter';
 import { createBrowserHistory } from "history";
 import GlobalStyle from './Styles/GlobalStyle';
-
 
 const history = createBrowserHistory();
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -16,15 +15,13 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <GlobalStyle>
+      <GlobalStyle/>
       <CustomRouter history={history}>
         <App />
       </CustomRouter>
-      </GlobalStyle>
     </Provider>
   </React.StrictMode>
 );
-
 
 export default history;
 // If you want to start measuring performance in your app, pass a function

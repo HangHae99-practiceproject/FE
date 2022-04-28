@@ -1,3 +1,4 @@
+// GlobalStyle.js
 import { createGlobalStyle } from 'styled-components';
 import PretendardBold from './font/Pretendard-Bold.woff';
 import PretendardMedium from './font/Pretendard-Medium.woff';
