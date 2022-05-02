@@ -22,6 +22,7 @@ const Input = props => {
     _onKeyDown,
     value,
     width,
+    textAlign,
   } = props;
 
   if (is_float) {
@@ -55,6 +56,7 @@ const Input = props => {
         <ElInput
           type={type}
           ref={_ref}
+          textAlign={textAlign}
           placeholder={placeholder}
           onChange={_onChange}
           onClick={_onClick}
@@ -81,6 +83,7 @@ const Input = props => {
 };
 
 Input.defaultProps = {
+  textAlign: '',
   islabel: false,
   labelText: '텍스트',
   labelBold: false,
