@@ -22,19 +22,19 @@ const GlobalStyle = createGlobalStyle`
   }
 
   @font-face {
-    font-family:'Noto Sans Kr' ;
+    font-family:'Pretendard' ;
     font-weight: 700;
     src: url(${PretendardBold});
   }
 
   @font-face {
-    font-family:'Noto Sans Kr' ;
+    font-family:'Pretendard' ;
     font-weight: 500;
     src: url(${PretendardMedium});
   }
 
   @font-face {
-    font-family:'Noto Sans Kr' ;
+    font-family:'Pretendard' ;
     font-weight: 400;
     src: url(${PretendardRegular});
   }

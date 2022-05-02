@@ -4,7 +4,7 @@ import Grid from '../elements/Grid';
 import Text from '../elements/Text';
 import { GrClose } from 'react-icons/gr';
 import { FiSettings } from 'react-icons/fi';
-import { IoIosArrowBack } from 'react-icons/io';
+import { BsChevronLeft } from 'react-icons/bs'
 // import theme from '../Styles/theme';
 
 /**
@@ -21,7 +21,7 @@ const Headerbar = props => {
     <>
       <Grid is_flex padding="12px" center>
         {isback ? (
-          <IoIosArrowBack
+          <BsChevronLeft
             size="22px"
             cursor="pointer"
             onClick={_onClickClose}
@@ -35,7 +35,6 @@ const Headerbar = props => {
           <FiSettings size="22px" cursor="pointer" onClick={_onClickEdit} />
         )}
       </Grid>
-      <hr />
     </>
   );
 };

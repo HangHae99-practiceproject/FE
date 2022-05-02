@@ -29,12 +29,18 @@ const KakaoMap = (props) => {
 
         for (var i = 0; i < data.length; i++) {
           // @ts-ignore
+          console.log(data[i])
           markers.push({
             position: {
               lat: data[i].y,
               lng: data[i].x,
             },
             content: data[i].place_name,
+            detail: {
+              category_g_code: data[i].category_group_code,
+              category_g_name: data[i].category_group_name,
+              category_name: data[i].category_name,
+            },
           })
           // @ts-ignore
           bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x))
@@ -103,7 +109,7 @@ const KakaoMap = (props) => {
           {info &&info.content === marker.content && (
             <MarkerDetail>
               <p>{marker.content}</p>
-              <Here onClick={()=> console.log(marker.content, marker.position)}>여기서 만나기</Here>
+              <Here onClick={()=> console.log(marker)}>여기서 만나기</Here>
             </MarkerDetail>
           )}
         </MapMarker>
