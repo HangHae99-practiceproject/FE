@@ -9,6 +9,7 @@ import SignUp from "./pages/SignUp";
 import Main from "./pages/Main";
 import Detail from "./pages/Detail";
 import PastSchedule from "./pages/PastSchedule";
+import AddPlans from "./pages/AddPlans";
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
             <Routes>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/signup" element={<SignUp/>}/>
+                <Route path="/add" element={<AddPlans/>}/>
                 <Route path="/main" element={<Main/>}/>
                 <Route path="/detail" element={<Detail/>}/>
                 <Route path="/past" element={<PastSchedule/>}/>
