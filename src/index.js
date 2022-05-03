@@ -6,7 +6,6 @@ import * as ReactDOMClient from "react-dom/client";
 import {Provider} from "react-redux";
 import {store} from "./redux/configureStore";
 import {BrowserRouter} from "react-router-dom";
-import GlobalStyle from "./Styles/GlobalStyle";
 
 
 
@@ -15,7 +14,6 @@ const root = ReactDOMClient.createRoot(rootElement);
 
 root.render(
     <Provider store={store}>
-      <GlobalStyle />
         <BrowserRouter>
             <App/>
         </BrowserRouter>
