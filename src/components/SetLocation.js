@@ -13,7 +13,7 @@ const SetLocation = (props) => {
     React.useEffect(() => {
         props.setPlace({name:name, address: address, lat:lat, lng:lng})
     },[name])
-    
+
     return(
         <React.Fragment>
             <Grid padding="16px">
