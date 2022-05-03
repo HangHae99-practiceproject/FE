@@ -1,30 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux';
-import { store } from './redux/configureStore';
-import CustomRouter from './customRouter';
-import { createBrowserHistory } from "history";
-import GlobalStyle from './Styles/GlobalStyle';
+import React from "react";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import * as ReactDOMClient from "react-dom/client";
+import {Provider} from "react-redux";
+import {store} from "./redux/configureStore";
+import {BrowserRouter} from "react-router-dom";
+import GlobalStyle from "./Styles/GlobalStyle";
 
-const history = createBrowserHistory();
-const root = ReactDOM.createRoot(document.getElementById('root'));
+
+
+const rootElement = document.getElementById("root");
+const root = ReactDOMClient.createRoot(rootElement);
 
 root.render(
-  <React.StrictMode>
     <Provider store={store}>
-      <GlobalStyle/>
-      <CustomRouter history={history}>
-        <App />
-      </CustomRouter>
-    </Provider>
-  </React.StrictMode>
+      <GlobalStyle />
+        <BrowserRouter>
+            <App/>
+        </BrowserRouter>
+    </Provider>,
 );
 
-export default history;
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
