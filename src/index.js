@@ -8,7 +8,6 @@ import {store} from "./redux/configureStore";
 import {BrowserRouter} from "react-router-dom";
 
 
-
 const rootElement = document.getElementById("root");
 const root = ReactDOMClient.createRoot(rootElement);
 
