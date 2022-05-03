@@ -5,10 +5,15 @@ import theme from '../Styles/theme';
 
 const SetLocation = (props) => {
     const [showmap, setShowMap] = useState(false);
-    const [address, setAddress] = useState('');
+    const [name, setName] = useState('');
+    const [address, setAddress] = useState('')
     const [lat, setLat] = useState('');
     const [lng, setLng] = useState('');
 
+    React.useEffect(() => {
+        props.setPlace({name:name, address: address, lat:lat, lng:lng})
+    },[name])
+    
     return(
         <React.Fragment>
             <Grid padding="16px">
@@ -21,12 +26,13 @@ const SetLocation = (props) => {
                 _onClick={() => {
                     setShowMap(true);
                 }}
-                value={address}
+                value={name}
                 />
                 </Grid>
                 {showmap && (
                 <PlanSelectMap
                     setShowMap={setShowMap}
+                    setName={setName}
                     setAddress={setAddress}
                     setLat={setLat}
                     setLng={setLng}

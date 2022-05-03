@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { Button, Grid, Text } from '../elements';
 import styled from 'styled-components';
-
 import Headerbar from '../shared/Headerbar';
 import theme from '../Styles/theme';
 import { BiSearch } from 'react-icons/bi';
@@ -26,6 +25,7 @@ const PlanSelectMap = props => {
     content: '',
     address_name: '',
     road_address_name: '',
+    place_url: '',
   });
 
   useEffect(() => {
@@ -49,6 +49,7 @@ const PlanSelectMap = props => {
             content: data[i].place_name,
             address_name: data[i].address_name,
             road_address_name: data[i].road_address_name,
+            place_url: data[i].place_url,
           });
           // @ts-ignore
           bounds.extend(new window.kakao.maps.LatLng(data[i].y, data[i].x));
@@ -64,7 +65,6 @@ const PlanSelectMap = props => {
   const inputdatabutton = event => {
     setKeyword(inputref.current.value);
   };
-
   return (
     <>
       <Section>
@@ -107,10 +107,12 @@ const PlanSelectMap = props => {
                           content: point.place_name,
                           address_name: point.address_name,
                           road_address_name: point.road_address_name,
+                          place_url: point.place_url,
                         };
                         setSelectlist(markerdata);
                         setIsInput(false);
-                        props.setAddress(point.place_name);
+                        props.setName(point.place_name);
+                        props.setAddress(point.address_name);
                         props.setLat(point.y);
                         props.setLng(point.x);
                         props.setShowMap(true);
@@ -150,9 +152,15 @@ const PlanSelectMap = props => {
                 position={selectlist.position}
                 onClick={() => setInfo(selectlist)}
               >
-                {info && info.content === selectlist.content && (
+                {/* {info && info.content === selectlist.content && (
                   <div style={{ color: 'black' }}>{selectlist.content}</div>
-                )}
+                )} */}
+              {info &&info.content === selectlist.content && (
+                <MarkerDetail>
+                  <p>{selectlist.content}</p>
+                  <Here onClick={()=> window.open(selectlist.place_url)}>정보</Here>
+                </MarkerDetail>
+              )}
               </MapMarker>
             </Map>
           )}
@@ -180,7 +188,7 @@ const PlanSelectMap = props => {
                   is_disabled={!isdata}
                   height="100px"
                   width="80px"
-                  _onClick={() => props.setShowMap(false)}
+                  _onClick={() => {props.setShowMap(false)}}
                 />
               </div>
             </InfoMap>
@@ -234,4 +242,21 @@ const InfoMap = styled.div`
   position: absolute;
   bottom: 0;
 `;
+
+const MarkerDetail = styled.div`
+  color: #000;
+  width: 150px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Here = styled.button`
+  margin-top: auto;
+  width: fit-content;
+  margin-left: auto;
+  border: 0px;
+  background: transparent;
+  padding: 5px;
+`
 export default PlanSelectMap;

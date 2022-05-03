@@ -1,29 +1,48 @@
 import React, { useEffect, useState } from 'react';
-import Headerbar from '../shared/Headerbar';
 import { Input, Grid, Button } from '../elements';
 import theme from '../Styles/theme';
 import PlanName from '../components/PlanName';
 import SetLocation from '../components/SetLocation';
 import SetTime from '../components/SetTime';
 import Penalty from '../components/Penalty';
-
+import { BsChevronLeft } from 'react-icons/bs'
 
 
 const AddPlans = (props) => {
     let [comp, setComp] = React.useState(0)
+    const [Name, setName] = React.useState('')
+    const [place, setPlace] = React.useState('')
+    const [time, setTime] = React.useState('')
+
+    const eventhandler = (e) => {
+        setName(e.target.value)
+    }
+    // const placeHandler = (e) => {
+    //     setPlace(e.target.value)
+    // }
     const clickHandler =() => {
         setComp(comp +1)
     }
-
+    const goBack = () => {
+        if(comp > 0) {
+            setComp(comp -1)
+        }
+    }
     let obj = {
-    0: <PlanName/>,
-    1: <SetLocation />,
-    2: <SetTime />,
-    3: <Penalty />,
-}
+        0: <PlanName value={Name} eventHandler={eventhandler}/>,
+        1: <SetLocation setPlace={setPlace}/>,
+        2: <SetTime setTime={setTime}/>,
+        3: <Penalty />,
+    }
     return (
         <React.Fragment>
-            <Headerbar isback/>
+            <Grid padding="16px">
+                <BsChevronLeft
+                    size="22px"
+                    cursor="pointer"
+                    onClick={goBack}
+                />
+            </Grid>
             <Grid>
                 {obj[comp]}
             </Grid>
@@ -38,3 +57,5 @@ AddPlans.defaultProps = {
 }
 
 export default AddPlans;
+
+<div/>
