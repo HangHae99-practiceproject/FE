@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const client = axios.create({
-    baseURL: 'URL',
+    baseURL: 'http://52.78.231.125:8080',
 })
 
 export const setClient = (token) => {

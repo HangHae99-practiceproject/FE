@@ -10,7 +10,7 @@ const initialState = {
 export const signUp = createAsyncThunk(
     'user/signup',
     async (data, {rejectedWithValue}) => {
-        // console.log(data)
+        console.log(data)
         try {
             const res = await postApi('/user/signup', data)
             window.location.assign('/login')
@@ -27,13 +27,33 @@ export const signUp = createAsyncThunk(
 export const login = createAsyncThunk(
     'user/login',
     async (data, {rejectedWithValue}) => {
-        // console.log(data)
+        console.log(data)
         try {
             const res = await postApi('/user/login', data, {
                 withCredentials: true,
             })
             localStorage.setItem('token', res.headers.authorization)
             window.location.assign('/main')
+            return res
+        } catch (err) {
+            console.log(err)
+            return rejectedWithValue(err.response)
+        }
+    }
+)
+
+export const logout = createAsyncThunk(
+    'user/logout',
+    async (_, {rejectedWithValue}) => {
+        console.log(_)
+        const data = {
+            data : '',
+        }
+        console.log(data)
+        try {
+            const res = await postApi('/user/logout', data)
+            localStorage.removeItem('token')
+            setTimeout(() => window.location.assign('/main'), 1000)
             return res
         } catch (err) {
             console.log(err)
@@ -51,7 +71,7 @@ export const userSlice = createSlice({
         },
         setLoading: (state, action) => {
             state.loading = action.payload
-        }
+        },
     },
     extraReducers: {
         // user/signup/pending === signUp.pending
@@ -73,20 +93,20 @@ export const userSlice = createSlice({
                 state.loading = 'failed'
             }
         },
-        // user/login/pending === signUp.pending
+        // user/login/pending === login.pending
         [login.pending]: (state, action) => {
             if (state.loading === 'idle') {
                 state.loading = 'pending'
             }
         },
-        // user/login/fulfilled === signUp.fulfilled
+        // user/login/fulfilled === login.fulfilled
         [login.fulfilled]: (state, action) => {
             if (state.loading === 'pending') {
                 state.loading = 'succeeded'
                 state.user = action.payload
             }
         },
-        // user/login/rejected === signUp.rejected
+        // user/login/rejected === login.rejected
         [login.rejected]: (state, action) => {
             if (state.loading === 'pending') {
                 state.loading = 'failed'
