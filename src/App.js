@@ -10,6 +10,7 @@ import Main from "./pages/Main";
 import Detail from "./pages/Detail";
 import PastSchedule from "./pages/PastSchedule";
 import AddPlans from "./pages/AddPlans";
+import Test from "./pages/Test";
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/main" element={<Main/>}/>
                 <Route path="/detail" element={<Detail/>}/>
                 <Route path="/past" element={<PastSchedule/>}/>
+                <Route path="/test" element={<Test/>}/>
             </Routes>
             <GlobalStyle/>
         </>

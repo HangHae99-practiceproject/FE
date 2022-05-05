@@ -1,6 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
-import axios from "axios";
 import {postApi} from "../../shared/api/client";
+
 
 const initialState = {
     user: null,
@@ -12,17 +12,17 @@ export const signUp = createAsyncThunk(
     async (data, {rejectedWithValue}) => {
         console.log(data)
         try {
-            const res = await postApi('/user/signup', data)
+            const res = await postApi('/user/signup/', data)
             window.location.assign('/login')
             return res
         } catch (err) {
             // window.alert(err.response.data.message)
-
             console.log(err)
             return rejectedWithValue(err.response)
         }
     }
 )
+
 
 export const login = createAsyncThunk(
     'user/login',

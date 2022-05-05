@@ -31,11 +31,12 @@ const AddPlans = (props) => {
     // console.log(Name, place, time, date)
     let [comp, setComp] = React.useState(0)
     let obj = {
-        0: <PlanName value={Name} eventHandler={eventhandler}/>,
-        1: <SetLocation setPlace={setPlace}/>,
+        0: <PlanName value={Name} eventHandler={eventhandler} clickHandler={clickHandler}/>,
+        1: <SetLocation setPlace={setPlace} clickHandler={clickHandler}/>,
         2: <SetTime setTime={setTime} setDate={setDate}/>,
         3: <Penalty />,
     }
+
     if(comp <= 3) {
         return (
             <React.Fragment>
@@ -49,9 +50,9 @@ const AddPlans = (props) => {
                 <Grid>
                     {obj[comp]}
                 </Grid>
-                <Grid bottom="0" padding="16px" >
+                {/* <Grid bottom="0" padding="16px" >
                     <Button _onClick={clickHandler}>다음으로</Button>
-                </Grid>
+                </Grid> */}
             </React.Fragment>
         )
     }

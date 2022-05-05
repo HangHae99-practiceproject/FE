@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PlanSelectMap from './PlanSelectMap';
-import { Input, Grid } from '../elements';
+import { Input, Grid, Button } from '../elements';
 import theme from '../Styles/theme';
 
 const SetLocation = (props) => {
@@ -38,6 +38,15 @@ const SetLocation = (props) => {
                     setLng={setLng}
                 />
                 )}
+                 {name !== ''?
+                <Grid bottom="0" padding="16px" >
+                    <Button _onClick={props.clickHandler}>다음으로</Button>
+                </Grid>
+                :
+                <Grid bottom="0" padding="16px" >
+                    <Button _onClick={()=> alert('장소를 정해주세요')}>다음으로</Button>
+                </Grid>
+                }
         </React.Fragment>
     )
 }

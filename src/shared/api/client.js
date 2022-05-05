@@ -1,8 +1,14 @@
 import axios from "axios";
 
 const client = axios.create({
-    baseURL: 'http://52.78.231.125:8080',
+    baseURL: 'https://imonint.shop',
+    headers: {
+        "Access-Control-Allow-Origin": "*",
+        'content-type': 'application/json;charset=UTF-8',
+		accept: 'application/json,',
+    }
 })
+
 
 export const setClient = (token) => {
     client.defaults.headers.common['Authorization'] = `Bearer ${token}`
