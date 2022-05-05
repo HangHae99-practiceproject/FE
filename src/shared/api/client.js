@@ -1,12 +1,12 @@
 import axios from "axios";
 
 const client = axios.create({
-    baseURL: 'https://imonint.shop',
-    headers: {
-        "Access-Control-Allow-Origin": "*",
-        'content-type': 'application/json;charset=UTF-8',
-		accept: 'application/json,',
-    }
+    baseURL: 'http://13.209.80.90:8080',
+    // headers: {
+    //     "Access-Control-Allow-Origin": "*",
+    //     'content-type': 'application/json;charset=UTF-8',
+	// 	accept: 'application/json,',
+    // }
 })
 
 

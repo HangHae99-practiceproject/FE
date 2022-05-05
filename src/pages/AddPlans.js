@@ -6,11 +6,14 @@ import SetLocation from '../components/SetLocation';
 import SetTime from '../components/SetTime';
 import Penalty from '../components/Penalty';
 import { BsChevronLeft } from 'react-icons/bs'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
+import {useDispatch} from 'react-redux';
+import { addPlan } from '../redux/modules/plan';
 import KakaoMap from '../shared/KakaoMap';
 
 const AddPlans = (props) => {
-    const nav = useNavigate();
+    // const nav = useNavigate();
+    const dispatch = useDispatch();
     const [Name, setName] = React.useState('');
     const [place, setPlace] = React.useState('');
     const [time, setTime] = React.useState('');
@@ -36,6 +39,22 @@ const AddPlans = (props) => {
         2: <SetTime setTime={setTime} setDate={setDate}/>,
         3: <Penalty />,
     }
+
+    const handleAddPlan = () => {
+        const data = {
+            planName: Name,
+            planDate: date + time,
+            location: {
+                name: place.name,
+                lat: place.lat,
+                lng: place.lng,
+                address: place.address
+            },
+            penalty: penalty
+        }
+        dispatch(addPlan(data))
+    }
+
 
     if(comp <= 3) {
         return (
@@ -76,7 +95,7 @@ const AddPlans = (props) => {
                     </div>
                 </Grid>
                 <Grid bottom="0" padding="16px" >
-                    <Button _onClick={() => nav('/main')}>공유하기</Button>
+                    <Button _onClick={handleAddPlan}>완성!</Button>
                 </Grid>
             </React.Fragment>
         )
