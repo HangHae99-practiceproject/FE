@@ -1,5 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import {postApi} from "../../shared/api/client";
+import { deleteCookie, getCookie, setCookie } from '../../shared/utils/Cookie';
 
 
 const initialState = {
@@ -36,6 +37,7 @@ export const login = createAsyncThunk(
                 withCredentials: true,
             })
             localStorage.setItem('token', res.headers.authorization)
+            setCookie(data.username, 'nickname')
             window.location.assign('/main')
             return {
                 data: res.data,
@@ -57,8 +59,9 @@ export const logout = createAsyncThunk(
         }
         console.log(data)
         try {
-            const res = await postApi('/user/logout', data)
-            localStorage.removeItem('token')
+            const res = await postApi('/user/logout', data);
+            localStorage.removeItem('token');
+            deleteCookie(document.cookie.split("=")[0])
             setTimeout(() => window.location.assign('/login'), 1000)
             return {
                 data: res.data,

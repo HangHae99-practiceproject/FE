@@ -42,8 +42,6 @@ ScheduleContainer.defaultProps = {
             locationName: '강남역',
             lat: '12',
             lng: '123',
-            categoryName: '',
-            categoryCode: '',
         },
         penalty: '벌금 100만원',
     }

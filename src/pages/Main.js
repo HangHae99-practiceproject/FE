@@ -8,16 +8,16 @@ import {useNavigate} from "react-router-dom";
 import ScheduleContainer from "../components/ScheduleContainer";
 import {useDispatch} from "react-redux";
 import {logout} from "../redux/modules/user";
+import { getCookie } from "../shared/utils/Cookie";
 
 const Main = (props) => {
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
-
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const logoutBtn = () => {
         localStorage.removeItem('token')
         dispatch(logout())
         console.log(logoutBtn)
-    }
+    };
 
     return (
         <div>
@@ -36,7 +36,7 @@ const Main = (props) => {
             </HeadBox>
 
             <UserInfo>
-                <p>{props.nickName} 님</p>
+                <p>{document.cookie.split("=")[1]} 님</p>
                 <p>{props.today} 입니다.</p>
             </UserInfo>
 

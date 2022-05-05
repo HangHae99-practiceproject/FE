@@ -1,6 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import {postApi, getApi} from "../../shared/api/client";
-import {signUp} from "./user";
 
 const initialState = {
     list: [],
@@ -32,7 +31,7 @@ export const addPlan = createAsyncThunk(
         console.log(data)
         try {
             const res = await postApi('/member/plan', data)
-            // window.location.assign('/main')
+            window.location.assign('/main')
             return {
                 data: res.data,
                 status: res.status

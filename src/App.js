@@ -5,7 +5,7 @@ import { createGlobalStyle } from "styled-components";
 import {setClient} from "./shared/api/client";
 
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Signup from "./pages/SignUp";
 import Main from "./pages/Main";
 import Detail from "./pages/Detail";
 import PastSchedule from "./pages/PastSchedule";
@@ -14,9 +14,8 @@ import Test from "./pages/Test";
 import Home from "./pages/Home";
 
 function App() {
-
     useEffect(() => {
-        const token = localStorage.getItem('jwt-token')
+        const token = localStorage.getItem('token')
         if (token) {
             setClient(token)
         }
