@@ -29,7 +29,7 @@ function App() {
                 <Route path="/signup" element={<Signup/>}/>
                 <Route path="/add" element={<AddPlans/>}/>
                 <Route path="/main" element={<Main/>}/>
-                <Route path="/detail" element={<Detail/>}/>
+                <Route path="/detail/:planId" element={<Detail/>}/>
                 <Route path="/past" element={<PastSchedule/>}/>
                 <Route path="/test" element={<Test/>}/>
             </Routes>

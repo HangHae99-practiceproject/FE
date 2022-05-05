@@ -10,7 +10,7 @@ const ScheduleContainer = (props) => {
         <div>
 
             <ScheduleTop onClick={() => {
-                navigate('/detail')
+                navigate(`/detail/${props.planList.planId}`)
             }}>
                 <h3>{props.planList.planDate} / {props.planList.planTime}</h3>
                 <h3>{props.planList.planName}</h3>
