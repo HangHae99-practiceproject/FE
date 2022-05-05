@@ -16,7 +16,7 @@ const Main = (props) => {
     const logoutBtn = () => {
         localStorage.removeItem('token')
         dispatch(logout())
-        console.log(logoutBtn)
+        console.log(logout)
     }
 
     return (

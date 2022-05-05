@@ -20,12 +20,12 @@ const SignUp = (props) => {
         if (!username || !nickname || !pw || !pwCheck) {
             return window.alert('내용을 모두 입력해주세요');
         }
-        if (username != pwCheck) {
+        if (pw !== pwCheck) {
             return window.alert('비밀번호가 일치하지 않습니다');
         } else {
             const data = {
                 username,
-                nickname,
+                userNickname : nickname,
                 password: pw,
             }
             dispatch(signUp(data));

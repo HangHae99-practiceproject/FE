@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const client = axios.create({
-    baseURL: 'http://52.78.231.125:8080',
+    baseURL: 'https://imonint.shop',
+    // 'https://www.iamonit.shop'
 })
 
 export const setClient = (token) => {

@@ -49,7 +49,6 @@ export const logout = createAsyncThunk(
         const data = {
             data : '',
         }
-        console.log(data)
         try {
             const res = await postApi('/user/logout', data)
             localStorage.removeItem('token')
