@@ -42,13 +42,16 @@ const Main = (props) => {
 
             <ScheduleContainer/>
 
-            <IoAddCircle style={{
-                cursor: "pointer",
-                fontSize: "50px",
-                position: "fixed",
-                bottom: "15px",
-                right: "15px"
-            }}/>
+            <IoAddCircle
+                style={{
+                    cursor: "pointer",
+                    fontSize: "50px",
+                    position: "fixed",
+                    bottom: "15px",
+                    right: "15px"
+                }}
+                onClick={()=> navigate('/add')}
+            />
         </div>
     )
 }

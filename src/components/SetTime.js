@@ -1,6 +1,5 @@
 import React from 'react';
-import { Grid, Input } from '../elements';
-import Headerbar from '../shared/Headerbar';
+import { Grid, Input, Button } from '../elements';
 
 const SetTime = (props) => {
     let today = new Date();
@@ -35,6 +34,9 @@ const SetTime = (props) => {
                 _onChange={handleTime}
                 />
             </Grid>
+                <Grid bottom="0" padding="16px" >
+                    <Button _onClick={props.clickHandler}>다음으로</Button>
+                </Grid>
         </React.Fragment>
     )
 }

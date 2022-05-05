@@ -36,14 +36,14 @@ const AddPlans = (props) => {
     let obj = {
         0: <PlanName value={Name} eventHandler={eventhandler} clickHandler={clickHandler}/>,
         1: <SetLocation setPlace={setPlace} clickHandler={clickHandler}/>,
-        2: <SetTime setTime={setTime} setDate={setDate}/>,
-        3: <Penalty />,
+        2: <SetTime setTime={setTime} setDate={setDate} clickHandler={clickHandler}/>,
+        3: <Penalty clickHandler={clickHandler} />,
     }
 
     const handleAddPlan = () => {
         const data = {
             planName: Name,
-            planDate: date + time,
+            planDate: date + ' ' + time,
             location: {
                 name: place.name,
                 lat: place.lat,

@@ -13,10 +13,13 @@ export const signUp = createAsyncThunk(
         console.log(data)
         try {
             const res = await postApi('/user/signup/', data)
-            window.location.assign('/login')
-            return res
+            // window.location.assign('/login')
+            return {
+                data: res.data,
+                status: res.status
+            }
+            
         } catch (err) {
-            // window.alert(err.response.data.message)
             console.log(err)
             return rejectedWithValue(err.response)
         }
@@ -34,9 +37,12 @@ export const login = createAsyncThunk(
             })
             localStorage.setItem('token', res.headers.authorization)
             window.location.assign('/main')
-            return res
+            return {
+                data: res.data,
+                status: res.status
+            }
         } catch (err) {
-            console.log(err)
+            alert(err.response.data.exception)
             return rejectedWithValue(err.response)
         }
     }
@@ -53,8 +59,11 @@ export const logout = createAsyncThunk(
         try {
             const res = await postApi('/user/logout', data)
             localStorage.removeItem('token')
-            setTimeout(() => window.location.assign('/main'), 1000)
-            return res
+            setTimeout(() => window.location.assign('/login'), 1000)
+            return {
+                data: res.data,
+                status: res.status
+            }
         } catch (err) {
             console.log(err)
             return rejectedWithValue(err.response)

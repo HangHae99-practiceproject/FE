@@ -12,8 +12,11 @@ export const addPlan = createAsyncThunk(
         console.log(data)
         try {
             const res = await postApi('/member/plan', data)
-            window.location.assign('/main')
-            return res
+            // window.location.assign('/main')
+            return {
+                data: res.data,
+                status: res.status
+            }
         } catch (err) {
             console.log(err)
             return rejectedWithValue(err.response)
