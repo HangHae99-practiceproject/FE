@@ -8,7 +8,6 @@ import {useNavigate} from "react-router-dom";
 import ScheduleContainer from "../components/ScheduleContainer";
 import {useDispatch} from "react-redux";
 import {logout} from "../redux/modules/user";
-import NavBar from "../components/NavBar";
 
 const Main = (props) => {
     const navigate = useNavigate()
@@ -17,14 +16,12 @@ const Main = (props) => {
     const logoutBtn = () => {
         localStorage.removeItem('token')
         dispatch(logout())
-        console.log(logout)
+        console.log(logoutBtn)
     }
 
     return (
         <div>
-            {/*<NavBar />*/}
             <HeadBox>
-
                 <div onClick={logoutBtn}>로그아웃</div>
                 <BsBell style={{
                     fontSize: "20px",
@@ -46,7 +43,8 @@ const Main = (props) => {
             <ScheduleContainer/>
 
             <IoAddCircle
-                onClick={() => {navigate('/add')}} style={{
+                onClick={() => {navigate('/add')}}
+                style={{
                 cursor: "pointer",
                 fontSize: "50px",
                 position: "fixed",

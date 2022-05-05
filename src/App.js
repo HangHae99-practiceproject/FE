@@ -11,6 +11,7 @@ import Detail from "./pages/Detail";
 import PastSchedule from "./pages/PastSchedule";
 import AddPlans from "./pages/AddPlans";
 import Test from "./pages/Test";
+import Home from "./pages/Home";
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
     return (
         <>
             <Routes>
+                <Route path='/' element={<Home/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/signup" element={<Signup/>}/>
                 <Route path="/add" element={<AddPlans/>}/>

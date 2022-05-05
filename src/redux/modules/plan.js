@@ -26,38 +26,74 @@ export const getPlan = createAsyncThunk(
     }
 )
 
-export const planSlice = createSlice({
-        name: 'plan',
-        initialState,
-        reducers: {
-            getPlanList: (state, action) => {
-                state.plan = action.payload
-            },
-        },
-        extraReducers: {
-            // plan/setPlan/pending === signUp.pending
-            [getPlan.pending]: (state, action) => {
-                if (state.loading === 'idle') {
-                    state.loading = 'pending'
-                }
-            },
-            // plan/setPlan/fulfilled === signUp.fulfilled
-            [getPlan.fulfilled]: (state, action) => {
-                if (state.loading === 'pending') {
-                    state.loading = 'succeeded'
-                    state.user = action.payload
-                }
-            },
-            // plan/setPlan/rejected === signUp.rejected
-            [getPlan.rejected]: (state, action) => {
-                if (state.loading === 'pending') {
-                    state.loading = 'failed'
-                }
-            },
-        },
+export const addPlan = createAsyncThunk(
+    'member/plan',
+    async (data, {rejectedWithValue}) => {
+        console.log(data)
+        try {
+            const res = await postApi('/member/plan', data)
+            // window.location.assign('/main')
+            return {
+                data: res.data,
+                status: res.status
+            }
+        } catch (err) {
+            console.log(err)
+            return rejectedWithValue(err.response)
+        }
     }
 )
 
-export const {getPlanList} = planSlice.actions
+export const planSlice = createSlice({
+    name: 'plan',
+    initialState,
+    reducers: {
+        setLoading: (state, action) => {
+            state.loading = action.payload
+        },
+        getPlanList: (state, action) => {
+            state.plan = action.payload
+        },
+    },
+    extraReducers: {
+        // plan/setPlan/pending === signUp.pending
+        [getPlan.pending]: (state, action) => {
+            if (state.loading === 'idle') {
+                state.loading = 'pending'
+            }
+        },
+        // plan/setPlan/fulfilled === signUp.fulfilled
+        [getPlan.fulfilled]: (state, action) => {
+            if (state.loading === 'pending') {
+                state.loading = 'succeeded'
+                state.user = action.payload
+            }
+        },
+        // plan/setPlan/rejected === signUp.rejected
+        [getPlan.rejected]: (state, action) => {
+            if (state.loading === 'pending') {
+                state.loading = 'failed'
+            }
+        },
+        [addPlan.pending]: (state, action) => {
+            if (state.loading === 'idle') {
+                state.loading = 'pending'
+            }
+        },
+        [addPlan.fulfilled]: (state, action) => {
+            if (state.loading === 'pending') {
+                state.loading = 'succeeded'
+                state.plan = action.payload
+            }
+        },
+        [addPlan.rejected]: (state, action) => {
+            if (state.loading === 'pending') {
+                state.loading = 'failed'
+            }
+        },
+    }
+})
+
+export const {setLoading, getPlanList} = planSlice.actions
 
 export default planSlice.reducer

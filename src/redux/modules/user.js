@@ -20,7 +20,6 @@ export const signUp = createAsyncThunk(
                 status: res.status
             }
         } catch (err) {
-            // window.alert(err.response.data.message)
             console.log(err)
             return rejectedWithValue(err.response)
         }
@@ -43,7 +42,7 @@ export const login = createAsyncThunk(
                 status: res.status
             }
         } catch (err) {
-            console.log(err)
+            alert(err.response.data.exception)
             return rejectedWithValue(err.response)
         }
     }
@@ -56,10 +55,11 @@ export const logout = createAsyncThunk(
         const data = {
             data : '',
         }
+        console.log(data)
         try {
             const res = await postApi('/user/logout', data)
             localStorage.removeItem('token')
-            setTimeout(() => window.location.assign('/main'), 1000)
+            setTimeout(() => window.location.assign('/login'), 1000)
             return {
                 data: res.data,
                 status: res.status

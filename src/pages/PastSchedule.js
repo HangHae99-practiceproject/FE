@@ -6,7 +6,7 @@ import ScheduleContainer from "../components/ScheduleContainer";
 
 const PastSchedule = (props) => {
     const navigate = useNavigate()
-
+ 
     return (
         <div>
             <HeadLine>
