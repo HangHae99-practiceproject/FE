@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
-const Test = () => {
+const Test = (props) => {
+  console.log(props)
   const [state, setState] = useState({
     center: {
-      lat: 33.450701,
-      lng: 126.570667,
+      lat: props.props.lat,
+      lng: props.props.lng,
     },
     errMsg: null,
     isLoading: true,
@@ -60,7 +61,7 @@ const Test = () => {
         style={{
           // 지도의 크기
           width: "100%",
-          height: "450px",
+          height: "100%",
           position: "relative",
         }}
         level={3} // 지도의 확대 레벨
@@ -92,7 +93,7 @@ const Test = () => {
             }}
             onClick={() =>
               setState({
-                center: { lat: 33.450701, lng: 126.570667 },
+                center: { lat: props.props.lat, lng: props.props.lng },
                 isPanto: true,
               })
             }
@@ -105,11 +106,10 @@ const Test = () => {
           </MapMarker>
         )}
         <MapMarker // 마커를 생성합니다
-            position={{
+            position={
             // 마커가 표시될 위치입니다
-            lat: 33.450701,
-            lng: 126.570667,
-            }}
+            state.center
+            }
         />
       </Map>
     </>

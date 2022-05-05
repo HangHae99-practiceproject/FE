@@ -11,6 +11,8 @@
     "axios": "^0.27.1",
     "classnames": "^2.3.1",
     "dotenv": "^16.0.0",
+    "firebase": "^9.7.0",
+    "firebase-tools": "^10.8.0",
     "lodash": "^4.17.21",
     "react": "^18.0.0",
     "react-bootstrap": "^2.3.1",
@@ -29,7 +31,7 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set HTTPS=true&&set SSL_CRT_FILE=C:/Windows/System32/cert.crt&&set SSL_KEY_FILE=C:/Windows/System32/cert.key&&react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

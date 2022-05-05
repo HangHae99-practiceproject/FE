@@ -34,10 +34,11 @@ export const login = createAsyncThunk(
         console.log(data)
         try {
             const res = await postApi('/user/login', data, {
-                withCredentials: true,
+                withCredentials: false,
             })
+            console.log(res.headers)
             localStorage.setItem('token', res.headers.authorization)
-            setCookie(data.username, 'nickname')
+            setCookie(res.data.id, res.data.nickname)
             window.location.assign('/main')
             return {
                 data: res.data,

@@ -12,14 +12,19 @@ import PastSchedule from "./pages/PastSchedule";
 import AddPlans from "./pages/AddPlans";
 import Test from "./pages/Test";
 import Home from "./pages/Home";
+import Real from "./pages/teeest";
+//firebase
+
 
 function App() {
-    useEffect(() => {
-        const token = localStorage.getItem('token')
-        if (token) {
-            setClient(token)
-        }
-    }, [])
+
+
+    // useEffect(() => {
+    //     const token = localStorage.getItem('token')
+    //     if (token) {
+    //         setClient(token)
+    //     }
+    // }, [])
 
     return (
         <>
@@ -32,6 +37,7 @@ function App() {
                 <Route path="/detail/:planId" element={<Detail/>}/>
                 <Route path="/past" element={<PastSchedule/>}/>
                 <Route path="/test" element={<Test/>}/>
+                <Route path="/real" element={<Real/>}/>
             </Routes>
             <GlobalStyle/>
         </>

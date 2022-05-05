@@ -1,18 +1,19 @@
 import axios from "axios";
 
 const client = axios.create({
-    baseURL: 'http://13.124.93.54:8080',
-    // headers: {
-    //     "Access-Control-Allow-Origin": "*",
-    //     'content-type': 'application/json;charset=UTF-8',
-	// 	accept: 'application/json,',
-    // }
+    baseURL: 'https://imonint.shop',
 })
 
+// cookie?
+client.interceptors.request.use(function (config) {
+	const accessToken = localStorage.getItem('token')
+	config.headers.common['Authorization'] = `${accessToken}`;
+	return config;
+});
 
-export const setClient = (token) => {
-    client.defaults.headers.common['Authorization'] = `${token}`
-}
+// export const setClient = (token) => {
+//     client.defaults.headers.common['Authorization'] = `${token}`
+// }
 
 export const getApi = (path, config) => {
     return client.get(path, config)
