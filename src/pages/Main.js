@@ -18,7 +18,7 @@ const Main = (props) => {
         dispatch(logout())
         console.log(logoutBtn)
     }
-
+ 
     return (
         <div>
             <HeadBox>

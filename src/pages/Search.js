@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import GlobalStyle from '../Styles/GlobalStyle'
 import KakaoMap from "../shared/KakaoMap";
 import _ from "lodash";
-
+ 
 const Search = (props) => {
 const [keyword, setKeyword] = useState(null);
   const [search, setSearch] = useState(null);

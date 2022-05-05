@@ -73,7 +73,7 @@ const GuestBtn = styled.div`
   cursor: pointer;
   margin: auto;
 `;
-
+ 
 // default props 작성 위치
 Home.defaultProps = {};
 
