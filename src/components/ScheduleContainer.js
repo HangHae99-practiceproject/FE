@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 const ScheduleContainer = (props) => {
     const navigate = useNavigate()
+    const params = useParams()
 
     return (
         <div>
@@ -11,29 +12,41 @@ const ScheduleContainer = (props) => {
             <ScheduleTop onClick={() => {
                 navigate('/detail')
             }}>
-                <h3>약속 날짜 / 시간</h3>
-                <h3>약속 이름</h3>
-                <p>약속 장소</p>
-                <p>패널티</p>
+                <h3>{props.planList.planDate} / {props.planList.planTime}</h3>
+                <h3>{props.planList.planName}</h3>
+                <p>{props.planList.locationDetail.locationName}</p>
+                <p>{props.planList.penalty}</p>
             </ScheduleTop>
 
-            <ScheduleList>
-                <div>
-                    <p>약속 날짜 / 시간</p>
-                    <p>약속 이름</p>
-                    <p>약속 장소</p>
-                    <p>패널티</p>
-                </div>
-
-                <div>
-                    <p>약속 날짜 / 시간</p>
-                    <p>약속 이름</p>
-                    <p>약속 장소</p>
-                    <p>패널티</p>
-                </div>
-            </ScheduleList>
+            {/*<ScheduleList onClick={() => {*/}
+            {/*    navigate('/detail')*/}
+            {/*}}>*/}
+            {/*    <div>*/}
+            {/*        <p>{props.planList.planDate} / {props.planList.planTime}</p>*/}
+            {/*        <p>{props.planList.planName}</p>*/}
+            {/*        <p>{props.planList.locationDetail.locationName}</p>*/}
+            {/*        <p>{props.planList.penalty}</p>*/}
+            {/*    </div>*/}
+            {/*</ScheduleList>*/}
         </div>
     )
+}
+
+ScheduleContainer.defaultProps = {
+    planList: {
+        planId: 1,
+        planName: '강남 테러',
+        planDate: '2022-05-05',
+        planTime: '17시30분',
+        locationDetail: {
+            locationName: '강남역',
+            lat: '12',
+            lng: '123',
+            categoryName: '',
+            categoryCode: '',
+        },
+        penalty: '벌금 100만원',
+    }
 }
 
 export default ScheduleContainer

@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom";
 import ScheduleContainer from "../components/ScheduleContainer";
 import {useDispatch} from "react-redux";
 import {logout} from "../redux/modules/user";
+import NavBar from "../components/NavBar";
 
 const Main = (props) => {
     const navigate = useNavigate()
@@ -21,7 +22,9 @@ const Main = (props) => {
 
     return (
         <div>
+            {/*<NavBar />*/}
             <HeadBox>
+
                 <div onClick={logoutBtn}>로그아웃</div>
                 <BsBell style={{
                     fontSize: "20px",
@@ -36,13 +39,14 @@ const Main = (props) => {
             </HeadBox>
 
             <UserInfo>
-                <p>(온잇) 님</p>
-                <p>(2022)년 (05)월 (01)일 (일요일)입니다.</p>
+                <p>{props.nickName} 님</p>
+                <p>{props.today} 입니다.</p>
             </UserInfo>
 
             <ScheduleContainer/>
 
-            <IoAddCircle style={{
+            <IoAddCircle
+                onClick={() => {navigate('/add')}} style={{
                 cursor: "pointer",
                 fontSize: "50px",
                 position: "fixed",
@@ -51,6 +55,11 @@ const Main = (props) => {
             }}/>
         </div>
     )
+}
+
+Main.defaultProps = {
+    nickName: '온잇',
+    today: '2022년 5월 01일'
 }
 
 export default Main

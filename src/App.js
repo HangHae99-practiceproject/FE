@@ -5,10 +5,12 @@ import { createGlobalStyle } from "styled-components";
 import {setClient} from "./shared/api/client";
 
 import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
+import Signup from "./pages/Signup";
 import Main from "./pages/Main";
 import Detail from "./pages/Detail";
 import PastSchedule from "./pages/PastSchedule";
+import AddPlans from "./pages/AddPlans";
+import Test from "./pages/Test";
 
 function App() {
 
@@ -23,10 +25,12 @@ function App() {
         <>
             <Routes>
                 <Route path="/login" element={<Login/>}/>
-                <Route path="/signup" element={<SignUp/>}/>
+                <Route path="/signup" element={<Signup/>}/>
+                <Route path="/add" element={<AddPlans/>}/>
                 <Route path="/main" element={<Main/>}/>
                 <Route path="/detail" element={<Detail/>}/>
                 <Route path="/past" element={<PastSchedule/>}/>
+                <Route path="/test" element={<Test/>}/>
             </Routes>
             <GlobalStyle/>
         </>

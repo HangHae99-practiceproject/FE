@@ -2,8 +2,28 @@ import React from "react";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 
+import ScheduleContainer from "../components/ScheduleContainer";
+
 function Detail() {
+
+    const plan = ScheduleContainer.defaultProps
+
     const navigate = useNavigate()
+
+    // 공유 팝업 생성
+    const handle = () => {
+        if (navigator.share) {
+            navigator.share({
+                title: '상세페이지 공유',
+                text: '강남 테러',
+                url: 'http://localhost:3000/detail',
+            })
+                .then(() => console.log('성공'))
+                .catch((err) => console.log(err))
+        } else {
+            alert("공유하기가 지원되지 않는 환경 입니다.")
+        }
+    }
 
     return (
         <div>
@@ -13,10 +33,10 @@ function Detail() {
             </HeadLine>
 
             <ScheduleBox>
-                <p>약속 날짜 / 시간</p>
-                <p>약속 이름</p>
-                <p>약속 장소</p>
-                <p>패널티</p>
+                <p>{plan.planList.planDate} / {plan.planList.planTime}</p>
+                <p>{plan.planList.planName}</p>
+                <p>{plan.planList.locationDetail.locationName}</p>
+                <p>{plan.planList.penalty}</p>
             </ScheduleBox>
 
             <MapBox>
@@ -25,7 +45,7 @@ function Detail() {
 
             <ButtonBox>
 
-                <button>
+                <button onClick={handle}>
                     공유 or 참석
                 </button>
 

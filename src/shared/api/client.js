@@ -1,8 +1,12 @@
 import axios from "axios";
 
 const client = axios.create({
-    baseURL: 'https://imonint.shop',
-    // 'https://www.iamonit.shop'
+    baseURL: 'http://13.124.93.54:8080',
+    // headers: {
+    //     "Access-Control-Allow-Origin": "*",
+    //     'content-type': 'application/json;charset=UTF-8',
+    //     accept: 'application/json,',
+    // }
 })
 
 export const setClient = (token) => {

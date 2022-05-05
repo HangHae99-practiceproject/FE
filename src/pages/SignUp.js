@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 import {getApi, postApi} from "../shared/api/client";
 
-const SignUp = (props) => {
+const Signup = (props) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -25,7 +25,7 @@ const SignUp = (props) => {
         } else {
             const data = {
                 username,
-                userNickname : nickname,
+                nickname,
                 password: pw,
             }
             dispatch(signUp(data));
@@ -104,7 +104,7 @@ const SignUp = (props) => {
     )
 }
 
-export default SignUp
+export default Signup
 
 const Container = styled.div`
   display: flex;
