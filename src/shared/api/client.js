@@ -10,7 +10,7 @@ const client = axios.create({
 })
 
 export const setClient = (token) => {
-    client.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    client.defaults.headers.common['Authorization'] = `${token}`
 }
 
 export const getApi = (path, config) => {

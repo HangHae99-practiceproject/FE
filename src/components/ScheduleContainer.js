@@ -37,13 +37,10 @@ ScheduleContainer.defaultProps = {
         planId: 1,
         planName: '강남 테러',
         planDate: '2022-05-05',
-        planTime: '17시30분',
         locationDetail: {
             locationName: '강남역',
             lat: '12',
             lng: '123',
-            categoryName: '',
-            categoryCode: '',
         },
         penalty: '벌금 100만원',
     }

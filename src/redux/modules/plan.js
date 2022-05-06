@@ -9,17 +9,31 @@ const initialState = {
 
 export const getPlan = createAsyncThunk(
     '/member/list',
-    async (planList, {rejectedWithValue}) => {
-        console.log(planList)
+    async (_, {rejectedWithValue}) => {
         try {
-            const res = await getApi('/member/list', planList)
+            const res = await getApi('/member/list' )
             console.log(res)
             return {
                 data: res.data,
                 status: res.status
             }
         } catch (err) {
-            // window.alert(err.response.data.message)
+            console.log(err)
+            return rejectedWithValue(err.response)
+        }
+    }
+)
+
+export const getOnePlan = createAsyncThunk(
+    '/member/list',
+    async (planId, {rejectedWithValue}) => {
+        try {
+            const res = await getApi(`/member/list/${planId}`)
+            console.log(res)
+            return {
+                data: res.data
+            }
+        } catch(err) {
             console.log(err)
             return rejectedWithValue(err.response)
         }
@@ -56,23 +70,21 @@ export const planSlice = createSlice({
         },
     },
     extraReducers: {
-        // plan/setPlan/pending === signUp.pending
-        [getPlan.pending]: (state, action) => {
-            if (state.loading === 'idle') {
-                state.loading = 'pending'
-            }
-        },
-        // plan/setPlan/fulfilled === signUp.fulfilled
         [getPlan.fulfilled]: (state, action) => {
             if (state.loading === 'pending') {
                 state.loading = 'succeeded'
-                state.user = action.payload
+                state.list = action.payload
             }
         },
-        // plan/setPlan/rejected === signUp.rejected
         [getPlan.rejected]: (state, action) => {
             if (state.loading === 'pending') {
                 state.loading = 'failed'
+            }
+        },
+        [getPlan.fulfilled]: (state, action) => {
+            if (state.loading === 'pending') {
+                state.loading = 'succeeded'
+                state.list = action.payload
             }
         },
         [addPlan.pending]: (state, action) => {

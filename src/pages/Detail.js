@@ -16,7 +16,7 @@ function Detail() {
             navigator.share({
                 title: '상세페이지 공유',
                 text: '강남 테러',
-                url: 'http://localhost:3000/detail',
+                url: window.location.href,
             })
                 .then(() => console.log('성공'))
                 .catch((err) => console.log(err))

@@ -16,7 +16,7 @@ import Home from "./pages/Home";
 function App() {
 
     useEffect(() => {
-        const token = localStorage.getItem('jwt-token')
+        const token = localStorage.getItem('token')
         if (token) {
             setClient(token)
         }
