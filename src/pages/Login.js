@@ -49,48 +49,53 @@ const Login = (props) => {
     }
 
     return (
-        <Container>
-            <div>
-                <h1>On it</h1>
-            </div>
+        <>
+            <Container>
+                <div>
+                    <h1>On it</h1>
+                </div>
+                <LoginText>
+                    <h2>로그인</h2>
+                </LoginText>
 
-            <InputBox>
-                <input
-                    placeholder='아이디를 입력하세요'
-                    onKeyPress={handleKeyPress}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-            </InputBox>
+                <InputBox>
+                    <input
+                        placeholder='아이디를 입력하세요'
+                        onKeyPress={handleKeyPress}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                </InputBox>
 
-            <InputBox>
-                <input
-                    placeholder='비밀번호 입력하세요'
-                    type='password'
-                    onKeyPress={handleKeyPress}
-                    onChange={(e) => setPw(e.target.value)}
-                />
-            </InputBox>
+                <InputBox>
+                    <input
+                        placeholder='비밀번호 입력하세요'
+                        type='password'
+                        onKeyPress={handleKeyPress}
+                        onChange={(e) => setPw(e.target.value)}
+                    />
+                </InputBox>
 
-            <LoginDiv>
-                <button
-                    onClick={Login}
-                >로그인
-                </button>
-            </LoginDiv>
+                <LoginDiv>
+                    <button
+                        onClick={Login}
+                    >로그인
+                    </button>
+                </LoginDiv>
 
-            <SignUpDiv>
-                <button>카카오톡 로그인</button>
-            </SignUpDiv>
+                <SignUpDiv>
+                    <button>카카오톡 로그인</button>
+                </SignUpDiv>
 
-            <SignUpDiv>
-                <button
-                    onClick={() => {
-                        navigate('/signup')
-                    }}
-                >회원가입
-                </button>
-            </SignUpDiv>
-        </Container>
+                <SignUpDiv>
+                    <button
+                        onClick={() => {
+                            navigate('/signup')
+                        }}
+                    >회원가입
+                    </button>
+                </SignUpDiv>
+            </Container>
+        </>
     )
 }
 
@@ -101,11 +106,16 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 70vh;
+`
+
+const LoginText = styled.div`
+  width: 80%;
 `
 
 const InputBox = styled.div`
   display: flex;
-  width: 70%;
+  width: 80%;
   margin-bottom: 10px;
 
   input {
@@ -118,7 +128,7 @@ const LoginDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 70%;
+  width: 80%;
   margin-top: 10px;
 
   button {
@@ -135,7 +145,7 @@ const SignUpDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 70%;
+  width: 80%;
   margin-top: 15px;
 
   button {

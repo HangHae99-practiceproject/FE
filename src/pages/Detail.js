@@ -1,21 +1,26 @@
-import React from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
-import {useNavigate} from "react-router-dom";
-
+import {useNavigate, useParams} from "react-router-dom";
+import { getOnePlan } from "../redux/modules/plan";
 import ScheduleContainer from "../components/ScheduleContainer";
+import { useDispatch, useSelector } from "react-redux";
+import Test from "./Test";
+import Real from "./teeest";
 
-function Detail() {
+const Detail = (props) => {
+    const params = useParams();
 
-    const plan = ScheduleContainer.defaultProps
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const plan = useSelector(state => state.plan.showplan.data)
 
-    const navigate = useNavigate()
 
     // 공유 팝업 생성
     const handle = () => {
         if (navigator.share) {
             navigator.share({
-                title: '상세페이지 공유',
-                text: '강남 테러',
+                title: plan.planName,
+                text: plan.planName,
                 url: window.location.href,
             })
                 .then(() => console.log('성공'))
@@ -25,41 +30,59 @@ function Detail() {
         }
     }
 
+    useEffect(() => {
+        dispatch(getOnePlan(params.planId))
+    }, [])
+
+    if(!plan){
+        return;
+    }
+
     return (
         <div>
-
             <HeadLine>
-                <h2>상세페이지 or 초대장</h2>
+                {plan.writer === document.cookie.split("=")[1] ?
+                    <h2>상세페이지</h2> : <h2>초대장</h2>
+                }
             </HeadLine>
-
             <ScheduleBox>
-                <p>{plan.planList.planDate} / {plan.planList.planTime}</p>
-                <p>{plan.planList.planName}</p>
-                <p>{plan.planList.locationDetail.locationName}</p>
-                <p>{plan.planList.penalty}</p>
+                <p>{plan?.planDate}</p>
+                <p>{plan?.planName}</p>
+                <p>{plan?.locationDetail?.name}</p>
+                <p>{plan?.penalty}</p>
             </ScheduleBox>
-
             <MapBox>
-                지도
+                <Test
+                props={plan?.locationDetail}
+                />
+                <Real/>
             </MapBox>
-
             <ButtonBox>
-
-                <button onClick={handle}>
-                    공유 or 참석
-                </button>
-
-                <button
-                    onClick={() => {
-                        navigate('/main')
-                    }}>
-                    나가기 or 거절
-                </button>
+                {plan.writer === document.cookie.split("=")[1] ?
+                <>
+                    <button onClick={handle}>
+                        공유하기
+                    </button>
+                    <button>
+                        뒤로가기
+                    </button>
+                </>
+                :
+                <>
+                    <button onClick={handle}>
+                        참석하기
+                    </button>
+                    <button
+                        onClick={() => {
+                            navigate('/main')
+                        }}>
+                        거절하기
+                    </button>
+                </>
+                }
             </ButtonBox>
-
         </div>
     )
-
 }
 
 export default Detail

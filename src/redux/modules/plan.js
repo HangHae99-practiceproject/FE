@@ -1,23 +1,20 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import {postApi, getApi} from "../../shared/api/client";
-import {signUp} from "./user";
+import { getDatabase, push, ref, set, onValue } from "firebase/database";
+import { app } from '../../firebase'
 
 const initialState = {
-    list: [],
     loading: 'idle'
 }
 
 export const getPlan = createAsyncThunk(
-    '/member/list',
-    async (_, {rejectedWithValue}) => {
+    `/member/list/${document.cookie.split("=")[0]}/1`,
+    async ( _ , {rejectedWithValue}) => {
         try {
-            const res = await getApi('/member/list' )
-            console.log(res)
-            return {
-                data: res.data,
-                status: res.status
-            }
+            const res = await getApi(`/member/list/${document.cookie.split("=")[0]}/1`)
+            return res.data
         } catch (err) {
+            // window.alert(err.response.data.message)
             console.log(err)
             return rejectedWithValue(err.response)
         }
@@ -25,15 +22,18 @@ export const getPlan = createAsyncThunk(
 )
 
 export const getOnePlan = createAsyncThunk(
-    '/member/list',
-    async (planId, {rejectedWithValue}) => {
+    `member/list`,
+    async ( planId , {rejectedWithValue}) => {
         try {
             const res = await getApi(`/member/list/${planId}`)
-            console.log(res)
-            return {
-                data: res.data
-            }
-        } catch(err) {
+            const data = res.data
+            console.log(data.data)
+            const db = getDatabase(app);
+            set(ref(db, `${planId}`), {
+                ...data.data
+            })
+            return data
+        } catch (err) {
             console.log(err)
             return rejectedWithValue(err.response)
         }
@@ -41,16 +41,13 @@ export const getOnePlan = createAsyncThunk(
 )
 
 export const addPlan = createAsyncThunk(
-    'member/plan',
+    '/member/plan',
     async (data, {rejectedWithValue}) => {
         console.log(data)
         try {
             const res = await postApi('/member/plan', data)
-            // window.location.assign('/main')
-            return {
-                data: res.data,
-                status: res.status
-            }
+            window.location.assign('/main')
+            return res.data;
         } catch (err) {
             console.log(err)
             return rejectedWithValue(err.response)
@@ -60,49 +57,27 @@ export const addPlan = createAsyncThunk(
 
 export const planSlice = createSlice({
     name: 'plan',
-    initialState,
-    reducers: {
-        setLoading: (state, action) => {
-            state.loading = action.payload
-        },
-        getPlanList: (state, action) => {
-            state.plan = action.payload
-        },
+    initialState: {
+        plans: [],
+        showplan: [],
     },
-    extraReducers: {
-        [getPlan.fulfilled]: (state, action) => {
-            if (state.loading === 'pending') {
-                state.loading = 'succeeded'
-                state.list = action.payload
-            }
-        },
-        [getPlan.rejected]: (state, action) => {
-            if (state.loading === 'pending') {
-                state.loading = 'failed'
-            }
-        },
-        [getPlan.fulfilled]: (state, action) => {
-            if (state.loading === 'pending') {
-                state.loading = 'succeeded'
-                state.list = action.payload
-            }
-        },
-        [addPlan.pending]: (state, action) => {
-            if (state.loading === 'idle') {
-                state.loading = 'pending'
-            }
-        },
-        [addPlan.fulfilled]: (state, action) => {
-            if (state.loading === 'pending') {
-                state.loading = 'succeeded'
-                state.plan = action.payload
-            }
-        },
-        [addPlan.rejected]: (state, action) => {
-            if (state.loading === 'pending') {
-                state.loading = 'failed'
-            }
-        },
+    reducers: {
+        // setLoading: (state, action) => {
+        //     state.loading = action.payload
+        // },
+        // getPlanList: (state, action) => {
+        //     state.plan = action.payload
+        // },
+    },
+    extraReducers: builder => {
+        builder
+            .addCase(getPlan.fulfilled, (state, action) => {
+                state.plans = action.payload;
+            })
+            .addCase(getOnePlan.fulfilled, (state, action) => {
+                state.showplan = action.payload;
+            })
+            .addCase(addPlan.fulfilled, (state, action) => {})
     }
 })
 

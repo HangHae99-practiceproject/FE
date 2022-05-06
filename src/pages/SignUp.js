@@ -51,56 +51,61 @@ const Signup = (props) => {
 
 
     return (
-        <Container>
-            <div>
-                <h1>On it</h1>
-            </div>
+        <>
+            <Container>
+                <div>
+                    <h1>On it</h1>
+                </div>
+                <SignupText>
+                    <h2>회원가입</h2>
+                </SignupText>
 
-            <InputBox>
-                <input
-                    value={username}
-                    placeholder='아이디를 입력하세요'
-                    onKeyPress={handleKeyPress}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-            </InputBox>
+                <InputBox>
+                    <input
+                        value={username}
+                        placeholder='아이디를 입력하세요'
+                        onKeyPress={handleKeyPress}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                </InputBox>
 
-            <InputBox>
-                <input
-                    value={nickname}
-                    placeholder='닉네임을 입력하세요'
-                    onKeyPress={handleKeyPress}
-                    onChange={(e) => setNickname(e.target.value)}
-                />
-            </InputBox>
+                <InputBox>
+                    <input
+                        value={nickname}
+                        placeholder='닉네임을 입력하세요'
+                        onKeyPress={handleKeyPress}
+                        onChange={(e) => setNickname(e.target.value)}
+                    />
+                </InputBox>
 
-            <InputBox>
-                <input
-                    value={pw}
-                    placeholder='비밀번호를 입력하세요'
-                    type='password'
-                    onKeyPress={handleKeyPress}
-                    onChange={(e) => setPw(e.target.value)}
-                />
-            </InputBox>
+                <InputBox>
+                    <input
+                        value={pw}
+                        placeholder='비밀번호를 입력하세요'
+                        type='password'
+                        onKeyPress={handleKeyPress}
+                        onChange={(e) => setPw(e.target.value)}
+                    />
+                </InputBox>
 
-            <InputBox>
-                <input
-                    value={pwCheck}
-                    placeholder='비밀번호를 다시 한번 입력하세요'
-                    type='password'
-                    onKeyPress={handleKeyPress}
-                    onChange={(e) => setPwCheck(e.target.value)}
-                />
-            </InputBox>
+                <InputBox>
+                    <input
+                        value={pwCheck}
+                        placeholder='비밀번호를 다시 한번 입력하세요'
+                        type='password'
+                        onKeyPress={handleKeyPress}
+                        onChange={(e) => setPwCheck(e.target.value)}
+                    />
+                </InputBox>
 
-            <SignUpDiv>
-                <button
-                    onClick={handleSignUp}
-                >회원가입
-                </button>
-            </SignUpDiv>
-        </Container>
+                <SignUpDiv>
+                    <button
+                        onClick={handleSignUp}
+                    >회원가입
+                    </button>
+                </SignUpDiv>
+            </Container>
+        </>
     )
 }
 
@@ -111,11 +116,16 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 70vh;
+`
+
+const SignupText = styled.div`
+  width: 80%;
 `
 
 const InputBox = styled.div`
   display: flex;
-  width: 70%;
+  width: 80%;
   margin-bottom: 10px;
 
   input {
@@ -133,7 +143,7 @@ const SignUpDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 70%;
+  width: 80%;
   margin-top: 15px;
 
   button {
