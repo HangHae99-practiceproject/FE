@@ -13,7 +13,7 @@ import AddPlans from "./pages/AddPlans";
 import Test from "./pages/Test";
 import Home from "./pages/Home";
 import Real from "./pages/teeest";
-import DrawerMenu from "./components/DrawerMenu";
+import NavBar from "./components/NavBar";
 //firebase
 
 
@@ -39,7 +39,7 @@ function App() {
                 <Route path="/past" element={<PastPlan/>}/>
                 <Route path="/test" element={<Test/>}/>
                 <Route path="/real" element={<Real/>}/>
-                <Route path='/drawer' element={<DrawerMenu/>}/>
+                <Route path='/drawer' element={<NavBar/>}/>
             </Routes>
             <GlobalStyle/>
         </>
