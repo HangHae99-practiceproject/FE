@@ -2,11 +2,18 @@ import React, { useState, useEffect } from 'react'
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
 const Test = (props) => {
-  console.log(props)
   const [state, setState] = useState({
     center: {
-      lat: props.props.lat,
-      lng: props.props.lng,
+      lat: props.lat,
+      lng: props.lng,
+    },
+    errMsg: null,
+    isLoading: true,
+  })
+  const [dest, setDest] = useState({
+    center: {
+      lat: props.lat,
+      lng: props.lng,
     },
     errMsg: null,
     isLoading: true,
@@ -93,27 +100,30 @@ const Test = (props) => {
             }}
             onClick={() =>
               setState({
-                center: { lat: props.props.lat, lng: props.props.lng },
+                center: { lat: props.lat, lng: props.lng },
                 isPanto: true,
               })
             }
         />
-        {!myLocation.isLoading && (
-          <MapMarker position={myLocation.center}>
-            <div style={{ padding: "5px", color: "#000" }}>
-              {myLocation.errMsg ? myLocation.errMsg : "여기에 계신가요?!"}
-            </div>
-          </MapMarker>
-        )}
         <MapMarker // 마커를 생성합니다
             position={
             // 마커가 표시될 위치입니다
-            state.center
+            dest.center
             }
-        />
+        >
+          <div style={{ padding: "5px", color: "#000" }}>
+              {dest.errMsg ? dest.errMsg : props.name}
+            </div>
+        </MapMarker>
+          <MapMarker position={myLocation.center}>
+            <div style={{ padding: "5px", color: "#000" }}>
+              {myLocation.errMsg ? myLocation.errMsg : "내 위치"}
+            </div>
+          </MapMarker>
+
       </Map>
     </>
   )
 }
- 
+
 export default Test;

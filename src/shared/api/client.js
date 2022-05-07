@@ -2,7 +2,12 @@ import axios from "axios";
 
 const client = axios.create({
     baseURL: 'https://imonint.shop',
+    withCredentials: false,
 })
+
+// export const URL = axios.create({
+//     baseURL: 'https://imonint.shop',
+// })
 
 // cookie?
 client.interceptors.request.use(function (config) {

@@ -1,11 +1,12 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import {postApi} from "../../shared/api/client";
-import { deleteCookie, getCookie, setCookie } from '../../shared/utils/Cookie';
+import { deleteCookie, setCookie } from '../../shared/utils/Cookie';
 
 
 const initialState = {
     user: null,
-    loading: 'idle'
+    loading: 'idle',
+    is_login: false
 }
 
 export const signUp = createAsyncThunk(
@@ -13,7 +14,9 @@ export const signUp = createAsyncThunk(
     async (data, {rejectedWithValue}) => {
         console.log(data)
         try {
-            const res = await postApi('/user/signup', data)
+            const res = await postApi('/user/signup', data, {
+                withCredentials: false,
+            })
             console.log(res)
             window.location.assign('/login')
             return {
@@ -116,7 +119,7 @@ export const userSlice = createSlice({
         [login.fulfilled]: (state, action) => {
             if (state.loading === 'pending') {
                 state.loading = 'succeeded'
-                state.user = action.payload
+                state.user = action.payload;
             }
         },
         // user/login/rejected === login.rejected

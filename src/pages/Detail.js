@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {useNavigate, useParams} from "react-router-dom";
 import { getOnePlan } from "../redux/modules/plan";
@@ -7,10 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 import Test from "./Test";
 import Real from "./teeest";
 
+import { getDatabase, ref, onValue, child, get} from "firebase/database";
+
+
 const Detail = (props) => {
     const params = useParams();
 
-    const navigate = useNavigate();
+    const nav = useNavigate();
     const dispatch = useDispatch();
     // 공유 팝업 생성
     const handle = () => {
@@ -26,38 +29,61 @@ const Detail = (props) => {
             alert("공유하기가 지원되지 않는 환경 입니다.")
         }
     }
-    const plan = useSelector(state => state.plan.showplan.data)
-    console.log(plan)
+    // const plan = useSelector(state => state.plan.showplan.data)
+    // console.log(plan)
     useEffect(() => {
         dispatch(getOnePlan(params.planId))
     }, [])
 
-    if(!plan){
+    // if(!plan){
+    //     return;
+    // }
+    const [plans, setPlan] = useState({})
+    // const db = getDatabase();
+    // const planData = ref(db, `${params.planId}`)
+    // onValue(planData, (snapshot) => {
+    //     setPlan({...snapshot.val()});
+    // })
+    const dbRef = ref(getDatabase());
+    useEffect(() => {
+        get(child(dbRef, `${params.planId}`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                setPlan({...snapshot.val()});
+            } else {
+                console.log("No data available");
+            }
+        }).catch((err) => {
+            console.log(err)
+        });
+    }, [])
+    console.log(plans)
+    if(!plans.locationDetail){
         return;
     }
-
     return (
         <div>
             <HeadLine>
                 <h2>상세페이지 or 초대장</h2>
             </HeadLine>
             <ScheduleBox>
-                <p>{plan?.planDate}</p>
-                <p>{plan?.planName}</p>
-                <p>{plan?.locationDetail?.name}</p>
-                <p>{plan?.penalty}</p>
+                <p>{plans?.planDate}</p>
+                <p>{plans?.planName}</p>
+                <p>{plans?.locationDetail?.name}</p>
+                <p>{plans?.penalty}</p>
             </ScheduleBox>
             <MapBox>
                 <Test
-                props={plan?.locationDetail}
+                {...plans?.locationDetail}
                 />
-                <Real/>
             </MapBox>
             <ButtonBox>
-                {plan?.writer === document.cookie.split("=")[1] ?
+                {plans.writer === document.cookie.split("=")[1] ?
                 <>
                     <button onClick={handle}>
                         공유하기
+                    </button>
+                    <button onClick={() => nav(`/details/${plans.url}`)}>
+                        이동
                     </button>
                     <button>
                         뒤로가기
@@ -68,9 +94,12 @@ const Detail = (props) => {
                     <button onClick={handle}>
                         참석하기
                     </button>
+                      <button onClick={() => nav(`/details/${plans.url}`)}>
+                        이동
+                    </button>
                     <button
                         onClick={() => {
-                            navigate('/main')
+                            nav('/main')
                         }}>
                         거절하기
                     </button>

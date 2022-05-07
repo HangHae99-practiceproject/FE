@@ -1,30 +1,23 @@
 import React, {useEffect} from "react";
 import {Route, Routes} from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
-
-import {setClient} from "./shared/api/client";
-
 import Login from "./pages/Login";
 import Signup from "./pages/SignUp";
 import Main from "./pages/Main";
 import Detail from "./pages/Detail";
 import PastSchedule from "./pages/PastSchedule";
 import AddPlans from "./pages/AddPlans";
-import Test from "./pages/Test";
 import Home from "./pages/Home";
 import Real from "./pages/teeest";
+import PlanSetName from "./pages/PlanSetName";
 //firebase
 
 
 function App() {
 
+    const islogin = localStorage.getItem('token') ? true : false;
+    const userNick = document.cookie.split("=")[1];
 
-    // useEffect(() => {
-    //     const token = localStorage.getItem('token')
-    //     if (token) {
-    //         setClient(token)
-    //     }
-    // }, [])
 
     return (
         <>
@@ -36,8 +29,8 @@ function App() {
                 <Route path="/main" element={<Main/>}/>
                 <Route path="/detail/:planId" element={<Detail/>}/>
                 <Route path="/past" element={<PastSchedule/>}/>
-                <Route path="/test" element={<Test/>}/>
                 <Route path="/real" element={<Real/>}/>
+                <Route path="/details/:url" element={<PlanSetName islogin={islogin} userNick={userNick} />} />
             </Routes>
             <GlobalStyle/>
         </>
