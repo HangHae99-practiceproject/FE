@@ -8,10 +8,8 @@ import Detail from "./pages/Detail";
 import PastPlan from "./pages/PastPlan";
 import AddPlans from "./pages/AddPlans";
 import Home from "./pages/Home";
-import Real from "./pages/teeest";
 import PlanSetName from "./pages/PlanSetName";
 import NavBar from "./components/NavBar";
-import Test from "./pages/Test";
 //firebase
 
 
@@ -32,8 +30,6 @@ function App() {
                 <Route path="/detail/:planId" element={<Detail/>}/>
                 <Route path="/details/:url" element={<PlanSetName islogin={islogin} userNick={userNick} />} />
                 <Route path="/past" element={<PastPlan/>}/>
-                <Route path="/test" element={<Test/>}/>
-                <Route path="/real" element={<Real/>}/>
                 <Route path='/drawer' element={<NavBar/>}/>
             </Routes>
             <GlobalStyle/>

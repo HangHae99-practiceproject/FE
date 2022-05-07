@@ -5,7 +5,6 @@ import { getOnePlan } from "../redux/modules/plan";
 import ScheduleContainer from "../components/ScheduleContainer";
 import { useDispatch, useSelector } from "react-redux";
 import Test from "./Test";
-import Real from "./teeest";
 
 import { getDatabase, ref, onValue, child, get} from "firebase/database";
 
