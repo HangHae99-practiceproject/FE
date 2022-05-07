@@ -92,7 +92,7 @@ const AddPlans = (props) => {
                     </div>
                 </Grid>
                 <Grid bottom="0" padding="16px" >
-                    <Button _onClick={create}>공유하기</Button>
+                    <Button _onClick={create}>완성!</Button>
                 </Grid>
             </React.Fragment>
         )

@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import moment from "moment";
+import 'moment/locale/ko'
 
 import { Grid, Text } from "../elements";
 import theme from "../Styles/theme";
@@ -12,16 +14,17 @@ import ScheduleContainer from "../components/ScheduleContainer";
 import {useDispatch} from "react-redux";
 import {logout} from "../redux/modules/user";
 import { getPlan } from "../redux/modules/plan";
+import {onHidden} from "web-vitals/dist/modules/lib/onHidden";
 
 const Main = (props) => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const planList = useSelector(state => state.plan.plans.data?.planList);
+
     const logoutBtn = () => {
         localStorage.removeItem('token')
         dispatch(logout())
-        console.log(logoutBtn)
     };
     console.log(planList)
     useEffect(() => {
@@ -35,10 +38,18 @@ const Main = (props) => {
         }
     }
 
+    const [isOpen, setMenu] = useState(false);
+
+    const toggleMenu = () => {
+        setMenu(isOpen => !isOpen);
+    }
+
+    const nowTime = moment()
+        .format('YYYY'+'년'+'MM'+'월'+'DD'+'일' +' '+ 'HH'+'시'+'mm'+'분')
+
     return (
         <div>
             <HeadBox>
-                <div onClick={logoutBtn}>로그아웃</div>
                 <BsBell style={{
                     fontSize: "20px",
                     margin: "5px",
@@ -48,22 +59,30 @@ const Main = (props) => {
                     fontSize: "20px",
                     margin: "5px",
                     cursor: "pointer"
-                }}/>
+                }} onClick={() => toggleMenu()}/>
+                {isOpen ? <ShowMenu>
+                    <p>{document.cookie.split("=")[1]} 님</p>
+                    <p onClick={()=>{navigate('/past')}} >지난 일정</p>
+                    <p onClick={logoutBtn}>로그아웃</p>
+                </ShowMenu> : <HideMenu>
+                    <span></span>
+                </HideMenu>}
             </HeadBox>
 
             <UserInfo>
                 <p>{document.cookie.split("=")[1]} 님</p>
-                <p>{props.today} 입니다.</p>
+                <p>{nowTime} 입니다.</p>
             </UserInfo>
             {/* <ScheduleContainer /> */}
             <PlanList>
                 {Plans.length === 0 ? (
-                    <Grid is_flex center padding="10px">
-                        <Text size="14px" color={theme.color.gray3}>
+                    <Grid center padding="10px">
+                        <Text size="14px" color={theme.color.gray2}>
                             모임이 없습니다
-                            <br />
-                            모임을 추가해보세요!
                         </Text>
+                        <button
+                            onClick={() => {navigate('/add')}}
+                        >온잇으로 모임 만들기</button>
                     </Grid>
                 ) : (
                     Plans.map((plan, idx) => (
@@ -82,16 +101,31 @@ const Main = (props) => {
                     ))
                 )}
             </PlanList>
-
-            <IoAddCircle
-                onClick={() => {navigate('/add')}}
-                style={{
-                cursor: "pointer",
-                fontSize: "50px",
-                position: "fixed",
-                bottom: "15px",
-                right: "15px"
-            }}/>
+            {Plans.length === 0 ?
+                <IoAddCircle
+                    onClick={() => {
+                        navigate('/add')
+                    }}
+                    style={{
+                        cursor: "pointer",
+                        fontSize: "50px",
+                        position: "fixed",
+                        bottom: "15px",
+                        right: "15px",
+                        visibility: 'hidden'
+                    }}/>
+                :
+                <IoAddCircle
+                    onClick={() => {
+                        navigate('/add')
+                    }}
+                    style={{
+                        cursor: "pointer",
+                        fontSize: "50px",
+                        position: "fixed",
+                        bottom: "15px",
+                        right: "15px",
+                    }}/>}
         </div>
     )
 }
@@ -109,8 +143,33 @@ const Schedules = styled.div`
   margin: auto;
   padding: 0 0 0 5px;
   width: 90%;
-  border: 1px solid #ddd;
+  border: 1px none #ddd;
   border-radius: 10px;
+`
+
+const HeadBox = styled.div`
+  background-color: red;
+  width: 100%;
+  text-align: right;
+  padding: 0 5px 0 0;
+  margin: 5px 0 5px 0;
+`
+
+const ShowMenu = styled.div`
+  background-color: #ddd;
+  width: 40%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  transition: 1s;
+`
+
+const HideMenu = styled.p`
+  width: 40%;
+  height: 500px;
+  position: absolute;
+  left: -40%;
+  transition: 1s;
 `
 
 const PlanList = styled.div`
@@ -142,36 +201,8 @@ const ScheduleTop = styled.div`
   }
 `
 
-const HeadBox = styled.div`
-  background-color: red;
-  width: 100%;
-  text-align: right;
-  padding: 0 5px 0 0;
-  margin: 5px 0 5px 0;
-`
-
 const UserInfo = styled.div`
   background-color: green;
   width: 100%;
   padding: 0 0 0 5px;
-`
-
-const AddButton = styled.div`
-  cursor: pointer;
-  background-color: slateblue;
-  width: 50px;
-  height: 50px;
-  border: none;
-  border-radius: 50%;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-
-  font-size: 50px;
-  font-weight: 800;
-  color: #fff;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `

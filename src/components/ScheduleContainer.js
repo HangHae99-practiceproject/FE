@@ -10,19 +10,19 @@ const ScheduleContainer = (props) => {
     console.log(posts)
     const navigate = useNavigate()
     if(!posts){
-      return;
+        return;
     }
     return (
-                posts.map((el, idx) => {
-                  console.log(el)
-                  return (
-                    <Schedules key={idx} onClick={() => {
-                      navigate(`/detail/${el?.planId}`)
-                    }}>
+        posts.map((el, idx) => {
+            console.log(el)
+            return (
+                <Schedules key={idx} onClick={() => {
+                    navigate(`/detail/${el?.planId}`)
+                }}>
                     <PlanList {...el}/>
-                    </Schedules>
-                  )
-                })
+                </Schedules>
+            )
+        })
     )
 }
 
@@ -33,8 +33,8 @@ const Schedules = styled.div`
 
   margin: auto;
   padding: 0 0 0 5px;
-  width: 90%;
-  border: 1px solid #ddd;
+  width: 100%;
+  border: 1px none #ddd;
   border-radius: 10px;
 
   h3 {

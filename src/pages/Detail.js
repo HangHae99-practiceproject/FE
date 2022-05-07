@@ -15,12 +15,15 @@ const Detail = (props) => {
 
     const nav = useNavigate();
     const dispatch = useDispatch();
+    const plan = useSelector(state => state.plan.showplan.data)
+
+
     // 공유 팝업 생성
     const handle = () => {
         if (navigator.share) {
             navigator.share({
-                title: '상세페이지 공유',
-                text: '강남 테러',
+                title: plan.planName,
+                text: plan.planName,
                 url: window.location.href,
             })
                 .then(() => console.log('성공'))
@@ -63,7 +66,9 @@ const Detail = (props) => {
     return (
         <div>
             <HeadLine>
-                <h2>상세페이지 or 초대장</h2>
+                {plan.writer === document.cookie.split("=")[1] ?
+                    <h2>상세페이지</h2> : <h2>초대장</h2>
+                }
             </HeadLine>
             <ScheduleBox>
                 <p>{plans?.planDate}</p>

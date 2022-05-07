@@ -11,9 +11,9 @@ const client = axios.create({
 
 // cookie?
 client.interceptors.request.use(function (config) {
-	const accessToken = localStorage.getItem('token')
-	config.headers.common['Authorization'] = `${accessToken}`;
-	return config;
+    const accessToken = localStorage.getItem('token')
+    config.headers.common['Authorization'] = `${accessToken}`;
+    return config;
 });
 
 // export const setClient = (token) => {
