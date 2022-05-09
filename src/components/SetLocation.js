@@ -21,7 +21,7 @@ const SetLocation = (props) => {
                 islabel
                 labelBold
                 labelColor={theme.color.gray1}
-                labelText="어디서 만날건가요?"
+                labelText="먼저 장소를 정해주세요"
                 placeholder="장소를 입력해주세요."
                 _onClick={() => {
                     setShowMap(true);
@@ -39,14 +39,36 @@ const SetLocation = (props) => {
                 />
                 )}
                  {name !== ''?
-                <Grid bottom="0" padding="16px" >
-                    <Button _onClick={props.clickHandler}>다음으로</Button>
-                </Grid>
-                :
-                <Grid bottom="0" padding="16px" >
-                    <Button _onClick={()=> alert('장소를 정해주세요')}>다음으로</Button>
-                </Grid>
-                }
+                     <Grid bottom="0" padding="16px">
+                         <button
+                             style={{
+                                 backgroundColor: '#A1ED00',
+                                 width: '100%',
+                                 height: '100%',
+                                 padding: '12px',
+                                 color: 'black',
+                                 border: 'none',
+                                 borderRadius: '10px',
+                             }}
+                             onClick={props.clickHandler}>다음으로
+                         </button>
+                     </Grid>
+                     :
+                     <Grid bottom="0" padding="16px">
+                         <button
+                             style={{
+                                 backgroundColor: '#eee',
+                                 width: '100%',
+                                 height: '100%',
+                                 padding: '12px',
+                                 color: 'black',
+                                 border: 'none',
+                                 borderRadius: '10px',
+                             }}
+                             onClick={() => alert('장소를 정해주세요')}>다음으로
+                         </button>
+                     </Grid>
+                 }
         </React.Fragment>
     )
 }

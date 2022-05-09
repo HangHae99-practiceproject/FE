@@ -5,7 +5,7 @@ import {FaBars} from "react-icons/fa";
 import {AiOutlineClose} from "react-icons/ai";
 
 
-const DrawerMenu = ({ width=280, children }) => {
+const NavBar = ({ width=280, children }) => {
 
     const [isOpen, setMenu] = useState(false);
 
@@ -16,7 +16,7 @@ const DrawerMenu = ({ width=280, children }) => {
     return (
         <>
             <div className="header">
-                {/*클릭되었을 때 준비한 함수 호출! on off 개념*/}
+
                 <FaBars onClick={() => toggleMenu()}></FaBars>
                 {isOpen ? <ShowMenu>
                     <li>1</li>
@@ -34,7 +34,7 @@ const DrawerMenu = ({ width=280, children }) => {
         </>
     );
 }
-export default DrawerMenu;
+export default NavBar;
 
 const ShowMenu = styled.ul`
   background-color: #ddd;

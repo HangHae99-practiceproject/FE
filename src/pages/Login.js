@@ -4,7 +4,8 @@ import {useNavigate} from 'react-router-dom'
 import styled from "styled-components";
 
 import {login, setLoading, setUserName} from "../redux/modules/user";
- 
+import {KAKAO_AUTH_URL} from "../service/OAuth";
+
 const Login = (props) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -34,9 +35,6 @@ const Login = (props) => {
         }
     };
 
-    const setUser = (userName) => {
-        dispatch(setUserName(userName))
-    }
 
     if (loading === 'pending') {
         return 'loading...'
@@ -52,7 +50,10 @@ const Login = (props) => {
         <>
             <Container>
                 <div>
-                    <h1>On it</h1>
+                    <h1 style={{
+                        fontWeight: 'bold',
+                        fontSize:'48px'}}
+                    >On it</h1>
                 </div>
                 <LoginText>
                     <h2>로그인</h2>
@@ -83,10 +84,6 @@ const Login = (props) => {
                 </LoginDiv>
 
                 <SignUpDiv>
-                    <button>카카오톡 로그인</button>
-                </SignUpDiv>
-
-                <SignUpDiv>
                     <button
                         onClick={() => {
                             navigate('/signup')
@@ -94,6 +91,13 @@ const Login = (props) => {
                     >회원가입
                     </button>
                 </SignUpDiv>
+
+                <KakaoDiv>
+                    <a href={KAKAO_AUTH_URL}>
+                        카카오로 간편 로그인
+                    </a>
+                </KakaoDiv>
+
             </Container>
         </>
     )
@@ -111,6 +115,12 @@ const Container = styled.div`
 
 const LoginText = styled.div`
   width: 80%;
+  h2 {
+    color : #5A5A5A;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 16px 0;
+  }
 `
 
 const InputBox = styled.div`
@@ -119,8 +129,11 @@ const InputBox = styled.div`
   margin-bottom: 10px;
 
   input {
+    padding: 12px;
     width: 100%;
     height: 30px;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
   }
 `
 const LoginDiv = styled.div`
@@ -134,9 +147,11 @@ const LoginDiv = styled.div`
   button {
     width: 100%;
     height: 30px;
-    border: 0px;
-    color: white;
-    background-color: black;
+    border: none;
+    border-radius: 10px;
+    color: black;
+    background-color: #A1ED00;
+    cursor: pointer;
   }
 `
 
@@ -151,8 +166,26 @@ const SignUpDiv = styled.div`
   button {
     width: 100%;
     height: 30px;
-    border: 0px;
-    color: white;
-    background-color: black;
+    border: none;
+    border-radius: 10px;
+    color: black;
+    background-color: #A1ED00;
+    cursor: pointer;
+  }
+`
+
+const KakaoDiv = styled.div`
+  display: flex;
+  text-align: center;
+  width: 80%;
+  margin-top: 15px;
+
+  a {
+    width: 100%;
+    height: 30px;
+    border: none;
+    border-radius: 10px;
+    color: black;
+    cursor: pointer;
   }
 `

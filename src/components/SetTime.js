@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid, Input, Button } from '../elements';
+import theme from "../Styles/theme";
 
 const SetTime = (props) => {
     let today = new Date();
@@ -17,26 +18,38 @@ const SetTime = (props) => {
     return (
         <React.Fragment>
             <Grid padding="16px">
-                <h1>언제 만나는게 좋을까요?</h1>
                 <Input
-                islabel
-                labelBold
-                labelText="먼저 날짜를 알려주세요"
-                textAlign="center"
-                placeholder={today = yyyy + '년 '+mm+'월 '+dd+'일 '}
-                _onChange={handleDate} />
+                    islabel
+                    labelBold
+                    labelColor={theme.color.gray1}
+                    labelText="먼저 날짜를 알려주세요"
+                    textAlign="center"
+                    placeholder={today = yyyy + '년 ' + mm + '월 ' + dd + '일 '}
+                    _onChange={handleDate}/>
                 <Input
-                islabel
-                labelBold
-                labelText="시간은 몇시가 좋을까요?"
-                textAlign="center"
-                placeholder={time}
-                _onChange={handleTime}
+                    islabel
+                    labelBold
+                    labelColor={theme.color.gray1}
+                    labelText="시간은 몇시가 좋을까요?"
+                    textAlign="center"
+                    placeholder={time}
+                    _onChange={handleTime}
                 />
             </Grid>
-                <Grid bottom="0" padding="16px" >
-                    <Button _onClick={props.clickHandler}>다음으로</Button>
-                </Grid>
+            <Grid bottom="0" padding="16px">
+                <button
+                    style={{
+                        backgroundColor: '#A1ED00',
+                        width: '100%',
+                        height: '100%',
+                        padding: '12px',
+                        color: 'black',
+                        border: 'none',
+                        borderRadius: '10px',
+                    }}
+                    onClick={props.clickHandler}>다음으로
+                </button>
+            </Grid>
         </React.Fragment>
     )
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
 
 const Test = (props) => {
-  console.log(props)
+  // console.log(props)
   const [state, setState] = useState({
     center: {
       lat: props.props.lat,

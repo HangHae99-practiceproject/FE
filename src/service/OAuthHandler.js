@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   actionCreators as userActions,
-  getUserbyToken,
+  getUserToken,
 } from '../redux/modules/user';
 
 import Spinner from '../elements/Spinner';
@@ -50,7 +50,7 @@ const OAuthHandler = props => {
           // console.log(ACCESS_TOKEN);
 
           setCookie('token', ACCESS_TOKEN, 1);
-          dispatch(getUserbyToken()).then(res => navigate('/main'));
+          dispatch(getUserToken()).then(res => navigate('/main'));
         })
         .catch(err => {
           console.log('소셜로그인 에러', err);

@@ -14,6 +14,7 @@ import Test from "./pages/Test";
 import Home from "./pages/Home";
 import Real from "./pages/teeest";
 import EditPlan from "./pages/EditPlan";
+import OAuthKakaoHandler from "./service/OAuthKakaoHandler";
 
 
 function App() {
@@ -34,12 +35,13 @@ function App() {
                 <Route path="/signup" element={<Signup/>}/>
                 <Route path="/add" element={<AddPlans/>}/>
                 <Route path="/main" element={<Main/>}/>
-                <Route path="/detail" element={<Detail/>}/>
-                {/*<Route path="/detail/:planId" element={<Detail/>}/>*/}
+                {/*<Route path="/detail" element={<Detail/>}/>*/}
+                <Route path="/detail/:planId" element={<Detail/>}/>
                 <Route path="/past" element={<PastPlan/>}/>
                 <Route path="/test" element={<Test/>}/>
                 <Route path="/real" element={<Real/>}/>
                 <Route path="/edit" element={<EditPlan/>}/>
+                <Route path="/api/kakao/callback" element={<OAuthKakaoHandler/>}/>
             </Routes>
             <GlobalStyle/>
         </>

@@ -4,10 +4,9 @@ import styled from "styled-components";
 import moment from "moment";
 import 'moment/locale/ko'
 
-import {Grid, Text} from "../elements";
+import {Text} from "../elements";
 import theme from "../Styles/theme";
-import {IoAddCircle} from "react-icons/io5";
-import {BsList, BsBell} from "react-icons/bs";
+import { BsBell } from "react-icons/bs";
 import {useNavigate} from "react-router-dom";
 
 import {useDispatch} from "react-redux";
@@ -20,16 +19,17 @@ const Main = (props) => {
     const dispatch = useDispatch();
     const planList = useSelector(state => state.plan.plans.data?.planList);
 
+    // console.log(planList && planList)
+
     const [isOpen, setMenu] = useState(false);
 
     const logoutBtn = () => {
         localStorage.removeItem('token')
         dispatch(logout())
     };
-    // console.log(planList)
 
     useEffect(() => {
-        dispatch(getPlan())
+        dispatch(getPlan(planList))
     }, [])
 
     const Plans = [];
@@ -48,13 +48,13 @@ const Main = (props) => {
 
 
     return (
-        <div style={{backgroundColor: '#eee'}}>
+        <div style={{backgroundColor: '#eee', height:'100vh'}}>
             <HeadBox>
                 <div style={{
                     height: '100%',
                     width: '40%',
-                    paddingRight: '5px',
-                    paddingTop: '5px',
+                    paddingRight: '8px',
+                    paddingBottom:'8px',
                     display: 'flex',
                     justifyContent: 'flex-end',
                     alignItems: 'center',
@@ -98,16 +98,41 @@ const Main = (props) => {
             </UserInfo>
 
             <PlanList>
-                <Schedules>
-                    <p>2022-05-07 T18:55</p>
-                    <p>약속이름</p>
-                    <p>약속 장소 이름</p>
-                    <p>페널티</p>
-                </Schedules>
+                {/*<div className='lists'>*/}
+                {/*    <h3>2022-05-07 T18:55</h3>*/}
+                {/*    <p>약속이름</p>*/}
+                {/*    <p>약속 장소 이름</p>*/}
+                {/*    <p>페널티</p>*/}
+                {/*</div>*/}
+                {/*<div className='lists'>*/}
+                {/*    <h3>2022-05-07 T18:55</h3>*/}
+                {/*    <p>약속이름</p>*/}
+                {/*    <p>약속 장소 이름</p>*/}
+                {/*    <p>페널티</p>*/}
+                {/*</div>*/}
+                {/*<div className='lists'>*/}
+                {/*    <h3>2022-05-07 T18:55</h3>*/}
+                {/*    <p>약속이름</p>*/}
+                {/*    <p>약속 장소 이름</p>*/}
+                {/*    <p>페널티</p>*/}
+                {/*</div>*/}
+                {/*<div className='lists'>*/}
+                {/*    <h3>2022-05-07 T18:55</h3>*/}
+                {/*    <p>약속이름</p>*/}
+                {/*    <p>약속 장소 이름</p>*/}
+                {/*    <p>페널티</p>*/}
+                {/*</div>*/}
                 {Plans.length === 0 ? (
-                    <Grid center padding="10px">
-                        <Text size="14px" color={theme.color.gray2}>
-                            모임이 없습니다
+                    <div style={{
+                        textAlign: "center",
+                        width: '100%',
+                        padding: '10px 0',
+                        marginTop: '20px',
+                    }}>
+                        <Text size="14px" color={theme.color.gray1}>
+                            아직 약속이 없습니다!
+                            <br style={{padding:'16px'}}/>
+                            즐거운 모임 온잇에서 어떠신가요?
                         </Text>
                         <button
                             onClick={() => {
@@ -115,51 +140,28 @@ const Main = (props) => {
                             }}
                         >온잇으로 모임 만들기
                         </button>
-                    </Grid>
+                    </div>
                 ) : (
                     Plans.map((plan, idx) => (
                         <div key={idx}>
-                            <Schedules
+                            <div className='lists'
                                 onClick={() => {
                                     navigate(`/detail/${plan.planId}`)
                                 }}
                             >
                                 <h3>{plan.planDate}</h3>
-                                <h3>{plan.planName}</h3>
-                                <p>{plan.locationDetail.locationName}</p>
+                                <p>{plan.planName}</p>
+                                <p>{plan.locationDetail.name}</p>
                                 <p>{plan.planList?.penalty}</p>
-                            </Schedules>
+                            </div>
                         </div>
                     ))
                 )}
             </PlanList>
-
-            <AddButton onClick={() => {navigate('/add')}}>+</AddButton>
-            {Plans.length === 0 ?
-                <IoAddCircle
-                    onClick={() => {
-                        navigate('/add')
-                    }}
-                    style={{
-                        cursor: "pointer",
-                        fontSize: "50px",
-                        position: "fixed",
-                        bottom: "15px",
-                        right: "15px",
-                        visibility: 'hidden'
-                    }}/>
-                :
-                <IoAddCircle
-                    onClick={() => {
-                        navigate('/add')
-                    }}
-                    style={{
-                        cursor: "pointer",
-                        fontSize: "50px",
-                        position: "fixed",
-                        bottom: "15px",
-                        right: "15px",
-                    }}/>}
+            {Plans.length === 0 ? null :
+            <AddButton onClick={() => {
+                navigate('/add')
+            }}>+</AddButton>}
         </div>
     )
 }
@@ -167,9 +169,11 @@ const Main = (props) => {
 export default Main
 
 const HeadBox = styled.div`
-  background-color: #eee;
+  background-color: #fff;
   width: 100%;
   height: 40px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   display: flex;
   justify-content: flex-end;
   .hamburger-btn {
@@ -207,7 +211,7 @@ const HeadBox = styled.div`
     }
 
     span:nth-of-type(2) {
-      top: 7.6px;
+      top: 7.7px;
     }
 
     span:nth-of-type(3) {
@@ -218,13 +222,13 @@ const HeadBox = styled.div`
 
     &.active {
       span:nth-of-type(1) {
-        transform: translateY(7.6px) rotate(-45deg);
+        transform: translateY(7.8px) rotate(-45deg);
       }
       span:nth-of-type(2) {
         opacity: 0;
       }
       span:nth-of-type(3) {
-        transform: translateY(-7.6px) rotate(45deg);
+        transform: translateY(-7.8px) rotate(45deg);
       }
     }
   }
@@ -272,8 +276,8 @@ const ShowMenu = styled.div`
 
 const PlanList = styled.div`
   padding: 0 30px;
-  margin: 30px 0;
-  height: 100vh;
+  margin-top: 30px;
+  overflow: hidden;
   //text-align: center;
   overflow-y: scroll;
   -ms-overflow-style: none; /* IE and Edge */
@@ -290,15 +294,54 @@ const PlanList = styled.div`
     border-radius: 10px;
     border: none;
   }
+  .lists:first-of-type {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    
+    background-color: #A1ED00;
+    width: 100%;
+    height: 25vh;
+    font-size: 24px;
+  }
+  .lists:first-of-type > h3 {
+    font-size: 32px;
+  }
+  
+  .lists {
+    background-color: white;
+    margin-top: 16px;
+    width: 100%;
+    border: 1px none #ddd;
+    border-radius: 10px;
+    padding: 16px 10px;
+  }
+  h3 {
+    padding-bottom: 16px;
+    font-weight: bold;
+    font-size: 20px;
+  }
+    p + p {
+    margin-top: 8px;
+  }
 `
 
 const Schedules = styled.div`
   background-color: #A1ED00;
-  margin: auto;
+  margin: 16px auto;
   width: 100%;
   border: 1px none #ddd;
   border-radius: 10px;
   padding: 16px 10px;
+  
+  h3: first-of-type { 
+    padding-bottom: 8px;
+    font-weight: bold;
+    font-size: 20px;
+  }
+  h3 + h3 {
+    padding-bottom: 8px;
+  }
   p + p {
     margin-top: 16px;
   }

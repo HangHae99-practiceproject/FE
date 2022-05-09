@@ -1,11 +1,13 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
-import {postApi} from "../../shared/api/client";
+import {getApi, postApi} from "../../shared/api/client";
 import { deleteCookie, getCookie, setCookie } from '../../shared/utils/Cookie';
+import axios from "axios";
 
 
 const initialState = {
     user: null,
-    loading: 'idle'
+    loading: 'idle',
+    is_login: false
 }
 
 export const signUp = createAsyncThunk(
@@ -75,6 +77,23 @@ export const logout = createAsyncThunk(
     }
 )
 
+export const getUserToken = createAsyncThunk(
+    'user/getUserToken',
+    async (_, {rejectedWithValue}) => {
+        try {
+            const res = await getApi('/api/kakao/callback',{
+                withCredentials : true,
+            })
+            return {
+                data: res.data,
+            }
+        } catch (err) {
+            console.log(err)
+            return rejectedWithValue(err.response)
+        }
+    }
+)
+
 export const userSlice = createSlice({
     name: 'user',
     initialState,
@@ -125,6 +144,10 @@ export const userSlice = createSlice({
                 state.loading = 'failed'
             }
         },
+        [getUserToken.fulfilled]: (state, action) => {
+            state.is_login = true
+            state.user = action.payload
+        }
     },
 })
 
@@ -138,5 +161,30 @@ export const {setUserName, setLoading} = userSlice.actions
 
 // 3
 // export const actions = userSlice.actions
+
+export const KakaoLogin = code => {
+    return function () {
+        axios({
+            method: 'GET',
+            url: `https://imonint.shop/api/kakao/callback?code=${code}`,
+        })
+            .then(res => {
+                console.log(res)
+                const ACCESS_TOKEN = res.headers.authorization;
+                // localStorage.setItem('token', ACCESS_TOKEN);
+                setCookie('token', ACCESS_TOKEN, 1)
+                window.location.assign('/main')
+
+                debugger;
+            })
+            .catch(err => {
+                console.log('소셜로그인 에러', err);
+
+                window.location.assign('/login');
+            });
+    };
+};
+const actionCreators = { KakaoLogin };
+export { actionCreators };
 
 export default userSlice.reducer
