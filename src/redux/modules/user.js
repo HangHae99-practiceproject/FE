@@ -1,5 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
-import {postApi} from "../../shared/api/client";
+import {getApi, postApi} from "../../shared/api/client";
 import { deleteCookie, setCookie } from '../../shared/utils/Cookie';
 
 
@@ -78,6 +78,47 @@ export const logout = createAsyncThunk(
     }
 )
 
+export const setFCMToken = createAsyncThunk(
+  'plan/setFCMToken',
+  async (data, { rejectWithValue }) => {
+    try {
+      return await postApi(`/member/devices`, data)
+        .then(response => response.data.data);
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+export const isFCMToken = createAsyncThunk(
+  'plan/isFCMToken',
+  async (data, { rejectWithValue }) => {
+    try {
+      return await postApi(`/member/alarms`, data)
+        .then(response => response.data.data);
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const getUserbyToken = createAsyncThunk(
+  'user/getUserbyToken',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await getApi(`/member`, { withCredentials: true })
+        .then(response => {
+          return response.data.data;
+        });
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+
 export const userSlice = createSlice({
     name: 'user',
     initialState,
@@ -128,6 +169,12 @@ export const userSlice = createSlice({
                 state.loading = 'failed'
             }
         },
+        [setFCMToken.fulfilled]: (state, action) => {},
+        [isFCMToken.fulfilled]: (state, action) => {},
+        [getUserbyToken.fulfilled]: (state, action) => {
+        state.is_login = true;
+        state.user_info = action.payload;
+      },
     },
 })
 
