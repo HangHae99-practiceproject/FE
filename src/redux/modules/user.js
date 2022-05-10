@@ -6,7 +6,9 @@ import { deleteCookie, setCookie } from '../../shared/utils/Cookie';
 const initialState = {
     user: null,
     loading: 'idle',
-    is_login: false
+    is_login: false,
+    user_info: {
+    }
 }
 
 export const signUp = createAsyncThunk(
@@ -55,22 +57,14 @@ export const login = createAsyncThunk(
 )
 
 export const logout = createAsyncThunk(
-    'user/logout',
+    'logout',
     async (_, {rejectedWithValue}) => {
-        console.log(_)
-        const data = {
-            data : '',
-        }
-        console.log(data)
         try {
-            const res = await postApi('/user/logout', data);
+            // const res = await postApi('/logout');
             localStorage.removeItem('token');
             deleteCookie(document.cookie.split("=")[0])
             setTimeout(() => window.location.assign('/login'), 1000)
-            return {
-                data: res.data,
-                status: res.status
-            }
+            // return res.data
         } catch (err) {
             console.log(err)
             return rejectedWithValue(err.response)

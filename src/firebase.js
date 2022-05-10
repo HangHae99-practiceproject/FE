@@ -3,7 +3,6 @@ import { initializeApp } from 'firebase/app';
 import { getMessaging } from 'firebase/messaging';
 import { getDatabase } from "firebase/database";
 
-
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -17,10 +16,11 @@ const firebaseConfig = {
   messagingSenderId: "738179248047",
   appId: "1:738179248047:web:e52348a2b26ef46381495a",
   measurementId: "G-4BH9SHC3SD",
+  databaseURL: "https://onit-a1529-default-rtdb.asia-southeast1.firebasedatabase.app",
 }
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
-const messaging = getMessaging(app);
+const messaging = getMessaging();
 export { messaging, database, app};

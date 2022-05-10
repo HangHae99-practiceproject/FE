@@ -23,10 +23,9 @@ const Main = (props) => {
     const planList = useSelector(state => state.plan.plans.data?.planList);
 
     const logoutBtn = () => {
-        localStorage.removeItem('token')
+        // localStorage.removeItem('token')
         dispatch(logout())
     };
-    console.log(planList)
     useEffect(() => {
         dispatch(getPlan())
     }, [])
