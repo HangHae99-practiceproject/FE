@@ -1,8 +1,6 @@
 import React, {useEffect} from "react";
 import {Route, Routes} from "react-router-dom";
-import {createGlobalStyle} from "styled-components";
-
-import {setClient} from "./shared/api/client";
+import { createGlobalStyle } from "styled-components";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -12,20 +10,18 @@ import PastPlan from "./pages/PastPlan";
 import AddPlans from "./pages/AddPlans";
 import Test from "./pages/Test";
 import Home from "./pages/Home";
+import PlanSetName from "./pages/PlanSetName";
 import Real from "./pages/teeest";
 import EditPlan from "./pages/EditPlan";
+import OAuthHandler from "./service/OAuthHandler";
 import OAuthKakaoHandler from "./service/OAuthKakaoHandler";
 
 
 function App() {
 
+    const isLogin = !!localStorage.getItem('token');
+    const userNick = document.cookie.split("=")[1];
 
-    // useEffect(() => {
-    //     const token = localStorage.getItem('token')
-    //     if (token) {
-    //         setClient(token)
-    //     }
-    // }, [])
 
     return (
         <>
@@ -35,13 +31,13 @@ function App() {
                 <Route path="/signup" element={<Signup/>}/>
                 <Route path="/add" element={<AddPlans/>}/>
                 <Route path="/main" element={<Main/>}/>
-                {/*<Route path="/detail" element={<Detail/>}/>*/}
                 <Route path="/detail/:planId" element={<Detail/>}/>
+                <Route path="/details/:url" element={<PlanSetName isLogin={isLogin} userNick={userNick} />} />
                 <Route path="/past" element={<PastPlan/>}/>
                 <Route path="/test" element={<Test/>}/>
                 <Route path="/real" element={<Real/>}/>
-                <Route path="/edit" element={<EditPlan/>}/>
-                <Route path="/api/kakao/callback" element={<OAuthKakaoHandler/>}/>
+                <Route path="/edit/:planId" element={<EditPlan/>}/>
+                <Route path="/users/kakao/callback" element={<OAuthHandler/>}/>
             </Routes>
             <GlobalStyle/>
         </>

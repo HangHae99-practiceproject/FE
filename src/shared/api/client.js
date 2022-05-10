@@ -2,9 +2,9 @@ import axios from "axios";
 
 const client = axios.create({
     baseURL: 'https://imonint.shop',
+    withCredentials: true,
 })
 
-// cookie?
 client.interceptors.request.use(function (config) {
     const accessToken = localStorage.getItem('token')
     config.headers.common['Authorization'] = `${accessToken}`;

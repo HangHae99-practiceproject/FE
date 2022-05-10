@@ -24,7 +24,7 @@ const Login = (props) => {
                 username,
                 password: pw,
             };
-            dispatch(login(loginData));
+            dispatch(login({data: loginData, navigate}));
         }
     };
 
@@ -175,17 +175,22 @@ const SignUpDiv = styled.div`
 `
 
 const KakaoDiv = styled.div`
+  background-color: #A1ED00;
   display: flex;
-  text-align: center;
   width: 80%;
   margin-top: 15px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
 
   a {
     width: 100%;
     height: 30px;
-    border: none;
-    border-radius: 10px;
     color: black;
-    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration-line: none;
   }
 `

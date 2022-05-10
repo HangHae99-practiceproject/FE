@@ -10,6 +10,7 @@ import React, {
   import styled from 'styled-components';
   import theme from '../Styles/theme.js';
   import Headerbar from '../shared/Headerbar.js';
+
   import { useNavigate } from 'react-router-dom';
 
   //카카오 맵
@@ -69,19 +70,20 @@ import React, {
       }, [delay]);
     };
 
-    //소켓관련
-    // const publicMaps = props.publicMaps;
 
-    // const [info, setInfo] = useState();
-    // const [position, setPosition] = useState();
-    // const [userData, setUserData] = useState({
-    //   sender: '',
-    //   connected: false,
-    //   content: '',
-    // });
-    // useEffect(() => {
-    //   return () => {};
-    // }, [publicMaps]);
+    //소켓관련
+    const publicMaps = props.publicMaps;
+
+    const [info, setInfo] = useState();
+    const [position, setPosition] = useState();
+    const [userData, setUserData] = useState({
+      sender: '',
+      connected: false,
+      content: '',
+    });
+    useEffect(() => {
+      return () => {};
+    }, [publicMaps]);
 
     //지도 관련
     const [map, setMap] = useState();
@@ -97,7 +99,7 @@ import React, {
 
     //위치보내기
     const sendMyLocation = () => {
-      console.log('위치보내기!');
+      // console.log('위치보내기!');
       if (stompClient) {
         let chatMessage = {
           sender: props.usernick,
@@ -108,16 +110,14 @@ import React, {
           type: 'MAP',
           planId: planId,
         };
-
         stompClient.send('/maps/map.send', {}, JSON.stringify(chatMessage));
         setUserData({ ...userData, lat: '', lng: '' });
       }
     };
-
     //내위치 반복 보내기
-    // useInterval(() => {
-    //   sendMyLocation();
-    // }, 3000);
+    useInterval(() => {
+      sendMyLocation();
+    }, 3000);
     // eslint-disable-next-line no-unused-vars
     const bounds = useMemo(() => {
       const bounds = new kakao.maps.LatLngBounds();
@@ -196,7 +196,9 @@ import React, {
           style={{
             // 지도의 크기
             width: '100%',
-            height: 'calc(90%)',
+            height: '50%',
+            position: "absolute",
+            bottom: 120
           }}
           level={3} // 지도의 확대 레벨
           onCreate={setMap}
@@ -205,7 +207,7 @@ import React, {
             setPosition(undefined);
           }}
         >
-          {/* {!myLocation.isLoading && <MapMarker position={myLocation.center} />} */}
+          {!myLocation.isLoading && <MapMarker position={myLocation.center} />}
           {publicMaps &&
             publicMaps.map((chat, index) => (
               // console.log('MAP', chat),

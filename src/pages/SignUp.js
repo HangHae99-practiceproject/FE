@@ -28,7 +28,7 @@ const Signup = (props) => {
                 nickname,
                 password: pw,
             }
-            dispatch(signUp(data));
+            dispatch(signUp({data, navigate}));
         }
     };
 

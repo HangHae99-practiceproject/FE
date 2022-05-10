@@ -23,6 +23,7 @@ const Input = props => {
     value,
     width,
     textAlign,
+    readonly
   } = props;
 
   if (is_float) {
@@ -61,6 +62,7 @@ const Input = props => {
           onChange={_onChange}
           onClick={_onClick}
           value={value}
+          readonly={readonly}
         />
       </Grid>
     );

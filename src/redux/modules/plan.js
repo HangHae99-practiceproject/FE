@@ -1,19 +1,15 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import {postApi, getApi, putApi, deleteApi} from "../../shared/api/client";
-import { getDatabase, push, ref, set, onValue } from "firebase/database";
+import { getDatabase, ref, set } from "firebase/database";
 import { app } from '../../firebase'
-
-const initialState = {
-    loading: 'idle',
-}
 
 export const getPlan = createAsyncThunk(
     'plan/getPlan',
     async (_, {rejectedWithValue}) => {
         try {
             const res = await getApi(`/member/list/${document.cookie.split("=")[0]}/1`)
-            return res.data
             console.log(res)
+            return res.data
         } catch (err) {
             // window.alert(err.response.data.message)
             console.log(err)
@@ -43,11 +39,11 @@ export const getOnePlan = createAsyncThunk(
 
 export const addPlan = createAsyncThunk(
     'plan/addPlan',
-    async (data, {rejectedWithValue}) => {
+    async ({data, navigate}, {rejectedWithValue}) => {
         console.log(data)
         try {
             const res = await postApi('/member/plan', data)
-            window.location.assign('/main')
+            navigate('/main')
             return res.data;
         } catch (err) {
             console.log(err)
@@ -58,13 +54,14 @@ export const addPlan = createAsyncThunk(
 
 export const editPlan = createAsyncThunk(
     'plan/editPlan',
-    async (data, {rejectedWithValue}) => {
+    async ({data, navigate}, {rejectedWithValue}) => {
         console.log(data)
         const planId = data?.planId
         console.log(planId)
         try {
             const res = await putApi(`/member/list/${planId}`, data)
             console.log(res)
+            // navigate(`/detail/${planId}`)
             return res.data
         } catch (err) {
             console.log(err)
@@ -75,13 +72,13 @@ export const editPlan = createAsyncThunk(
 
 export const deletePlan = createAsyncThunk(
     'plan/deletePlan',
-    async (planId, {rejectedWithValue}) => {
-        console.log(planId)
+    async ({planId, navigate}, {rejectedWithValue}) => {
+        // console.log(planId)
         try {
             const res = await deleteApi(`/member/list/${planId}`)
             console.log(res)
-            window.alert(res.data.message)
-            window.location.assign('/main')
+            // window.alert(res.data.message)
+            navigate('/main')
             return res
         } catch (err) {
             console.log(err)
@@ -95,6 +92,7 @@ export const planSlice = createSlice({
     initialState: {
         plans: [],
         showplan: [],
+        loading: 'idle',
     },
     reducers: {
         setLoading: (state, action) => {
@@ -106,8 +104,21 @@ export const planSlice = createSlice({
     },
     extraReducers: builder => {
         builder
+            .addCase(getPlan.pending, state => {
+                if (state?.loading === 'idle'){
+                    state.loading = 'pending'
+                }
+            })
             .addCase(getPlan.fulfilled, (state, action) => {
-                state.plans = action.payload;
+                if (state.loading === 'pending') {
+                    state.loading = 'succeeded'
+                    state.plans = action.payload;
+                }
+            })
+            .addCase(getPlan.rejected, state => {
+                if (state.loading === 'pending') {
+                    state.loading = 'failed'
+                }
             })
             .addCase(getOnePlan.fulfilled, (state, action) => {
                 state.showplan = action.payload;

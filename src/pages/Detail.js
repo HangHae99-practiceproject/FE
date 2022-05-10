@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {useNavigate, useParams} from "react-router-dom";
 import {editPlan, deletePlan, getOnePlan} from "../redux/modules/plan";
@@ -7,6 +7,8 @@ import {BsChevronLeft} from "react-icons/bs";
 import Test from "./Test";
 import Real from "./teeest";
 
+import {getDatabase, ref, onValue, child, get} from "firebase/database";
+
 const Detail = (props) => {
     const params = useParams();
 
@@ -14,11 +16,15 @@ const Detail = (props) => {
     const dispatch = useDispatch();
     const plan = useSelector(state => state.plan.showplan.data)
     console.log(plan)
+
     const [Name, setName] = React.useState('');
     const [place, setPlace] = React.useState('');
     const [time, setTime] = React.useState('');
     const [date, setDate] = React.useState('');
     const [penalty, setPenalty] = React.useState('');
+
+    const planDay = plan && plan ? plan.planDate.split('T')[0].split('-') : null
+    const planTime = plan && plan ? plan.planDate.split('T')[1].slice(0, 5) : null
 
     // 공유 팝업 생성
     const handle = () => {
@@ -35,32 +41,38 @@ const Detail = (props) => {
         }
     }
 
-    const editPlanBtn = () => {
-        const data = {
-            planId: params.planId,
-            planName: plan.planName,
-            planDate: plan.planDate,
-            location: {
-                name: plan.locationDetail.name,
-                lat: plan.locationDetail.lat,
-                lng: plan.locationDetail.lng,
-                address: plan.locationDetail.address
-            },
-            penalty: penalty,
-        }
-        dispatch(editPlan(data));
-    }
-
     const deletePlanBtn = () => {
         const planId = params.planId
-        dispatch(deletePlan(planId))
+        dispatch(deletePlan({planId, navigate}))
     }
 
     useEffect(() => {
         dispatch(getOnePlan(params.planId))
     }, [])
 
-    if (!plan) {
+    // if(!plan){
+    //     return;
+    // }
+    const [plans, setPlan] = useState({})
+    // const db = getDatabase();
+    // const planData = ref(db, `${params.planId}`)
+    // onValue(planData, (snapshot) => {
+    //     setPlan({...snapshot.val()});
+    // })
+    const dbRef = ref(getDatabase());
+    useEffect(() => {
+        get(child(dbRef, `${params.planId}`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                setPlan({...snapshot.val()});
+            } else {
+                console.log("No data available");
+            }
+        }).catch((err) => {
+            console.log(err)
+        });
+    }, [])
+    // console.log(plans)
+    if (!plans.locationDetail) {
         return;
     }
 
@@ -93,9 +105,14 @@ const Detail = (props) => {
             <ScheduleBox>
                 {plan.writer === document.cookie.split('=')[1] ?
                     <div style={{position: 'relative',}}>
-                        <button onClick={editPlanBtn}>수정</button>
+                        <button
+                            onClick={() => {
+                                navigate(`/edit/${params.planId}`)
+                            }}>수정
+                        </button>
                         <button onClick={deletePlanBtn}>삭제</button>
-                    </div> :
+                    </div>
+                    :
                     <div style={{position: 'relative',}}>
                         <button onClick={() => {
                             window.alert('작성자만 수정 가능합니다.')
@@ -107,19 +124,19 @@ const Detail = (props) => {
                         </button>
                     </div>
                 }
-                <p>{plan?.planDate}</p>
-                <p>{plan?.planName}</p>
+                <h3>{planDay[0] + '년' + ' ' + planDay[1] + '월' + ' ' + planDay[2] + '일'}</h3>
+                <h3>{planTime}</h3>
+                <p>{plan.planName}</p>
                 <p>{plan?.locationDetail?.name}</p>
                 <p>{plan?.penalty}</p>
             </ScheduleBox>
             <MapBox>
                 <Test
-                    props={plan?.locationDetail}
+                    {...plans?.locationDetail}
                 />
-                <Real/>
             </MapBox>
             <ButtonBox>
-                {plan.writer === document.cookie.split("=")[1] ?
+                {plans.writer === document.cookie.split("=")[1] ?
                     <>
                         <button onClick={handle}>
                             공유하기
@@ -166,8 +183,14 @@ const ScheduleBox = styled.div`
   height: 35vh;
   margin: auto;
 
+  h3 {
+    padding: 10px 0 5px 10px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
   p {
-    padding: 10px 10px;
+    padding: 10px;
   }
 
   button: first-of-type {

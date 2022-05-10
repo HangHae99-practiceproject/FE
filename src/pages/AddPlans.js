@@ -10,30 +10,31 @@ import { BsChevronLeft } from 'react-icons/bs'
 import KakaoMap from '../shared/KakaoMap';
 import { useDispatch } from 'react-redux';
 import { addPlan } from '../redux/modules/plan';
+import {useNavigate} from "react-router-dom";
 
 const AddPlans = (props) => {
+    const navigate = useNavigate()
     const dispatch = useDispatch();
-    const [Name, setName] = React.useState('');
+    const [name, setName] = React.useState('');
     const [place, setPlace] = React.useState('');
     const [time, setTime] = React.useState('');
     const [date, setDate] = React.useState('');
     const [penalty, setPenalty] = React.useState('');
-    const eventhandler = (e) => {
-        setName(e.target.value)
-    }
 
-    const clickHandler =() => {
+    const clickHandler = () => {
         setComp(comp +1)
     }
     const goBack = () => {
         if(comp > 0) {
             setComp(comp -1)
+        } else {
+            navigate(-1)
         }
     }
     // console.log(Name, place, time, date)
     let [comp, setComp] = React.useState(0)
     let obj = {
-        0: <PlanName value={Name} eventHandler={eventhandler} clickHandler={clickHandler}/>,
+        0: <PlanName name={name} setName={setName} clickHandler={clickHandler}/>,
         1: <SetLocation setPlace={setPlace} clickHandler={clickHandler}/>,
         2: <SetTime setTime={setTime} setDate={setDate} clickHandler={clickHandler}/>,
         3: <Penalty clickHandler={clickHandler} />,
@@ -41,18 +42,30 @@ const AddPlans = (props) => {
 
     const create = () => {
         const data = {
-            planName: Name,
-            planDate: date + ' ' + time,
+            planName: name,
+            planDate: `${date} ${time}`,
             location: {
                 name: place.name,
                 lat: place.lat,
                 lng: place.lng,
                 address: place.address
             },
-            penalty: penalty,
+            penalty,
         }
-        dispatch(addPlan(data));
+        dispatch(addPlan({data, navigate}));
     }
+
+    // const getContent = () => {
+    //     switch (comp) {
+    //         case 0:
+    //             return <PlanName value={Name} eventHandler={eventHandler} clickHandler={clickHandler}/>
+    //         case 1:
+    //             return <SetLocation setPlace={setPlace} clickHandler={clickHandler}/>
+    //         //...
+    //         default:
+    //             return null
+    //     }
+    // }
 
     if(comp <= 3) {
         return (
@@ -66,6 +79,7 @@ const AddPlans = (props) => {
                 </Grid>
                 <Grid>
                     {obj[comp]}
+                    {/*{getContent()}*/}
                 </Grid>
                 {/* <Grid bottom="0" padding="16px" >
                     <Button _onClick={clickHandler}>다음으로</Button>
@@ -73,6 +87,7 @@ const AddPlans = (props) => {
             </React.Fragment>
         )
     }
+
     const year = date.split('-')[0]
     const month = date.split('-')[1]
     const day = date.split('-')[2]
@@ -96,7 +111,7 @@ const AddPlans = (props) => {
                         paddingBottom: '16px',
                     }}>약속이 생성되었습니다!</p>
                 <PlanDiv>
-                    <p>{Name}</p>
+                    <p>{name}</p>
                     <h2>{year}년 {month}월 {day}일</h2>
                     <h2>{hour}시 {minute}분</h2>
                     <p>{place.address}</p>

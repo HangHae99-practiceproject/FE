@@ -10,34 +10,27 @@ import { BsBell } from "react-icons/bs";
 import {useNavigate} from "react-router-dom";
 
 import {useDispatch} from "react-redux";
-import {logout} from "../redux/modules/user";
+import {logout, setLoading} from "../redux/modules/user";
 import {getPlan} from "../redux/modules/plan";
 
 const Main = (props) => {
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const loading = useSelector((state) => state.plan.loading)
     const planList = useSelector(state => state.plan.plans.data?.planList);
-
-    // console.log(planList && planList)
+    const userData = useSelector(state => state.user.user?.data)
+    console.log(planList)
 
     const [isOpen, setMenu] = useState(false);
 
     const logoutBtn = () => {
         localStorage.removeItem('token')
-        dispatch(logout())
+        dispatch(logout(navigate))
     };
 
     useEffect(() => {
-        dispatch(getPlan(planList))
+        dispatch(getPlan())
     }, [])
-
-    const Plans = [];
-    if (planList) {
-        for (let i = 0; i < planList.length; i++) {
-            Plans.push(planList[i]);
-        }
-    }
 
     const toggleMenu = () => {
         setMenu(isOpen => !isOpen);
@@ -46,6 +39,17 @@ const Main = (props) => {
     const nowDate = moment()
         .format('YYYY년MM월DD일 dddd')
 
+
+
+    // if (loading === 'pending') {
+    //     return 'loading...'
+    // }
+    // if (loading === 'failed') {
+    //     setTimeout(() => {
+    //         dispatch(setLoading('idle'))
+    //     }, 1000)
+    //     return 'failed...'
+    // }
 
     return (
         <div style={{backgroundColor: '#eee', height:'100vh'}}>
@@ -84,84 +88,72 @@ const Main = (props) => {
                             </div>
                         </button>
                     </div>
-                    <p>{document.cookie.split("=")[1]} 님</p>
-                    <p onClick={() => {
-                        navigate('/past')
-                    }}>지난 일정</p>
-                    <p onClick={logoutBtn}>로그아웃</p>
+                    <div className='member'>
+                        <img src='../../public/avtar-profile-edit.png'/>
+                        {/*<p>{document.cookie.split("=")[1]} 님</p>*/}
+                        <p>{userData?.nickname || '회원'} 님</p>
+                    </div>
+                    <div className='past-plan'
+                         onClick={() => {
+                             navigate('/past')
+                         }}>
+                        <p>지난 일정</p>
+                    </div>
+                    <div className='logout'
+                         onClick={logoutBtn}
+                    >
+                        <p>로그아웃</p>
+                    </div>
                 </ShowMenu>
             </HeadBox>
 
             <UserInfo>
-                <p>{document.cookie.split("=")[1]} 님</p>
+                <p>{userData?.nickname || '회원'} 님</p>
                 <p>{nowDate} 입니다.</p>
             </UserInfo>
-
-            <PlanList>
-                {/*<div className='lists'>*/}
-                {/*    <h3>2022-05-07 T18:55</h3>*/}
-                {/*    <p>약속이름</p>*/}
-                {/*    <p>약속 장소 이름</p>*/}
-                {/*    <p>페널티</p>*/}
-                {/*</div>*/}
-                {/*<div className='lists'>*/}
-                {/*    <h3>2022-05-07 T18:55</h3>*/}
-                {/*    <p>약속이름</p>*/}
-                {/*    <p>약속 장소 이름</p>*/}
-                {/*    <p>페널티</p>*/}
-                {/*</div>*/}
-                {/*<div className='lists'>*/}
-                {/*    <h3>2022-05-07 T18:55</h3>*/}
-                {/*    <p>약속이름</p>*/}
-                {/*    <p>약속 장소 이름</p>*/}
-                {/*    <p>페널티</p>*/}
-                {/*</div>*/}
-                {/*<div className='lists'>*/}
-                {/*    <h3>2022-05-07 T18:55</h3>*/}
-                {/*    <p>약속이름</p>*/}
-                {/*    <p>약속 장소 이름</p>*/}
-                {/*    <p>페널티</p>*/}
-                {/*</div>*/}
-                {Plans.length === 0 ? (
-                    <div style={{
-                        textAlign: "center",
-                        width: '100%',
-                        padding: '10px 0',
-                        marginTop: '20px',
-                    }}>
-                        <Text size="14px" color={theme.color.gray1}>
-                            아직 약속이 없습니다!
-                            <br style={{padding:'16px'}}/>
-                            즐거운 모임 온잇에서 어떠신가요?
-                        </Text>
-                        <button
-                            onClick={() => {
+            {planList && (
+                <PlanList>
+                    {planList.length > 0 ? (
+                        <>
+                            {planList.map((plan, idx) => (
+                                <div className='lists'
+                                     key={idx}
+                                     onClick={() => {
+                                         navigate(`/detail/${plan.planId}`)
+                                     }}
+                                >
+                                    <h3>{plan.planDate}</h3>
+                                    <p>{plan.planName}</p>
+                                    <p>{plan.locationDetail.name}</p>
+                                    <p>{plan.planList?.penalty}</p>
+                                </div>
+                            ))}
+                            <AddButton onClick={() => {
                                 navigate('/add')
-                            }}
-                        >온잇으로 모임 만들기
-                        </button>
-                    </div>
-                ) : (
-                    Plans.map((plan, idx) => (
-                        <div key={idx}>
-                            <div className='lists'
+                            }}>+</AddButton>
+                        </>
+                    ) : (
+                        <div style={{
+                            textAlign: "center",
+                            width: '100%',
+                            padding: '10px 0',
+                            marginTop: '20px',
+                        }}>
+                            <Text size="14px" color={theme.color.gray1}>
+                                아직 약속이 없습니다!
+                                <br style={{padding:'16px'}}/>
+                                즐거운 모임 온잇에서 어떠신가요?
+                            </Text>
+                            <button
                                 onClick={() => {
-                                    navigate(`/detail/${plan.planId}`)
+                                    navigate('/add')
                                 }}
-                            >
-                                <h3>{plan.planDate}</h3>
-                                <p>{plan.planName}</p>
-                                <p>{plan.locationDetail.name}</p>
-                                <p>{plan.planList?.penalty}</p>
-                            </div>
+                            >온잇으로 모임 만들기
+                            </button>
                         </div>
-                    ))
-                )}
-            </PlanList>
-            {Plans.length === 0 ? null :
-            <AddButton onClick={() => {
-                navigate('/add')
-            }}>+</AddButton>}
+                    )}
+                </PlanList>
+            )}
         </div>
     )
 }
@@ -265,12 +257,41 @@ const ShowMenu = styled.div`
     display: flex;
     justify-content: flex-end;
   }
-  p: first-of-type {
-    font-weight: bold;
-  }
-  p {
+  .member {
+    width: 100%;
+    height: 10%;
+    border-radius: 10px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto;
     cursor: pointer;
-    padding-top: 16px;
+  }
+  .member > p {
+    margin-top: 5px;
+  }
+  .past-plan {
+    width: 100%;
+    height: 6%;
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .logout {
+    width: 100%;
+    height: 6%;
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
   }
 `
 

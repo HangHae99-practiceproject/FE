@@ -32,9 +32,9 @@ const PastPlan = (props) => {
                     }}/>
                 <h2>나의 지난 일정</h2>
             </HeadLine>
-            {Plans.map((plan, key) => (
+            {Plans.map((plan, list) => (
                 <Schedules
-                    key={key}
+                    key={list}
                     onClick={() => {
                         navigate(`/detail/${plan.planId}`)
                     }}>

@@ -1,26 +1,27 @@
 import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import styled from "styled-components";
 import {Grid} from "../elements";
+import {editPlan} from "../redux/modules/plan";
+import {BsChevronLeft} from "react-icons/bs";
 
 const EditPlan = (props) => {
 
-    let today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    const yyyy = today.getFullYear();
-    let nowTime = String(today.getHours() + ":" + today.getMinutes())
-
+    const params = useParams()
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const getPlan = useSelector(state => state.plan.plans.data?.planList)
-    console.log(getPlan)
 
-    const [name, setName] = useState()
-    const [time, setTime] = useState()
-    const [date, setDate] = useState()
+    const plan = useSelector(state => state.plan.showplan.data)
+    console.log(plan)
 
+    const [name, setName] = useState('')
+    const [time, setTime] = useState('')
+    const [date, setDate] = useState('')
+    const [penalty, setPenalty] = useState('')
+
+    const planDay = plan.planDate.split('T')[0]
+    const planTime = plan.planDate.split('T')[1].slice(0,5)
 
     const changeName = (e) => {
         setName(e.target.value)
@@ -31,18 +32,52 @@ const EditPlan = (props) => {
     const changeDate = (e) => {
         setDate(e.target.value)
     }
+    const changePenalty = (e) => {
+        setPenalty(e.target.value)
+    }
+
+
+    const editPlanBtn = () => {
+        const data = {
+            planId: params.planId,
+            planName: plan.planName,
+            planDate: plan.planDate,
+            location: {
+                name: plan.locationDetail.name,
+                lat: plan.locationDetail.lat,
+                lng: plan.locationDetail.lng,
+                address: plan.locationDetail.address
+            },
+            penalty: penalty,
+        }
+        dispatch(editPlan({data, navigate}));
+    }
 
     return (
         <>
             <HeadLine>
-                <h3>수정할 항목을 선택해 주세요</h3>
+                <BsChevronLeft
+                    style={{
+                        position: 'absolute',
+                        padding: '20px 0',
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                        alignItems: 'flex-start'
+                    }}
+                    size="64px"
+                    cursor="pointer"
+                    onClick={() => {
+                        navigate(-1)
+                    }}
+                />
+                <h3>약속을 수정해 주세요</h3>
             </HeadLine>
 
             <InputBox>
                 <input
                     key={name}
                     onChange={changeName}
-                    // placeholder={getPlan.planName}
+                    placeholder={plan.planName}
                 />
             </InputBox>
 
@@ -50,7 +85,7 @@ const EditPlan = (props) => {
                 <input
                     key={date}
                     onChange={changeDate}
-                    // placeholder={getPlan.planDate}
+                    placeholder={planDay}
                 />
             </InputBox>
 
@@ -58,25 +93,27 @@ const EditPlan = (props) => {
                 <input
                     key={time}
                     onChange={changeTime}
-                    // placeholder={getPlan.planDate}
+                    placeholder={planTime}
                 />
             </InputBox>
 
             <InputBox>
                 <input
-                    // placeholder={getPlan.locationDetail.locationName}
+                    placeholder={plan.locationDetail.name}
                 />
             </InputBox>
 
             <InputBox>
                 <input
-                    // placeholder={getPlan.planList.penalty}
+                    key={penalty}
+                    placeholder={plan.penalty}
+                    onChange={changePenalty}
                 />
             </InputBox>
 
             <Grid bottom="0" padding="16px">
                 <button
-                    onClick={navigate('/detail')}
+                    onClick={editPlanBtn}
                     style={{
                         backgroundColor: '#A1ED00',
                         width: '100%',
@@ -95,9 +132,16 @@ const EditPlan = (props) => {
 export default EditPlan
 
 const HeadLine = styled.div`
+  position: relative;
   width: 100%;
   text-align: center;
-  margin: 20px 0 0 0;
+
+  h3 {
+    font-size: 24px;
+    font-weight: bold;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
 `
 
 const InputBox = styled.div`

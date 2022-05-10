@@ -1,6 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import {getApi, postApi} from "../../shared/api/client";
-import { deleteCookie, getCookie, setCookie } from '../../shared/utils/Cookie';
+import { deleteCookie, setCookie } from '../../shared/utils/Cookie';
 import axios from "axios";
 
 
@@ -12,12 +12,14 @@ const initialState = {
 
 export const signUp = createAsyncThunk(
     'user/signup',
-    async (data, {rejectedWithValue}) => {
+    async ({data, navigate}, {rejectedWithValue}) => {
         console.log(data)
         try {
-            const res = await postApi('/user/signup', data)
+            const res = await postApi('/user/signup', data, {
+                withCredentials: false,
+            })
             console.log(res)
-            window.location.assign('/login')
+            navigate('/login')
             return {
                 data: res.data,
                 status: res.status
@@ -32,7 +34,7 @@ export const signUp = createAsyncThunk(
 
 export const login = createAsyncThunk(
     'user/login',
-    async (data, {rejectedWithValue}) => {
+    async ({data, navigate}, {rejectedWithValue}) => {
         console.log(data)
         try {
             const res = await postApi('/user/login', data, {
@@ -41,7 +43,7 @@ export const login = createAsyncThunk(
             console.log(res.headers)
             localStorage.setItem('token', res.headers.authorization)
             setCookie(res.data.id, res.data.nickname)
-            window.location.assign('/main')
+            navigate('/main')
             return {
                 data: res.data,
                 status: res.status
@@ -55,20 +57,17 @@ export const login = createAsyncThunk(
 
 export const logout = createAsyncThunk(
     'user/logout',
-    async (_, {rejectedWithValue}) => {
-        console.log(_)
+    async (navigate, {rejectedWithValue}) => {
         const data = {
             data : '',
         }
-        console.log(data)
         try {
-            const res = await postApi('/user/logout', data);
-            localStorage.removeItem('token');
+            const res = await postApi('/api/logout', data);
+            // localStorage.removeItem('token');
             deleteCookie(document.cookie.split("=")[0])
-            setTimeout(() => window.location.assign('/login'), 1000)
+            setTimeout(() => navigate('/login'), 1000)
             return {
                 data: res.data,
-                status: res.status
             }
         } catch (err) {
             console.log(err)
@@ -81,11 +80,12 @@ export const getUserToken = createAsyncThunk(
     'user/getUserToken',
     async (_, {rejectedWithValue}) => {
         try {
-            const res = await getApi('/api/kakao/callback',{
+            const res = await getApi('/users/kakao/callback',{
                 withCredentials : true,
             })
+            console.log(res)
             return {
-                data: res.data,
+                data: res.data.data,
             }
         } catch (err) {
             console.log(err)
@@ -162,29 +162,28 @@ export const {setUserName, setLoading} = userSlice.actions
 // 3
 // export const actions = userSlice.actions
 
-export const KakaoLogin = code => {
+export const kakaoLogin = code => {
     return function () {
         axios({
             method: 'GET',
-            url: `https://imonint.shop/api/kakao/callback?code=${code}`,
+            url: `https://imonint.shop/users/kakao/callback?code=${code}`,
         })
             .then(res => {
                 console.log(res)
-                const ACCESS_TOKEN = res.headers.authorization;
-                // localStorage.setItem('token', ACCESS_TOKEN);
-                setCookie('token', ACCESS_TOKEN, 1)
+                const ACCESS_TOKEN = res.data.accessToken;
+                localStorage.setItem('token', ACCESS_TOKEN);
+                // setCookie('token', ACCESS_TOKEN, 1)
                 window.location.assign('/main')
 
                 debugger;
             })
             .catch(err => {
                 console.log('소셜로그인 에러', err);
-
                 window.location.assign('/login');
             });
     };
 };
-const actionCreators = { KakaoLogin };
+const actionCreators = { kakaoLogin };
 export { actionCreators };
 
 export default userSlice.reducer

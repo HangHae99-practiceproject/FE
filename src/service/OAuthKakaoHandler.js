@@ -1,22 +1,21 @@
 import React, {useEffect} from "react";
 import {useDispatch} from "react-redux";
 import {actionCreators as kakaoActions} from "../redux/modules/user";
+
 import Spinner from "../elements/Spinner";
 
 const OAuthKakaoHandler = (props) => {
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
-    let code = new URL(window.location.href).searchParams.get('code')
-    console.log(code)
+    // 인가코드
+    let code = new URL(window.location.href).searchParams.get("code");
 
-    useEffect(async () => {
-        await dispatch(kakaoActions.KakaoLogin(code))
-    }, [])
+    useEffect(() => {
+      dispatch(kakaoActions.kakaoLogin(code));
+    }, []);
 
-    return (
-        <Spinner></Spinner>
-    )
-}
+    return <Spinner />;
+};
 
 export default OAuthKakaoHandler
