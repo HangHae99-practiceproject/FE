@@ -22,5 +22,5 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
-const messaging = getMessaging();
+const messaging = getMessaging(app);
 export { messaging, database, app};
