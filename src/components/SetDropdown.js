@@ -22,7 +22,7 @@ const SetDropdown = ({onClose, hour, minute, setHour, setMinute, amPmType, setAm
     }
 
     const handleConfirm = () => {
-        if (!hour || !minute) {
+        if (!_amPmType || !_hour || !_minute || _hour === '시' || _minute === '분') {
             alert('시간을 선택해 주세요')
             return
         }
@@ -87,7 +87,7 @@ const SetDropdown = ({onClose, hour, minute, setHour, setMinute, amPmType, setAm
                 <button
                     style={{
                         backgroundColor:
-                        `${_amPmType === '' || _hour === '시' || _minute === '분' ? '#DDD' : '#A1ED00'}`,
+                            `${_amPmType === '' || _hour === '시' || _minute === '분' ? '#DDD' : '#A1ED00'}`,
                         width: '100%',
                         height: '100%',
                         padding: '12px',

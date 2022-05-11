@@ -3,13 +3,13 @@ import ModalPortal from "./ModalPortal";
 import SetTimeCalendar from "./SetTimeCalendar";
 import styled from "styled-components";
 
-const Modal = ({ onClose, day, setDay }) => {
+const Modal = ({ onClose, date, setDate }) => {
 
     return (
         <ModalPortal>
             <Background>
                 <Content>
-                    <SetTimeCalendar onClose={onClose} day={day} setDay={setDay}/>
+                    <SetTimeCalendar onClose={onClose} date={date} setDate={setDate}/>
                 </Content>
             </Background>
         </ModalPortal>

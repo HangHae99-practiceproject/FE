@@ -35,9 +35,9 @@ const AddPlans = (props) => {
     let [comp, setComp] = React.useState(0)
     let obj = {
         0: <PlanName name={name} setName={setName} clickHandler={clickHandler}/>,
-        1: <SetLocation setPlace={setPlace} clickHandler={clickHandler}/>,
+        1: <SetLocation place={place} setPlace={setPlace} clickHandler={clickHandler}/>,
         2: <SetTime setTime={setTime} setDate={setDate} clickHandler={clickHandler}/>,
-        3: <Penalty clickHandler={clickHandler} />,
+        3: <Penalty setPenalty={setPenalty} clickHandler={clickHandler} />,
     }
 
     const create = () => {
@@ -52,6 +52,7 @@ const AddPlans = (props) => {
             },
             penalty,
         }
+        console.log('data : ', data);
         dispatch(addPlan({data, navigate}));
     }
 
@@ -115,6 +116,7 @@ const AddPlans = (props) => {
                     <h2>{year}년 {month}월 {day}일</h2>
                     <h2>{hour}시 {minute}분</h2>
                     <p>{place.address}</p>
+                    <p>{penalty}</p>
                     <KakaoMap place={place.name} lat={place.lat} lng={place.lng}/>
                 </PlanDiv>
             </Grid>

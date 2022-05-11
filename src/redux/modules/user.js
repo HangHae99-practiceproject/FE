@@ -1,13 +1,14 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import {getApi, postApi} from "../../shared/api/client";
-import { deleteCookie, setCookie } from '../../shared/utils/Cookie';
+import {deleteCookie, setCookie} from '../../shared/utils/Cookie';
 import axios from "axios";
 
 
 const initialState = {
     user: null,
     loading: 'idle',
-    is_login: false
+    is_login: false,
+    user_info: {}
 }
 
 export const signUp = createAsyncThunk(
@@ -59,11 +60,11 @@ export const logout = createAsyncThunk(
     'user/logout',
     async (navigate, {rejectedWithValue}) => {
         const data = {
-            data : '',
+            data: '',
         }
         try {
             const res = await postApi('/api/logout', data);
-            // localStorage.removeItem('token');
+            localStorage.removeItem('token');
             deleteCookie(document.cookie.split("=")[0])
             setTimeout(() => navigate('/login'), 1000)
             return {
@@ -76,12 +77,37 @@ export const logout = createAsyncThunk(
     }
 )
 
+export const setFCMToken = createAsyncThunk(
+    'plan/setFCMToken',
+    async (data, {rejectWithValue}) => {
+        try {
+            return await postApi(`/member/devices`, data)
+                .then(response => response.data.data);
+        } catch (error) {
+            console.log(error);
+            return rejectWithValue(error.response.data);
+        }
+    },
+);
+export const isFCMToken = createAsyncThunk(
+    'plan/isFCMToken',
+    async (data, {rejectWithValue}) => {
+        try {
+            return await postApi(`/member/alarms`, data)
+                .then(response => response.data.data);
+        } catch (error) {
+            console.log(error);
+            return rejectWithValue(error.response.data);
+        }
+    },
+);
+
 export const getUserToken = createAsyncThunk(
     'user/getUserToken',
     async (_, {rejectedWithValue}) => {
         try {
-            const res = await getApi('/users/kakao/callback',{
-                withCredentials : true,
+            const res = await getApi('/users/kakao/callback', {
+                withCredentials: true,
             })
             console.log(res)
             return {
@@ -104,6 +130,9 @@ export const userSlice = createSlice({
         setLoading: (state, action) => {
             state.loading = action.payload
         },
+        resetUser: (state) => {
+            Object.assign(state, initialState)
+        }
     },
     extraReducers: {
         // user/signup/pending === signUp.pending
@@ -144,10 +173,14 @@ export const userSlice = createSlice({
                 state.loading = 'failed'
             }
         },
+        [setFCMToken.fulfilled]: (state, action) => {
+        },
+        [isFCMToken.fulfilled]: (state, action) => {
+        },
         [getUserToken.fulfilled]: (state, action) => {
             state.is_login = true
             state.user = action.payload
-        }
+        },
     },
 })
 
@@ -157,7 +190,7 @@ export const userSlice = createSlice({
 // export const setUserName2 = userSlice.actions.setUserName2
 
 // 2
-export const {setUserName, setLoading} = userSlice.actions
+export const {setUserName, setLoading, resetUser} = userSlice.actions
 
 // 3
 // export const actions = userSlice.actions
@@ -183,7 +216,7 @@ export const kakaoLogin = code => {
             });
     };
 };
-const actionCreators = { kakaoLogin };
-export { actionCreators };
+const actionCreators = {kakaoLogin};
+export {actionCreators};
 
 export default userSlice.reducer

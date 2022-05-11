@@ -1,31 +1,21 @@
 /* eslint-disable no-undef */
-import React, {
-    forwardRef,
-    useEffect,
-    useImperativeHandle,
-    useMemo,
-    useRef,
-    useState,
-  } from 'react';
-  import styled from 'styled-components';
-  import theme from '../Styles/theme.js';
-  import Headerbar from '../shared/Headerbar.js';
+import React, {forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState,} from 'react';
+import styled from 'styled-components';
+import theme from '../Styles/theme.js';
+import Headerbar from '../shared/Headerbar.js';
+import { useNavigate } from 'react-router-dom';
 
-  import { useNavigate } from 'react-router-dom';
+//카카오 맵
+import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import PlanMapInfo from './PlanMapInfo.js';
 
-  //카카오 맵
-  import { Map, MapMarker } from 'react-kakao-maps-sdk';
-//   import { Ellipse32, marker, redmarker } from '../img';
-  import PlanMapInfo from './PlanMapInfo.js';
-  // eslint-disable-next-line no-unused-vars
-//   import BiTargetLock from 'react-icons/bi';
 
-  /**
-   * @param {*} props
-   * @returns 리턴 설명 적어주기
-   * @역할 무엇을 위한 컴포넌트인지 적어주기
-   * @필수값 컴포넌트 사용을 위해 어떤 props가 필요한지 명시해주기
-   */
+/**
+ * @param {*} props
+ * @returns 리턴 설명 적어주기
+ * @역할 무엇을 위한 컴포넌트인지 적어주기
+ * @필수값 컴포넌트 사용을 위해 어떤 props가 필요한지 명시해주기
+ */
 
   const PlanMap = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
@@ -99,14 +89,11 @@ import React, {
 
     //위치보내기
     const sendMyLocation = () => {
-      // console.log('위치보내기!');
       if (stompClient) {
         let chatMessage = {
           sender: props.usernick,
           lat: myLocation.center.lat,
-          // lat: 37.52885,
           lng: myLocation.center.lng,
-          // lng: 127.02185,
           type: 'MAP',
           planId: planId,
         };
@@ -114,6 +101,7 @@ import React, {
         setUserData({ ...userData, lat: '', lng: '' });
       }
     };
+
     //내위치 반복 보내기
     useInterval(() => {
       sendMyLocation();

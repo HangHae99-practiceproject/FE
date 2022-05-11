@@ -1,16 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setPublicMaps,
-  setPublicChats,
-  setSoketClear,
-  getPlanId,
-} from '../redux/modules/map.js';
+import {setPublicMaps, setPublicChats, setSoketClear} from '../redux/modules/map.js';
 import PlanMap from './PlanMap.js';
-
-import PlanChating from './PlanChating.js';
 
 /**
  * @param {*} props
@@ -20,13 +12,14 @@ import PlanChating from './PlanChating.js';
  */
 
 const Plansocket = props => {
+  const dispatch = useDispatch();
   const planName = props.planName;
   const pId = props.planId;
   const sock = props.sock;
   const client = props.client;
-  const dispatch = useDispatch();
   const usernick = props.userNick;
-   const [myLocation, setMyLocation] = useState({
+
+  const [myLocation, setMyLocation] = useState({
     center: {
       lat: 33.450701,
       lng: 126.570667,
@@ -34,14 +27,17 @@ const Plansocket = props => {
     errMsg: null,
     isLoading: true,
   })
+
   const [userData, setUserData] = useState({
     sender: '',
     connected: false,
     message: null,
   });
+
   const publicChats = useSelector(state => state.map.publicChats);
   const publicMaps = useSelector(state => state.map.publicMaps);
   const MapRef = useRef();
+  //웹소켓 pId 정보를 얻을때 연결 진행하기
   useEffect(() => {
     connect();
     return () => {
@@ -53,6 +49,8 @@ const Plansocket = props => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pId]);
+
+  //웹소켓 연결 함수
   const connect = () => {
     client.debug = null;
     client.connect({}, onConnected, onError);
@@ -66,6 +64,7 @@ const Plansocket = props => {
       // console.log('Disconnected to Server😀');
     });
   };
+
   //연결
   const onConnected = () => {
     setUserData({ ...userData, connected: true });
@@ -77,6 +76,9 @@ const Plansocket = props => {
     userJoin();
     // console.log('연결 / 구독 / 유저 입장');
   };
+
+
+  //보낸정보 서버에서 응답값 받기
   const onMessageReceived2 = payload => {
     let payloadData = JSON.parse(payload.body);
     // console.log('payloadDataMap=', payloadData);
@@ -146,7 +148,10 @@ const Plansocket = props => {
     </>
   );
 };
-//test
+
+
 // 스타일 컴포넌트 작성 위치
-const StyleComponent = styled.div``; // eslint-disable-line no-unused-vars
+// eslint-disable-line no-unused-vars
+const StyleComponent = styled.div``;
+
 export default Plansocket;

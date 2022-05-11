@@ -14,17 +14,18 @@ const PenaltyItem = ({onClick, value, active}) => {
     )
 }
 
-const Penalty = (props) => {
-    const [selectedPenalty, setSelectedPenalty] = useState(null)
+const Penalty = ({setPenalty, clickHandler}) => {
+    const [selectedPenalty, setSelectedPenalty] = useState(0)
     const onClick = (id) => {
         setSelectedPenalty(selectedPenalty === id ? '' : id)
     }
 
     const handleNext = () => {
-        if ( selectedPenalty ) {
-            const selected = penaltyModel.find(model => model.id === selectedPenalty)
-            // 이걸 주면 되지
-            // selected.value
+        const _selectedPenalty = selectedPenalty || 0
+        const selected = penaltyModel.find(model => model.id === _selectedPenalty)
+        if ( selected ) {
+            setPenalty(selected.value)
+            clickHandler()
         }
     }
 
@@ -60,7 +61,7 @@ const Penalty = (props) => {
                         border: 'none',
                         borderRadius: '10px',
                     }}
-                    onClick={props.clickHandler}>다음으로
+                    onClick={handleNext}>다음으로
                 </button>
             </Grid>
         </React.Fragment>

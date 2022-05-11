@@ -5,11 +5,24 @@ import { app } from '../../firebase'
 
 export const getPlan = createAsyncThunk(
     'plan/getPlan',
-    async (_, {rejectedWithValue}) => {
+    async (userId, {rejectedWithValue}) => {
         try {
-            const res = await getApi(`/member/list/${document.cookie.split("=")[0]}/1`)
-            console.log(res)
-            return res.data
+            const res = await getApi(`/member/list/${userId}/1`)
+            return res.data.data
+        } catch (err) {
+            // window.alert(err.response.data.message)
+            console.log(err)
+            return rejectedWithValue(err.response)
+        }
+    }
+)
+
+export const getMorePlan = createAsyncThunk(
+    'plan/getMorePlan',
+    async ({userId, page}, {rejectedWithValue}) => {
+        try {
+            const res = await getApi(`/member/list/${userId}/${page}`)
+            return res.data.data.planList
         } catch (err) {
             // window.alert(err.response.data.message)
             console.log(err)
@@ -23,12 +36,7 @@ export const getOnePlan = createAsyncThunk(
     async (planId, {rejectedWithValue}) => {
         try {
             const res = await getApi(`/member/list/${planId}`)
-            const data = res.data
-            // console.log(data.data)
-            const db = getDatabase(app);
-            set(ref(db, `${planId}`), {
-                ...data.data
-            })
+            const {data} = res.data
             return data
         } catch (err) {
             console.log(err)
@@ -44,7 +52,7 @@ export const addPlan = createAsyncThunk(
         try {
             const res = await postApi('/member/plan', data)
             navigate('/main')
-            return res.data;
+            return res.data
         } catch (err) {
             console.log(err)
             return rejectedWithValue(err.response)
@@ -79,7 +87,7 @@ export const deletePlan = createAsyncThunk(
             console.log(res)
             // window.alert(res.data.message)
             navigate('/main')
-            return res
+            return planId
         } catch (err) {
             console.log(err)
             return rejectedWithValue(err.response)
@@ -87,20 +95,26 @@ export const deletePlan = createAsyncThunk(
     }
 )
 
+const initialState = {
+    plans: [],
+    totalPage: 1,
+    showplan: null,
+    loading: 'idle',
+}
+
 export const planSlice = createSlice({
     name: 'plan',
-    initialState: {
-        plans: [],
-        showplan: [],
-        loading: 'idle',
-    },
+    initialState,
     reducers: {
         setLoading: (state, action) => {
             state.loading = action.payload
         },
         getPlanList: (state, action) => {
-            state.plan = action.payload
+            state.plans = action.payload
         },
+        resetPlan: (state) => {
+            Object.assign(state, initialState)
+        }
     },
     extraReducers: builder => {
         builder
@@ -112,10 +126,28 @@ export const planSlice = createSlice({
             .addCase(getPlan.fulfilled, (state, action) => {
                 if (state.loading === 'pending') {
                     state.loading = 'succeeded'
-                    state.plans = action.payload;
+                    const {totalPage, planList} = action.payload
+                    state.plans = planList;
+                    state.totalPage = totalPage
                 }
             })
             .addCase(getPlan.rejected, state => {
+                if (state.loading === 'pending') {
+                    state.loading = 'failed'
+                }
+            })
+            .addCase(getMorePlan.pending, state => {
+                if (state?.loading === 'idle'){
+                    state.loading = 'pending'
+                }
+            })
+            .addCase(getMorePlan.fulfilled, (state, action) => {
+                if (state.loading === 'pending') {
+                    state.loading = 'succeeded'
+                    state.plans = [...state.plans, ...action.payload];
+                }
+            })
+            .addCase(getMorePlan.rejected, state => {
                 if (state.loading === 'pending') {
                     state.loading = 'failed'
                 }
@@ -129,14 +161,15 @@ export const planSlice = createSlice({
             .addCase(editPlan.fulfilled, (state, action) => {
                 const data = {...state.showplan, ...action.payload}
                 state.showplan = data
+                state.plans = state.plans.map((plan) => plan.planId === action.payload.planId ? action.payload : plan)
             })
             .addCase(deletePlan.fulfilled, (state, action) => {
                 state.showplan = null
-                // state.plans = state.plans.filter(e => e.planId !== action.payload)
+                state.plans = state.plans.filter((plan) => plan.planId !== action.payload)
             })
     }
 })
 
-export const {setLoading, getPlanList} = planSlice.actions
+export const {setLoading, getPlanList, resetPlan} = planSlice.actions
 
 export default planSlice.reducer

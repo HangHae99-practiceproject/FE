@@ -1,27 +1,71 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import styled from "styled-components";
 import {Grid} from "../elements";
-import {editPlan} from "../redux/modules/plan";
+import {editPlan, getOnePlan} from "../redux/modules/plan";
 import {BsChevronLeft} from "react-icons/bs";
+import {formatDate, formatTime} from "../shared/utils/common";
+import Modal from "../components/Modal";
+import ModalPortal from "../components/ModalPortal";
+import moment from "moment";
+import Modal2 from "../components/Modal2";
+import {hourModel, minuteModel} from "../statics/time";
+import {DropdownList} from "react-widgets/cjs";
+import {penaltyModel} from "../statics/penalty";
 
 const EditPlan = (props) => {
-
-    const params = useParams()
+    const {planId} = useParams()
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const plan = useSelector(state => state.plan.showplan.data)
-    console.log(plan)
+    const plan = useSelector(state => state.plan.showplan)
 
     const [name, setName] = useState('')
     const [time, setTime] = useState('')
     const [date, setDate] = useState('')
     const [penalty, setPenalty] = useState('')
+    const [place, setPlace] = useState(null)
 
-    const planDay = plan.planDate.split('T')[0]
-    const planTime = plan.planDate.split('T')[1].slice(0,5)
+    const [hour, setHour] = useState(null)
+    const [minute, setMinute] = useState(null)
+    const [amPmType, setAmPmType] = useState('')
+
+    const planDay = formatDate(plan?.planDate)
+    const planTime = formatTime(plan?.planDate)
+
+    useEffect(() => {
+        dispatch(getOnePlan(planId))
+    }, [])
+
+    useEffect(() => {
+        if (plan) {
+            setName(plan.planName)
+            setTime(formatTime(plan.planDate))
+            setDate(plan.planDate)
+            setPenalty(plan.penalty)
+            setPlace(plan.locationDetail)
+            const momentDate = moment(plan.planDate)
+            const _hour = momentDate.hour()
+            const calcHour = _hour <= 12 ? _hour : _hour - 12
+            const _minute = momentDate.minute()
+            setAmPmType(() => {
+                return Number(_hour) <= 12 ? 'am' : 'pm'
+            })
+            const hourData = hourModel.find((model) => model.value === calcHour.toString())
+            const minuteData = minuteModel.find((model) => model.value === _minute.toString())
+            setHour(hourData.id)
+            setMinute(minuteData.id)
+        }
+    }, [plan])
+
+    useEffect(() => {
+        if (hour && minute && amPmType) {
+            const _hour = hourModel.find((model) => model.id === hour)
+            const _minute = minuteModel.find((model) => model.id === minute)
+            setTime(`${amPmType === 'pm' ? parseInt(_hour.value) + 12 : _hour.value}:${_minute.value}`)
+        }
+    }, [hour, minute, amPmType])
 
     const changeName = (e) => {
         setName(e.target.value)
@@ -38,19 +82,37 @@ const EditPlan = (props) => {
 
 
     const editPlanBtn = () => {
+        if ( !validModify() ) {
+            return
+        }
         const data = {
-            planId: params.planId,
-            planName: plan.planName,
-            planDate: plan.planDate,
-            location: {
-                name: plan.locationDetail.name,
-                lat: plan.locationDetail.lat,
-                lng: plan.locationDetail.lng,
-                address: plan.locationDetail.address
-            },
-            penalty: penalty,
+            planId,
+            planName: name,
+            planDate: `${formatDate(date)} ${formatTime(time)}`,
+            location: place,
+            penalty,
         }
         dispatch(editPlan({data, navigate}));
+    }
+
+    const [editDateModal, setEditDateModal] = useState(false)
+    const [editTimeModal, setEditTimeModal] = useState(false)
+
+    const handleEditDateModal = () => {
+        setEditDateModal(!editDateModal)
+    }
+
+    const handleEditTimeModal = () => {
+        setEditTimeModal(!editTimeModal)
+    }
+
+    const validModify = () => {
+        const modifiedDate = moment(`${date} ${time}`).toISOString()
+        return name !== plan.planName || modifiedDate !== plan.planDate || penalty !== plan.penalty
+    }
+
+    if (!plan) {
+        return <div>loading...</div>
     }
 
     return (
@@ -75,7 +137,7 @@ const EditPlan = (props) => {
 
             <InputBox>
                 <input
-                    key={name}
+                    value={name}
                     onChange={changeName}
                     placeholder={plan.planName}
                 />
@@ -83,18 +145,36 @@ const EditPlan = (props) => {
 
             <InputBox>
                 <input
-                    key={date}
+                    readOnly
+                    value={formatDate(date)}
                     onChange={changeDate}
                     placeholder={planDay}
+                    onClick={handleEditDateModal}
                 />
+                <ModalPortal>
+                    {editDateModal &&
+                        <Modal onClose={handleEditDateModal} date={moment(date).toDate()} setDate={setDate}/>}
+                </ModalPortal>
             </InputBox>
 
             <InputBox>
                 <input
-                    key={time}
+                    readOnly
+                    value={time}
                     onChange={changeTime}
                     placeholder={planTime}
+                    onClick={handleEditTimeModal}
                 />
+                <ModalPortal>
+                    {editTimeModal && <Modal2 onClose={handleEditTimeModal}
+                                              hour={hour}
+                                              setHour={setHour}
+                                              minute={minute}
+                                              setMinute={setMinute}
+                                              amPmType={amPmType}
+                                              setAmPmType={setAmPmType}
+                    />}
+                </ModalPortal>
             </InputBox>
 
             <InputBox>
@@ -105,17 +185,24 @@ const EditPlan = (props) => {
 
             <InputBox>
                 <input
-                    key={penalty}
+                    value={penalty}
                     placeholder={plan.penalty}
                     onChange={changePenalty}
                 />
+                {/*<DropdownList*/}
+                {/*    dataKey="id"*/}
+                {/*    textField="value"*/}
+                {/*    value={penalty}*/}
+                {/*    onChange={changePenalty}*/}
+                {/*    data={penaltyModel}*/}
+                {/*/>*/}
             </InputBox>
 
             <Grid bottom="0" padding="16px">
                 <button
                     onClick={editPlanBtn}
                     style={{
-                        backgroundColor: '#A1ED00',
+                        backgroundColor: validModify() ? '#A1ED00' : '#eee',
                         width: '100%',
                         height: '100%',
                         padding: '12px',

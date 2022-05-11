@@ -6,30 +6,67 @@ import 'moment/locale/ko'
 
 import {Text} from "../elements";
 import theme from "../Styles/theme";
-import { BsBell } from "react-icons/bs";
+import {BsBell} from "react-icons/bs";
 import {useNavigate} from "react-router-dom";
 
 import {useDispatch} from "react-redux";
-import {logout, setLoading} from "../redux/modules/user";
-import {getPlan} from "../redux/modules/plan";
+import {logout} from "../redux/modules/user";
+import {getMorePlan, getPlan, setLoading} from "../redux/modules/plan";
+import useResetStore from "../hooks/useResetStore";
 
 const Main = (props) => {
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const loading = useSelector((state) => state.plan.loading)
-    const planList = useSelector(state => state.plan.plans.data?.planList);
+    const planList = useSelector(state => state.plan.plans);
+    const totalPage = useSelector(state => state.plan.totalPage);
     const userData = useSelector(state => state.user.user?.data)
-    console.log(planList)
+    const resetStore = useResetStore()
+    // console.log(planList)
+
+    const [page, setPage] = useState(1)
 
     const [isOpen, setMenu] = useState(false);
 
     const logoutBtn = () => {
         localStorage.removeItem('token')
+        resetStore()
         dispatch(logout(navigate))
     };
 
+    const handleScroll = () => {
+        const scrollHeight = document.documentElement.scrollHeight
+        const scrollTop = document.documentElement.scrollTop
+        const clientHeight = document.documentElement.clientHeight
+        if ( scrollTop + clientHeight >= scrollHeight && loading === 'idle' && totalPage >= page ) {
+            setPage(page + 1)
+        }
+    }
+
     useEffect(() => {
-        dispatch(getPlan())
+        if ( userData ) {
+            dispatch(getPlan(userData.id))
+        }
+    }, [userData])
+
+    useEffect(() => {
+        if ( userData && page > 1 ) {
+            dispatch(getMorePlan({userId: userData.id, page: page}))
+        }
+    }, [userData, page])
+
+    useEffect(() => {
+        if ( loading === 'succeeded' ) {
+            dispatch(setLoading('idle'))
+        }
+    }, [loading])
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll)
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
     }, [])
 
     const toggleMenu = () => {
@@ -40,25 +77,23 @@ const Main = (props) => {
         .format('YYYY년MM월DD일 dddd')
 
 
-
-    // if (loading === 'pending') {
-    //     return 'loading...'
-    // }
-    // if (loading === 'failed') {
-    //     setTimeout(() => {
-    //         dispatch(setLoading('idle'))
-    //     }, 1000)
-    //     return 'failed...'
-    // }
+    if (!planList.length && loading === 'pending') {
+        return 'loading...'
+    }
+    if (!planList.length && loading === 'failed') {
+        setTimeout(() => {
+            dispatch(setLoading('idle'))
+        }, 1000)
+        return 'failed...'
+    }
 
     return (
-        <div style={{backgroundColor: '#eee', height:'100vh'}}>
+        <div style={{backgroundColor: '#eee', minHeight: '100vh'}}>
             <HeadBox>
                 <div style={{
                     height: '100%',
                     width: '40%',
                     paddingRight: '8px',
-                    paddingBottom:'8px',
                     display: 'flex',
                     justifyContent: 'flex-end',
                     alignItems: 'center',
@@ -89,7 +124,7 @@ const Main = (props) => {
                         </button>
                     </div>
                     <div className='member'>
-                        <img src='../../public/avtar-profile-edit.png'/>
+                        <img src='avtar-profile-edit.png'/>
                         {/*<p>{document.cookie.split("=")[1]} 님</p>*/}
                         <p>{userData?.nickname || '회원'} 님</p>
                     </div>
@@ -111,49 +146,51 @@ const Main = (props) => {
                 <p>{userData?.nickname || '회원'} 님</p>
                 <p>{nowDate} 입니다.</p>
             </UserInfo>
-            {planList && (
-                <PlanList>
-                    {planList.length > 0 ? (
-                        <>
-                            {planList.map((plan, idx) => (
+            <PlanList>
+                {planList.length > 0 ? (
+                    <>
+                        {planList.map((plan, idx) => {
+                            const planDate = moment(plan.planDate).format('YYYY년 MM월 DD일 hh:mm')
+                            return (
                                 <div className='lists'
                                      key={idx}
                                      onClick={() => {
                                          navigate(`/detail/${plan.planId}`)
                                      }}
                                 >
-                                    <h3>{plan.planDate}</h3>
+                                    <h3>{planDate}</h3>
                                     <p>{plan.planName}</p>
-                                    <p>{plan.locationDetail.name}</p>
-                                    <p>{plan.planList?.penalty}</p>
+                                    <p>{plan.locationDetail?.name}</p>
+                                    <p>{plan.penalty}</p>
                                 </div>
-                            ))}
-                            <AddButton onClick={() => {
+                            )
+                        })}
+                        <AddButton onClick={() => {
+                            navigate('/add')
+                        }}>+</AddButton>
+                    </>
+                ) : (
+                    <div style={{
+                        textAlign: "center",
+                        width: '100%',
+                        padding: '10px 0',
+                        marginTop: '20px',
+                    }}>
+                        <Text size="14px" color={theme.color.gray1}>
+                            아직 약속이 없습니다!
+                            <br style={{padding: '16px'}}/>
+                            즐거운 모임 온잇에서 어떠신가요?
+                        </Text>
+                        <button
+                            className='create-on-it'
+                            onClick={() => {
                                 navigate('/add')
-                            }}>+</AddButton>
-                        </>
-                    ) : (
-                        <div style={{
-                            textAlign: "center",
-                            width: '100%',
-                            padding: '10px 0',
-                            marginTop: '20px',
-                        }}>
-                            <Text size="14px" color={theme.color.gray1}>
-                                아직 약속이 없습니다!
-                                <br style={{padding:'16px'}}/>
-                                즐거운 모임 온잇에서 어떠신가요?
-                            </Text>
-                            <button
-                                onClick={() => {
-                                    navigate('/add')
-                                }}
-                            >온잇으로 모임 만들기
-                            </button>
-                        </div>
-                    )}
-                </PlanList>
-            )}
+                            }}
+                        >온잇으로 모임 만들기
+                        </button>
+                    </div>
+                )}
+            </PlanList>
         </div>
     )
 }
@@ -163,11 +200,13 @@ export default Main
 const HeadBox = styled.div`
   background-color: #fff;
   width: 100%;
-  height: 40px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  height: 60px;
+  //margin-top: 10px;
+  //margin-bottom: 10px;
+  padding: 10px 0;
   display: flex;
   justify-content: flex-end;
+
   .hamburger-btn {
     border: 0;
     display: flex;
@@ -178,11 +217,13 @@ const HeadBox = styled.div`
     background-color: inherit;
     outline: none;
   }
+
   .menu-trigger {
     position: relative;
     width: 20px;
     height: 17.6px;
     cursor: pointer;
+
     &, span {
       display: inline-block;
       transition: all 0.4s;
@@ -216,9 +257,11 @@ const HeadBox = styled.div`
       span:nth-of-type(1) {
         transform: translateY(7.8px) rotate(-45deg);
       }
+
       span:nth-of-type(2) {
         opacity: 0;
       }
+
       span:nth-of-type(3) {
         transform: translateY(-7.8px) rotate(45deg);
       }
@@ -230,13 +273,13 @@ const UserInfo = styled.div`
   background-color: #eee;
   width: 100%;
   padding: 10px 20px;
-  
+
   p: first-of-type {
     font-weight: bold;
     font-size: 20px;
   }
 
-  p + p {
+    p + p {
     padding-top: 10px;
   }
 `
@@ -253,10 +296,12 @@ const ShowMenu = styled.div`
   padding: 10px;
   transform: ${({isOpen}) => `translateX(${isOpen ? 0 : '100%'})`};
   transition: transform 0.2s ease-in-out;
+
   .side-bar-header {
     display: flex;
     justify-content: flex-end;
   }
+
   .member {
     width: 100%;
     height: 10%;
@@ -269,9 +314,11 @@ const ShowMenu = styled.div`
     margin: 10px auto;
     cursor: pointer;
   }
+
   .member > p {
     margin-top: 5px;
   }
+
   .past-plan {
     width: 100%;
     height: 6%;
@@ -283,6 +330,7 @@ const ShowMenu = styled.div`
     margin-bottom: 10px;
     cursor: pointer;
   }
+
   .logout {
     width: 100%;
     height: 6%;
@@ -308,27 +356,29 @@ const PlanList = styled.div`
     display: none; /* Chrome , Safari , Opera */
   }
 
-  button {
+  .create-on-it {
     width: 70%;
     height: 35px;
     background-color: #A1ED00;
     border-radius: 10px;
     border: none;
   }
+
   .lists:first-of-type {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    
+
     background-color: #A1ED00;
     width: 100%;
     height: 25vh;
     font-size: 24px;
   }
+
   .lists:first-of-type > h3 {
     font-size: 32px;
   }
-  
+
   .lists {
     background-color: white;
     margin-top: 16px;
@@ -337,41 +387,16 @@ const PlanList = styled.div`
     border-radius: 10px;
     padding: 16px 10px;
   }
+
   h3 {
     padding-bottom: 16px;
     font-weight: bold;
     font-size: 20px;
   }
-    p + p {
+
+  p + p {
     margin-top: 8px;
   }
-`
-
-const Schedules = styled.div`
-  background-color: #A1ED00;
-  margin: 16px auto;
-  width: 100%;
-  border: 1px none #ddd;
-  border-radius: 10px;
-  padding: 16px 10px;
-  
-  h3: first-of-type { 
-    padding-bottom: 8px;
-    font-weight: bold;
-    font-size: 20px;
-  }
-  h3 + h3 {
-    padding-bottom: 8px;
-  }
-  p + p {
-    margin-top: 16px;
-  }
-  //p:not(:last-of-type) {
-  //  margin-bottom: 1em;
-  //}
-  //p:not(:first-of-type) {
-  //  margin-top: 1em;
-  //}
 `
 
 const AddButton = styled.button`

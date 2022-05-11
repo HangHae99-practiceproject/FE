@@ -3,17 +3,17 @@ import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css'
 import styled from "styled-components";
 
-const SetTimeCalendar = ({onClose, day = new Date(), setDay}) => {
+const SetTimeCalendar = ({onClose, date = new Date(), setDate}) => {
 
     const handleDay = (value) => {
-        setDay(value)
+        setDate(value)
         onClose()
     }
 
     return (
         <>
             <CalendarDiv>
-                <Calendar onChange={handleDay} value={day}/>
+                <Calendar onChange={handleDay} value={date}/>
             </CalendarDiv>
         </>
     )

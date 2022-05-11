@@ -8,22 +8,22 @@ import ModalPortal from "./ModalPortal";
 
 import moment from "moment";
 import {hourModel, minuteModel} from "../statics/time";
+import {formatDate} from "../shared/utils/common";
 
-const SetTime = (props) => {
+const SetTime = ({setDate, setTime, clickHandler}) => {
     let today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
     const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     const yyyy = today.getFullYear();
-    const timePlaceholder = String(today.getHours() + ":" + today.getMinutes())
-
-    const [day, setDay] = useState(new Date())
+    const timePlaceholder = `${today.getHours()}:${today.getMinutes()}`
+    const [_date, _setDate] = useState(today)
     const [hour, setHour] = useState('시')
     const [minute, setMinute] = useState('분')
     const [amPmType, setAmPmType] = useState('')
 
     // 1
-    const time = useMemo(() => {
-        if (!hour || !minute || hour === '시' || hour === '분') {
+    const _time = useMemo(() => {
+        if (!hour || !minute || hour === '시' || hour === '분' || !amPmType) {
             return ''
         }
         const _hour = hourModel.find((model) => model.id === hour)
@@ -52,6 +52,17 @@ const SetTime = (props) => {
         setOpenedTimeModal(!openedTimeModal)
     }
 
+    const handleNext = () => {
+        if (!_date || !_time) {
+            alert('날짜 정해 임마')
+            return
+        }
+        setDate(formatDate(_date))
+        setTime(_time)
+        clickHandler()
+    }
+
+
 
     return (
         <React.Fragment>
@@ -64,7 +75,7 @@ const SetTime = (props) => {
                     labelText="먼저 날짜를 알려주세요"
                     textAlign="center"
                     placeholder={today = yyyy + '년 ' + mm + '월 ' + dd + '일 '}
-                    value={moment(day).format('YYYY-MM-DD')}
+                    value={formatDate(_date)}
                     _onClick={handleDateModal}
                 />
                 <Input
@@ -74,13 +85,13 @@ const SetTime = (props) => {
                     labelColor={theme.color.gray1}
                     labelText="시간은 몇시가 좋을까요?"
                     textAlign="center"
-                    value={time}
+                    value={_time}
                     placeholder={timePlaceholder}
                     _onClick={handleTimeModal}
                 />
             </Grid>
             <ModalPortal>
-                {openedDateModal && <Modal onClose={handleDateModal} day={day} setDay={setDay}/>}
+                {openedDateModal && <Modal onClose={handleDateModal} date={_date} setDate={_setDate}/>}
             </ModalPortal>
 
             <ModalPortal>
@@ -91,7 +102,7 @@ const SetTime = (props) => {
             <Grid bottom="0" padding="16px">
                 <button
                     style={{
-                        backgroundColor: '#A1ED00',
+                        backgroundColor: !_date || !_time ? '#eee' : '#A1ED00',
                         width: '100%',
                         height: '100%',
                         padding: '12px',
@@ -99,7 +110,7 @@ const SetTime = (props) => {
                         border: 'none',
                         borderRadius: '10px',
                     }}
-                    onClick={props.clickHandler}>다음으로
+                    onClick={handleNext}>다음으로
                 </button>
             </Grid>
         </React.Fragment>

@@ -4,27 +4,24 @@ import {useNavigate, useParams} from "react-router-dom";
 import {editPlan, deletePlan, getOnePlan} from "../redux/modules/plan";
 import {useDispatch, useSelector} from "react-redux";
 import {BsChevronLeft} from "react-icons/bs";
+import moment from "moment";
 import Test from "./Test";
-import Real from "./teeest";
-
-import {getDatabase, ref, onValue, child, get} from "firebase/database";
 
 const Detail = (props) => {
-    const params = useParams();
+    const {planId} = useParams();
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const plan = useSelector(state => state.plan.showplan.data)
-    console.log(plan)
+    const user = useSelector(state => state.user.user.data)
+    const plan = useSelector(state => state.plan.showplan)
 
-    const [Name, setName] = React.useState('');
-    const [place, setPlace] = React.useState('');
-    const [time, setTime] = React.useState('');
-    const [date, setDate] = React.useState('');
-    const [penalty, setPenalty] = React.useState('');
+    useEffect(() => {
+        console.log('!!!')
+        dispatch(getOnePlan(planId))
+    }, [])
 
-    const planDay = plan && plan ? plan.planDate.split('T')[0].split('-') : null
-    const planTime = plan && plan ? plan.planDate.split('T')[1].slice(0, 5) : null
+    const planDay = moment(plan?.planDate).format('YYYY년 MM월 DD일')
+    const planTime = moment(plan?.planDate).format('hh:mm')
 
     // 공유 팝업 생성
     const handle = () => {
@@ -41,39 +38,25 @@ const Detail = (props) => {
         }
     }
 
+    const handleModify = () => {
+        if (user.nickname !== plan.writer) {
+            window.alert('작성자만 수정 가능합니다.')
+            return
+        } else {
+            navigate(`/edit/${planId}`)
+        }
+    }
+
     const deletePlanBtn = () => {
-        const planId = params.planId
+        if (user.nickname !== plan.writer) {
+            window.alert('작성자만 삭제 가능합니다.')
+            return
+        }
         dispatch(deletePlan({planId, navigate}))
     }
 
-    useEffect(() => {
-        dispatch(getOnePlan(params.planId))
-    }, [])
-
-    // if(!plan){
-    //     return;
-    // }
-    const [plans, setPlan] = useState({})
-    // const db = getDatabase();
-    // const planData = ref(db, `${params.planId}`)
-    // onValue(planData, (snapshot) => {
-    //     setPlan({...snapshot.val()});
-    // })
-    const dbRef = ref(getDatabase());
-    useEffect(() => {
-        get(child(dbRef, `${params.planId}`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                setPlan({...snapshot.val()});
-            } else {
-                console.log("No data available");
-            }
-        }).catch((err) => {
-            console.log(err)
-        });
-    }, [])
-    // console.log(plans)
-    if (!plans.locationDetail) {
-        return;
+    if ( !plan ) {
+        return <div>loading...</div>
     }
 
     return (
@@ -97,51 +80,40 @@ const Detail = (props) => {
                         navigate(-1)
                     }}
                 />
-                {plan.writer === document.cookie.split("=")[1] ?
+                {plan.writer === user.nickname ?
                     <h2>선택하신 약속입니다</h2> : <h2>초대장</h2>
                 }
             </HeadLine>
 
             <ScheduleBox>
-                {plan.writer === document.cookie.split('=')[1] ?
-                    <div style={{position: 'relative',}}>
-                        <button
-                            onClick={() => {
-                                navigate(`/edit/${params.planId}`)
-                            }}>수정
+                {user.nickname === plan.writer && (
+                    <div style={{position: 'relative'}}>
+                        <button onClick={handleModify}>수정
                         </button>
-                        <button onClick={deletePlanBtn}>삭제</button>
-                    </div>
-                    :
-                    <div style={{position: 'relative',}}>
-                        <button onClick={() => {
-                            window.alert('작성자만 수정 가능합니다.')
-                        }}>수정
-                        </button>
-                        <button onClick={() => {
-                            window.alert('작성자만 수정 가능합니다.')
-                        }}>삭제
+                        <button onClick={deletePlanBtn}>삭제
                         </button>
                     </div>
-                }
-                <h3>{planDay[0] + '년' + ' ' + planDay[1] + '월' + ' ' + planDay[2] + '일'}</h3>
+                )}
+                <h3>{planDay}</h3>
                 <h3>{planTime}</h3>
                 <p>{plan.planName}</p>
                 <p>{plan?.locationDetail?.name}</p>
                 <p>{plan?.penalty}</p>
             </ScheduleBox>
             <MapBox>
-                <Test
-                    {...plans?.locationDetail}
-                />
+                {plan.locationDetail ? (
+                    <Test
+                        {...plan.locationDetail}
+                    />
+                ) : (
+                    <div>loading...</div>
+                )}
             </MapBox>
             <ButtonBox>
-                {plans.writer === document.cookie.split("=")[1] ?
-                    <>
-                        <button onClick={handle}>
-                            공유하기
-                        </button>
-                    </>
+                {plan.writer === user.nickname ?
+                    <button onClick={handle}>
+                        공유하기
+                    </button>
                     :
                     <>
                         <button>
@@ -225,5 +197,9 @@ const ButtonBox = styled.div`
     color: black;
     border: none;
     border-radius: 10px;
+  }
+  
+  button + button {
+    margin-left: 10px;
   }
 `
