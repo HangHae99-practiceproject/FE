@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { BsChevronLeft } from 'react-icons/bs'
+import {BsChevronLeft} from 'react-icons/bs'
 import {useNavigate} from "react-router-dom";
 import PlanList from "../components/planList";
 import {useSelector} from "react-redux";
@@ -32,19 +32,18 @@ const PastPlan = (props) => {
                     }}/>
                 <h2>나의 지난 일정</h2>
             </HeadLine>
-            {Plans.map((plan, key) => (
+            {Plans.map((plan, list) => (
                 <Schedules
-                    key={key}
-                onClick={() => {
-                    navigate(`/detail/${plan.planId}`)
-                }}>
-                <h3>{plan.planDate}</h3>
-                <h3>{plan.planName}</h3>
-                <p>{plan.locationDetail.locationName}</p>
-                <p>{plan.planList?.penalty}</p>
-            </Schedules>
+                    key={list}
+                    onClick={() => {
+                        navigate(`/detail/${plan.planId}`)
+                    }}>
+                    <h3>{plan.planDate}</h3>
+                    <h3>{plan.planName}</h3>
+                    <p>{plan.locationDetail.locationName}</p>
+                    <p>{plan.planList?.penalty}</p>
+                </Schedules>
             ))}
-
         </div>
     )
 }
@@ -59,7 +58,7 @@ const HeadLine = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  
+
   h2 {
     margin: auto;
   }
@@ -72,4 +71,20 @@ const Schedules = styled.div`
   width: 90%;
   border: 1px none #ddd;
   border-radius: 10px;
+`
+
+const ButtonBox = styled.div`
+  width: 90%;
+  margin: 20px auto;
+  display: flex;
+
+  button {
+    margin: 0 5px;
+    flex: 1;
+    padding: 5px;
+    background-color: #A1ED00;
+    color: black;
+    border: none;
+    border-radius: 10px;
+  }
 `

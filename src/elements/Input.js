@@ -23,6 +23,7 @@ const Input = props => {
     value,
     width,
     textAlign,
+    readonly
   } = props;
 
   if (is_float) {
@@ -61,6 +62,7 @@ const Input = props => {
           onChange={_onChange}
           onClick={_onClick}
           value={value}
+          readonly={readonly}
         />
       </Grid>
     );
@@ -103,6 +105,7 @@ const ElInput = styled.input`
   width: 100%;
   padding: 12px 12px;
   margin-top: 14px;
+  margin-bottom: 14px;
   box-sizing: border-box;
   border-radius: 10px;
   background: #ffffff;

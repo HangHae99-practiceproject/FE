@@ -11,6 +11,7 @@ const Text = (props) => {
     color,
     size,
     margin,
+      padding,
     lineheight,
     textoverf,
     ws,
@@ -30,6 +31,7 @@ const Text = (props) => {
     lineheight,
     overf,
     textoverf,
+    padding,
     ws,
     cursor,
 
@@ -51,6 +53,7 @@ Text.defaultProps = {
   color: 'black',
   size: '1em',
   margin: 'auto',
+  padding: '8px',
   lineheight: 'null',
   cursor: 'default',
 
@@ -67,6 +70,7 @@ const DefaultText = styled.p`
   color: ${props => props.color};
   font-size: ${props => props.size};
   margin: ${props => props.margin};
+  padding : ${props => props.padding};
   ${props => (props.lineheight ? `line-height: ${props.lineheight}` : '')};
   ${props => (props.overf ? `overflow:auto` : '')};
   ${props => (props.textoverf ? 'text-overflow: ellipsis' : '')};

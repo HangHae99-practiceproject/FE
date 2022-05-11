@@ -14,16 +14,18 @@ export const getPlanId = createAsyncThunk(
   },
 );
 
+const initialState = {
+  planId: '',
+  planName: '',
+  publicMaps: [],
+  publicChats: [],
+  url: '',
+  loading: false,
+}
+
 export const mapSlice = createSlice({
   name: 'map',
-  initialState: {
-    planId: '',
-    planName: '',
-    publicMaps: [],
-    publicChats: [],
-    url: '',
-    loading: false,
-  },
+  initialState,
   reducers: {
     setPublicMaps: (state, action) => {
       let index = state.publicMaps.findIndex(
@@ -57,6 +59,9 @@ export const mapSlice = createSlice({
     setOnePlan: (state, action) => {
       state.showplan = { ...state.showplan, ...action.payload };
     },
+    resetMap: (state) => {
+      Object.assign(state, initialState)
+    }
   },
   extraReducers: builder => {
     builder
@@ -70,7 +75,7 @@ export const mapSlice = createSlice({
       });
   },
 });
-export const { setPublicMaps, setSoketClear, setPublicChats } =
+export const { setPublicMaps, setSoketClear, setPublicChats, resetMap } =
   mapSlice.actions;
 
 export default mapSlice.reducer;

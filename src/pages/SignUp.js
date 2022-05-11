@@ -28,7 +28,7 @@ const Signup = (props) => {
                 nickname,
                 password: pw,
             }
-            dispatch(signUp(data));
+            dispatch(signUp({data, navigate}));
         }
     };
 
@@ -54,7 +54,10 @@ const Signup = (props) => {
         <>
             <Container>
                 <div>
-                    <h1>On it</h1>
+                    <h1 style={{
+                        fontWeight: 'bold',
+                        fontSize:'48px'}}
+                    >On it</h1>
                 </div>
                 <SignupText>
                     <h2>회원가입</h2>
@@ -121,6 +124,12 @@ const Container = styled.div`
 
 const SignupText = styled.div`
   width: 80%;
+  h2 {
+    color : #5A5A5A;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 16px 0;
+  }
 `
 
 const InputBox = styled.div`
@@ -131,6 +140,9 @@ const InputBox = styled.div`
   input {
     width: 100%;
     height: 30px;
+    padding: 12px;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
 
     &:focus {
       outline: none;
@@ -149,9 +161,11 @@ const SignUpDiv = styled.div`
   button {
     width: 100%;
     height: 30px;
-    border: 0px;
-    color: white;
-    background-color: black;
+    border: none;
+    border-radius: 10px;
+    color: black;
+    background-color: #A1ED00;
+    cursor: pointer;
   }
 `
 

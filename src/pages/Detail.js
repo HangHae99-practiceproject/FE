@@ -1,21 +1,27 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {useNavigate, useParams} from "react-router-dom";
-import { getOnePlan } from "../redux/modules/plan";
-import ScheduleContainer from "../components/ScheduleContainer";
-import { useDispatch, useSelector } from "react-redux";
+import {editPlan, deletePlan, getOnePlan} from "../redux/modules/plan";
+import {useDispatch, useSelector} from "react-redux";
+import {BsChevronLeft} from "react-icons/bs";
+import moment from "moment";
 import Test from "./Test";
 
-import { getDatabase, ref, onValue, child, get} from "firebase/database";
-
-
 const Detail = (props) => {
-    const params = useParams();
+    const {planId} = useParams();
 
-    const nav = useNavigate();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const plan = useSelector(state => state.plan.showplan.data)
+    const user = useSelector(state => state.user.user.data)
+    const plan = useSelector(state => state.plan.showplan)
 
+    useEffect(() => {
+        console.log('!!!')
+        dispatch(getOnePlan(planId))
+    }, [])
+
+    const planDay = moment(plan?.planDate).format('YYYY년 MM월 DD일')
+    const planTime = moment(plan?.planDate).format('hh:mm')
 
     // 공유 팝업 생성
     const handle = () => {
@@ -31,83 +37,95 @@ const Detail = (props) => {
             alert("공유하기가 지원되지 않는 환경 입니다.")
         }
     }
-    // const plan = useSelector(state => state.plan.showplan.data)
-    // console.log(plan)
-    useEffect(() => {
-        dispatch(getOnePlan(params.planId))
-    }, [])
 
-    // if(!plan){
-    //     return;
-    // }
-    const [plans, setPlan] = useState({})
-    // const db = getDatabase();
-    // const planData = ref(db, `${params.planId}`)
-    // onValue(planData, (snapshot) => {
-    //     setPlan({...snapshot.val()});
-    // })
-    const dbRef = ref(getDatabase());
-    useEffect(() => {
-        get(child(dbRef, `${params.planId}`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                setPlan({...snapshot.val()});
-            } else {
-                console.log("No data available");
-            }
-        }).catch((err) => {
-            console.log(err)
-        });
-    }, [])
-    console.log(plans)
-    if(!plans.locationDetail){
-        return;
+    const handleModify = () => {
+        if (user.nickname !== plan.writer) {
+            window.alert('작성자만 수정 가능합니다.')
+            return
+        } else {
+            navigate(`/edit/${planId}`)
+        }
     }
+
+    const deletePlanBtn = () => {
+        if (user.nickname !== plan.writer) {
+            window.alert('작성자만 삭제 가능합니다.')
+            return
+        }
+        dispatch(deletePlan({planId, navigate}))
+    }
+
+    if ( !plan ) {
+        return <div>loading...</div>
+    }
+
     return (
-        <div>
+        <div style={{
+            height: '100vh',
+            backgroundColor: '#eee'
+        }}
+        >
             <HeadLine>
-                {plan.writer === document.cookie.split("=")[1] ?
-                    <h2>상세페이지</h2> : <h2>초대장</h2>
+                <BsChevronLeft
+                    style={{
+                        position: 'absolute',
+                        padding: '20px 0',
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                        alignItems: 'flex-start'
+                    }}
+                    size="64px"
+                    cursor="pointer"
+                    onClick={() => {
+                        navigate(-1)
+                    }}
+                />
+                {plan.writer === user.nickname ?
+                    <h2>선택하신 약속입니다</h2> : <h2>초대장</h2>
                 }
             </HeadLine>
+
             <ScheduleBox>
-                <p>{plans?.planDate}</p>
-                <p>{plans?.planName}</p>
-                <p>{plans?.locationDetail?.name}</p>
-                <p>{plans?.penalty}</p>
+                {user.nickname === plan.writer && (
+                    <div style={{position: 'relative'}}>
+                        <button onClick={handleModify}>수정
+                        </button>
+                        <button onClick={deletePlanBtn}>삭제
+                        </button>
+                    </div>
+                )}
+                <h3>{planDay}</h3>
+                <h3>{planTime}</h3>
+                <p>{plan.planName}</p>
+                <p>{plan?.locationDetail?.name}</p>
+                <p>{plan?.penalty}</p>
             </ScheduleBox>
             <MapBox>
-                <Test
-                {...plans?.locationDetail}
-                />
+                {plan.locationDetail ? (
+                    <Test
+                        {...plan.locationDetail}
+                    />
+                ) : (
+                    <div>loading...</div>
+                )}
             </MapBox>
             <ButtonBox>
-                {plans.writer === document.cookie.split("=")[1] ?
-                <>
+                {plan.writer === user.nickname ?
                     <button onClick={handle}>
                         공유하기
                     </button>
-                    <button onClick={() => nav(`/details/${plans.url}`)}>
-                        이동
-                    </button>
-                    <button>
-                        뒤로가기
-                    </button>
-                </>
-                :
-                <>
-                    <button onClick={handle}>
-                        참석하기
-                    </button>
-                      <button onClick={() => nav(`/details/${plans.url}`)}>
-                        이동
-                    </button>
-                    <button
-                        onClick={() => {
-                            nav('/main')
-                        }}>
-                        거절하기
-                    </button>
-                </>
+                    :
+                    <>
+                        <button>
+                            참석하기
+                        </button>
+                        <button
+                            onClick={() => {
+                                navigate('/main')
+                            }}>
+                            거절하기
+                        </button>
+                    </>
                 }
             </ButtonBox>
         </div>
@@ -117,36 +135,71 @@ const Detail = (props) => {
 export default Detail
 
 const HeadLine = styled.div`
-  background-color: green;
+  position: relative;
   width: 100%;
   text-align: center;
-  margin: 20px 0 0 0;
+
+  h2 {
+    font-size: 24px;
+    font-weight: bold;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
 `
 
 const ScheduleBox = styled.div`
-  background-color: slateblue;
-
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
   width: 90%;
-  height: 30vh;
+  height: 35vh;
   margin: auto;
+
+  h3 {
+    padding: 10px 0 5px 10px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  p {
+    padding: 10px;
+  }
+
+  button: first-of-type {
+    position: absolute;
+    right: 42.67px;
+  } button {
+    position: absolute;
+    right: 0;
+    margin: 8px;
+  }
 `
 
 const MapBox = styled.div`
-  background-color: steelblue;
-
+  background-color: #ddd;
+  border: none;
+  border-radius: 5px;
   width: 90%;
-  height: 40vh;
+  height: 45vh;
   margin: auto;
 `
 
 const ButtonBox = styled.div`
-
   width: 90%;
   margin: 20px auto;
   display: flex;
 
   button {
-    flex: 1;
-    padding: 5px;
+    background-color: #A1ED00;
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    color: black;
+    border: none;
+    border-radius: 10px;
+  }
+  
+  button + button {
+    margin-left: 10px;
   }
 `
