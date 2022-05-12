@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { getMessaging } from 'firebase/messaging';
+import { getMessaging, onMessage } from 'firebase/messaging';
 import { getDatabase } from "firebase/database";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -23,4 +23,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const messaging = getMessaging();
+onMessage(messaging, (payload) => {
+  console.log('Message received. ', payload);
+
+});
+
 export { messaging, database, app};

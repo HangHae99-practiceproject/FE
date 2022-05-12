@@ -124,7 +124,6 @@ const PlanSelectMap = props => {
                       }}
                     >
                       <Text size={'16px'}>{point.place_name}</Text>
-                      {/* <p style={{ color: 'green' }}>{point.address_name}</p> */}
                       <Text size={'11px'} color={theme.color.gray4}>
                         {point.address_name}
                       </Text>

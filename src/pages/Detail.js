@@ -8,27 +8,24 @@ import moment from "moment";
 import Test from "./Test";
 
 const Detail = (props) => {
-    const {planId} = useParams();
-    console.log(planId)
-
+    const {planUrl} = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const user = useSelector(state => state.user.user.data)
     const plan = useSelector(state => state.plan.showplan)
 
-    useEffect(() => {
-        dispatch(getOnePlan(planId))
-    }, [])
-
     const planDay = moment(plan?.planDate).format('YYYY년 MM월 DD일')
     const planTime = moment(plan?.planDate).format('hh:mm')
+    const url = window.location.href.split("/")
+    url[3] = 'details'
+    const wsUrl = url.join("/")
 
     const handleShared = () => {
         if (navigator.share) {
             navigator.share({
                 title: plan.planName,
                 text: plan.planName,
-                url: window.location.href,
+                url: wsUrl
             })
                 .then(() => console.log('성공'))
                 .catch((err) => console.log(err))
@@ -37,12 +34,16 @@ const Detail = (props) => {
         }
     }
 
+    useEffect(() => {
+        dispatch(getOnePlan(planUrl))
+    }, [])
+
     const handleModify = () => {
         if (user.nickname !== plan.writer) {
             window.alert('작성자만 수정 가능합니다.')
             return
         } else {
-            navigate(`/edit/${planId}`)
+            navigate(`/edit/${planUrl}`)
         }
     }
 
@@ -51,7 +52,7 @@ const Detail = (props) => {
             window.alert('작성자만 삭제 가능합니다.')
             return
         }
-        dispatch(deletePlan({planId, navigate}))
+        dispatch(deletePlan({planUrl, navigate}))
     }
 
     if ( !plan ) {
@@ -163,8 +164,8 @@ const ScheduleBox = styled.div`
     font-weight: bold;
     padding: 0 10px 16px 10px
   }
-  
-  P {
+
+  p {
     padding: 10px;
   };
 
@@ -201,7 +202,7 @@ const ButtonBox = styled.div`
     border: none;
     border-radius: 10px;
   }
-  
+
   button + button {
     margin-left: 10px;
   }

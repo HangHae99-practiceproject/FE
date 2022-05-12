@@ -8,7 +8,6 @@ import {persistor, store} from "./redux/configureStore";
 import {BrowserRouter} from "react-router-dom";
 import {PersistGate} from "redux-persist/integration/react";
 
-
 const rootElement = document.getElementById("root");
 const root = ReactDOMClient.createRoot(rootElement);
 

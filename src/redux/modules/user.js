@@ -37,7 +37,6 @@ export const signUp = createAsyncThunk(
 export const login = createAsyncThunk(
     'user/login',
     async ({data, navigate}, {rejectedWithValue}) => {
-        // console.log(data)
         try {
             const res = await postApi('/user/login', data, {
                 withCredentials: false,
@@ -89,6 +88,7 @@ export const setFCMToken = createAsyncThunk(
         }
     },
 );
+
 export const isFCMToken = createAsyncThunk(
     'plan/isFCMToken',
     async (data, {rejectWithValue}) => {

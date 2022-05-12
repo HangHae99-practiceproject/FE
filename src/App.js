@@ -4,7 +4,7 @@ import { createGlobalStyle } from "styled-components";
 
 //pages
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Signup from "./pages/SignUp";
 import Main from "./pages/Main";
 import Detail from "./pages/Detail";
 import PastPlan from "./pages/PastPlan";
@@ -19,60 +19,52 @@ import { setFCMToken } from "./redux/modules/user";
 import { useDispatch, useSelector } from "react-redux";
 
 //firebase
-import { messaging } from './firebase';
-import { deleteToken, getToken} from 'firebase/messaging'
-
+import { messaging, app } from './firebase';
+import { deleteToken, getToken, getMessaging, onMessage } from 'firebase/messaging'
+import { onBackgroundMessage } from "firebase/messaging/sw";
 //cookie
 import { getCookie, deleteCookie, setCookie } from "./shared/utils/Cookie";
 
 function App() {
-  const dispatch = useDispatch();
-  const islogin = localStorage.getItem('token') ? true : false;
-  const userNick = document.cookie.split("=")[1];
-  const user = useSelector(state => state?.user?.user_info)
-  const browsernoti = Notification.permission === 'granted' ? true : false;
+    const dispatch = useDispatch();
+    const islogin = localStorage.getItem('token') ? true : false;
+    const userNick = document.cookie.split("=")[1];
+    const browsernoti = Notification.permission === 'granted' ? true : false;
+
   useEffect(() => {
-    // console.log('app.js::didmount');
-    if (user.isNoticeAllowed !== undefined) {
-      // console.log('noti ', user);
-      if (browsernoti === user.isNoticeAllowed) {
-        // console.log('noti서로 같음', user.isNoticeAllowed);
-        return;
-      } else {
-        // console.log('noti서로 다름', user.isNoticeAllowed);
-        if (!browsernoti) {
+        if(islogin) {
+          if (!browsernoti) {
           console.log('알람을 받을수 없다')
-          //       // console.log("noti '' 보냄");
-          //       const data = {
-          //         token: '',
-          //       };
-          //       console.log(data)
-          //       getToken(messaging, {
-          //         vapidKey: "BLg2NeG06gdfa1DbdDn1E6VFSD8a82zuaxgPXS5drdMaqUSf_lY421iglOkbev53HaDsl2jkw5vxgMaA4b6wfug",
-          //       }).then(token => {
-          //         deleteToken(messaging).then(() => {
-          //           console.log('deleteFCMtoken');
-          //           deleteCookie('FCMtoken');
-          //         });
-          //       });
-          //       dispatch(setFCMToken(data));
-          //       return;
+          const data = {
+            token: '',
+          };
+          console.log(data)
+          getToken(messaging, {
+            vapidKey: "BLg2NeG06gdfa1DbdDn1E6VFSD8a82zuaxgPXS5drdMaqUSf_lY421iglOkbev53HaDsl2jkw5vxgMaA4b6wfug",
+          }).then(token => {
+            deleteToken(messaging).then(() => {
+              console.log('deleteFCMtoken');
+              localStorage.removeItem('FCMtoken');
+            });
+          });
+          dispatch(setFCMToken(data));
+          return;
         } else {
           console.log('noti 토큰 보냄');
           getToken(messaging, {
             vapidKey: "BLg2NeG06gdfa1DbdDn1E6VFSD8a82zuaxgPXS5drdMaqUSf_lY421iglOkbev53HaDsl2jkw5vxgMaA4b6wfug",
           }).then(token => {
             console.log(token);
-            setCookie('FCMtoken', token, 20);
+            localStorage.setItem('FCMtoken', token);
             const data = {
-              token: getCookie('FCMtoken'),
+              token: localStorage.getItem('FCMtoken'),
             };
             dispatch(setFCMToken(data));
           });
         }
-      }
-    }
-  })
+        } return;
+      },
+  [islogin])
 
   return (
       <>
@@ -82,10 +74,10 @@ function App() {
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/add" element={<AddPlans/>}/>
           <Route path="/main" element={<Main/>}/>
-          <Route path="/detail/:planId" element={<Detail/>}/>
+          <Route path="/detail/:planUrl" element={<Detail/>}/>
           <Route path="/details/:url" element={<PlanSetName islogin={islogin} userNick={userNick} />} />
           <Route path="/past" element={<PastPlan/>}/>
-          <Route path="/edit/:planId" element={<EditPlan/>}/>
+          <Route path="/edit/:planUrl" element={<EditPlan/>}/>
           <Route path="/users/kakao/callback" element={<OAuthHandler/>}/>
         </Routes>
         <GlobalStyle/>
@@ -99,7 +91,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
-  /* http://meyerweb.com/eric/tools/css/reset/ 
+  /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
@@ -154,6 +146,7 @@ const GlobalStyle = createGlobalStyle`
     border-spacing: 0;
   }
 `
+
 
 export default App;
 

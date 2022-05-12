@@ -16,7 +16,7 @@ export const getPlanId = createAsyncThunk(
 
 const initialState = {
   planId: '',
-  planName: '',
+  locationName: '',
   publicMaps: [],
   publicChats: [],
   url: '',
@@ -70,7 +70,7 @@ export const mapSlice = createSlice({
       })
       .addCase(getPlanId.fulfilled, (state, action) => {
         state.planId = action.payload.planId;
-        state.planName = action.payload.planName;
+        state.locationName = action.payload.locationName;
         state.loading = false;
       });
   },

@@ -15,7 +15,7 @@ import {DropdownList} from "react-widgets/cjs";
 import {penaltyModel} from "../statics/penalty";
 
 const EditPlan = (props) => {
-    const {planId} = useParams()
+    const {planUrl} = useParams()
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -35,7 +35,7 @@ const EditPlan = (props) => {
     const planTime = formatTime(plan?.planDate)
 
     useEffect(() => {
-        dispatch(getOnePlan(planId))
+        dispatch(getOnePlan(planUrl))
     }, [])
 
     useEffect(() => {
@@ -85,7 +85,7 @@ const EditPlan = (props) => {
             return
         }
         const data = {
-            planId,
+            planId : planUrl,
             planName: name,
             planDate: `${formatDate(date)} ${formatTime(time)}`,
             location: place,

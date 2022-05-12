@@ -34,9 +34,9 @@ export const getMorePlan = createAsyncThunk(
 
 export const getOnePlan = createAsyncThunk(
     `plan/getOnePlan`,
-    async (randomUrl, {rejectedWithValue}) => {
+    async (planUrl, {rejectedWithValue}) => {
         try {
-            const res = await getApi(`/member/list/${randomUrl}`)
+            const res = await getApi(`/member/list/${planUrl}`)
             const {data} = res.data
             return data
         } catch (err) {
@@ -95,14 +95,14 @@ export const editPlan = createAsyncThunk(
 
 export const deletePlan = createAsyncThunk(
     'plan/deletePlan',
-    async ({planId, navigate}, {rejectedWithValue}) => {
+    async ({planUrl, navigate}, {rejectedWithValue}) => {
         // console.log(planId)
         try {
-            const res = await deleteApi(`/member/list/${planId}`)
+            const res = await deleteApi(`/member/list/${planUrl}`)
             console.log(res)
             // window.alert(res.data.message)
             navigate('/main')
-            return planId
+            return planUrl
         } catch (err) {
             console.log(err)
             return rejectedWithValue(err.response)

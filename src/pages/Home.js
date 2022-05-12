@@ -39,11 +39,6 @@ const Container = styled.div`
   height: 70vh;
 `
 
-const GuestBtn = styled.div`
-  cursor: pointer;
-  margin: auto;
-`;
-
 const KakaoDiv = styled.div`
   background-color: #A1ED00;
   display: flex;

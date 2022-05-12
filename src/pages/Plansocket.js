@@ -13,12 +13,11 @@ import PlanMap from './PlanMap.js';
 
 const Plansocket = props => {
   const dispatch = useDispatch();
-  const planName = props.planName;
+  const locationName = props.locationName;
   const pId = props.planId;
   const sock = props.sock;
   const client = props.client;
   const usernick = props.userNick;
-
   const [myLocation, setMyLocation] = useState({
     center: {
       lat: 33.450701,
@@ -130,7 +129,6 @@ const Plansocket = props => {
       planId: pId,
       connected: true,
     });
-
     client.send('/maps/enter', {}, JSON.stringify(chatMessage));
   };
 
@@ -142,7 +140,7 @@ const Plansocket = props => {
         publicChats={publicChats}
         publicMaps={publicMaps}
         planId={pId}
-        planName={planName}
+        locationName={locationName}
         usernick={usernick}
       />
     </>

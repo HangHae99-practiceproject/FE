@@ -17,35 +17,35 @@ const PlanMapInfo = props => {
   const position = props.position;
   const isMount = useIsMount();
   const [address, setAddress] = useState();
-  useEffect(() => {
-    if (!map) return;
-    const geocoder = new window.kakao.maps.services.Geocoder();
-    const mycallback = function (result, status) {
-      if (status === kakao.maps.services.Status.OK && isMount.current) {
-        if (result[0].road_address === null) {
-          setAddress({
-            address_name: result[0].address.address_name,
-            building_name: result[0].address.region_3depth_name,
-          });
-        } else {
-          setAddress({
-            address_name: result[0].road_address.address_name,
-            building_name: result[0].road_address.building_name,
-          });
-        }
-      }
-    };
-    geocoder.coord2Address(
-      parseFloat(position.lng),
-      parseFloat(position.lat),
-      mycallback,
-    );
-    return () => {
-      setAddress();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMount, position]);
-  // console.log(address);
+  // useEffect(() => {
+  //   if (!map) return;
+  //   const geocoder = new window.kakao.maps.services.Geocoder();
+  //   const mycallback = function (result, status) {
+  //     if (status === kakao.maps.services.Status.OK && isMount.current) {
+  //       if (result[0].road_address === null) {
+  //         setAddress({
+  //           address_name: result[0].address.address_name,
+  //           building_name: result[0].address.region_3depth_name,
+  //         });
+  //       } else {
+  //         setAddress({
+  //           address_name: result[0].road_address.address_name,
+  //           building_name: result[0].road_address.building_name,
+  //         });
+  //       }
+  //     }
+  //   };
+  //   geocoder.coord2Address(
+  //     parseFloat(position.lng),
+  //     parseFloat(position.lat),
+  //     mycallback,
+  //   );
+  //   return () => {
+  //     setAddress();
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isMount, position]);
+  // // console.log(address);
 
   return (
     <>

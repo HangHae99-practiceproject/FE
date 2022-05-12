@@ -6,9 +6,9 @@ import Headerbar from '../shared/Headerbar.js';
 import { useNavigate } from 'react-router-dom';
 
 //카카오 맵
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
 import PlanMapInfo from './PlanMapInfo.js';
-
+import { dest_marker, my_marker } from '../img'
 
 /**
  * @param {*} props
@@ -23,12 +23,6 @@ import PlanMapInfo from './PlanMapInfo.js';
         sendMyLocation();
       },
       setDestpoint(payload) {
-        // console.log('payload', payload.lat, payload.lng);
-        // setPoints(prev => ({
-        //   ...prev,
-        //   lat: parseFloat(payload.lat),
-        //   lng: parseFloat(payload.lng),
-        // }));
         const data = points.concat({
           lat: parseFloat(payload.lat),
           lng: parseFloat(payload.lng),
@@ -39,6 +33,7 @@ import PlanMapInfo from './PlanMapInfo.js';
     // const PlanMap = props => {
     const navigate = useNavigate();
     const planId = props.planId;
+    const locationName = props.locationName
     const stompClient = props.client;
     const useInterval = (callback, delay) => {
       const savedCallback = useRef();
@@ -117,13 +112,6 @@ import PlanMapInfo from './PlanMapInfo.js';
 
       return bounds;
     }, [points]);
-    // if (points) {
-    //   const center = {
-    //     lat: (points[0].lat + points[1].lat) / 2,
-    //     lng: (points[0].lng + points[1].lng) / 2,
-    //   };
-    //   setSetMyLocation(center);
-    // }
     useEffect(() => {
       //현재 내위치 얻기
       if (navigator.geolocation) {
@@ -163,30 +151,20 @@ import PlanMapInfo from './PlanMapInfo.js';
     return (
       <>
         <Headerbar
-          text={`${props.planName}`}
+          text={'실시간 위치 공유'}
           _onClickClose={() => {
             navigate('/main', { replace: true });
           }}
-          _onClickEdit={() => {}}
         ></Headerbar>
-        {/*
-        <Button
-          _onClick={() => {
-            if (map) map.setBounds(bounds);
-            console.log('PointerButton');
-          }}
-        >
-          Chating
-        </Button> */}
-
+        
         <Map // 지도를 표시할 Container
           center={myLocation.center}
           style={{
             // 지도의 크기
             width: '100%',
-            height: '50%',
+            height: '90%',
             position: "absolute",
-            bottom: 120
+            bottom: 0
           }}
           level={3} // 지도의 확대 레벨
           onCreate={setMap}
@@ -195,38 +173,37 @@ import PlanMapInfo from './PlanMapInfo.js';
             setPosition(undefined);
           }}
         >
-          {!myLocation.isLoading && <MapMarker position={myLocation.center} />}
+          {!myLocation.isLoading && <MapMarker image={{
+                          src: my_marker,
+                          size: { width: 33, height: 33 },
+                        }} position={myLocation.center} />}
           {publicMaps &&
             publicMaps.map((chat, index) => (
-              // console.log('MAP', chat),
               <>
                 {chat.type === 'MAP' && (
                   <>
                     {chat.sender === props.usernick ? (
+                      <>
                       <MapMarker
                         key={'map' + index}
                         position={{ lat: chat.lat, lng: chat.lng }}
-                        // image={{
-                        //   src: redmarker,
-                        //   size: { width: 33, height: 41 },
-                        // }}
-                        onClick={() => {
-                          setInfo(true);
-                          setPosition({
-                            lat: chat.lat,
-                            lng: chat.lng,
-                            sender: chat.sender,
-                          });
+                        image={{
+                          src: my_marker,
+                          size: { width: 33, height: 33 },
                         }}
                       />
+                      <CustomOverlayMap position={{ lat: chat.lat, lng: chat.lng }}>
+                        <Info className='userNick'>{chat.sender}</Info>
+                      </CustomOverlayMap>
+                      </>
                     ) : (
                       <MapMarker
                         key={'map' + index}
                         position={{ lat: chat.lat, lng: chat.lng }}
-                        // image={{
-                        //   src: marker,
-                        //   size: { width: 33, height: 41 },
-                        // }}
+                        image={{
+                          src: my_marker,
+                          size: { width: 33, height: 33 },
+                        }}
                         onClick={() => {
                           setInfo(true);
                           setPosition({
@@ -240,25 +217,25 @@ import PlanMapInfo from './PlanMapInfo.js';
                   </>
                 )}
                 {chat.type === 'DEST' && (
+                  <>
                   <MapMarker
                     key={'DEST' + index}
                     position={{
                       lat: parseFloat(chat.destLat).toFixed(5),
                       lng: parseFloat(chat.destLng).toFixed(5),
                     }}
-                    // image={{
-                    //   src: Ellipse32,
-                    //   size: { width: 21, height: 21 },
-                    // }}
-                    onClick={() => {
-                      setInfo(true);
-                      setPosition({
-                        lat: parseFloat(chat.destLat).toFixed(5),
-                        lng: parseFloat(chat.destLng).toFixed(5),
-                        sender: 1,
-                      });
+                    image={{
+                      src: dest_marker,
+                      size: { width: 33, height: 33 },
                     }}
-                  ></MapMarker>
+                  /><CustomOverlayMap
+                      position={{
+                      lat: parseFloat(chat.destLat).toFixed(5),
+                      lng: parseFloat(chat.destLng).toFixed(5),
+                    }}>
+                    <Info>{locationName}</Info>
+                  </CustomOverlayMap>
+                  </>
                 )}
               </>
             ))}
@@ -272,20 +249,28 @@ import PlanMapInfo from './PlanMapInfo.js';
     );
   });
 
-  // 스타일 컴포넌트 작성 위치
-  const Section = styled.div`
-    position: absolute;
-    bottom: 5%;
-    box-sizing: border-box;
-    width: 100%;
-    height: 15%;
-    z-index: 99;
-    background-color: ${theme.color.white};
-    /* display: flex; */
-    /* justify-content: center; */
-    align-items: center;
-  `;
+// 스타일 컴포넌트 작성 위치
+const Section = styled.div`
+  position: absolute;
+  bottom: 5%;
+  box-sizing: border-box;
+  width: 100%;
+  height: 15%;
+  z-index: 99;
+  background-color: ${theme.color.white};
+  /* display: flex; */
+  /* justify-content: center; */
+  align-items: center;
+`;
 
+const Info = styled.div`
+background-color: black;
+color: white;
+margin-bottom: 100px;
+padding: 5px;
+border-radius: 10px;
+font-family: pretendard;
+`;
   // default props 작성 위치
   PlanMap.defaultProps = {};
 
