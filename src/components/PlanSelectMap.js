@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
 import React, { useEffect, useRef, useState } from 'react';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
 import { Button, Grid, Text } from '../elements';
 import styled from 'styled-components';
 import Headerbar from '../shared/Headerbar';
 import theme from '../Styles/theme';
-import { BiSearch } from 'react-icons/bi';
+import {dest_marker} from '../img'
 
 const PlanSelectMap = props => {
   const inputref = useRef(); //인풋데이터
@@ -150,17 +150,22 @@ const PlanSelectMap = props => {
               <MapMarker
                 position={selectlist.position}
                 onClick={() => setInfo(selectlist)}
-              >
+                image={{
+                  src: dest_marker,
+                  size: { width: 33, height: 33 },
+                }}
+              />
                 {/* {info && info.content === selectlist.content && (
                   <div style={{ color: 'black' }}>{selectlist.content}</div>
                 )} */}
-              {info &&info.content === selectlist.content && (
-                <MarkerDetail>
-                  <p>{selectlist.content}</p>
+              {/* {info &&info.content === selectlist.content && (
+                <CustomOverlayMap position={selectlist.position}>
+                  <MarkerDetail>
+                  {selectlist.content}
                   <Here onClick={()=> window.open(selectlist.place_url)}>정보</Here>
                 </MarkerDetail>
-              )}
-              </MapMarker>
+                </CustomOverlayMap>
+              )} */}
             </Map>
           )}
           {isdata && (
@@ -175,20 +180,25 @@ const PlanSelectMap = props => {
               </div>
               <div
                 style={{
-                  right: '8%',
-                  position: 'absolute',
-                  padding: '0px 20px 0px 0px',
+                  marginLeft: 'auto',
+                  display: "flex",
+                  fontFamily: "pretendard"
                 }}
               >
+                <DestInfo
+                  onClick={()=>
+                  window.open(selectlist.place_url)}
+                >
+                  <P>정보</P>
+                </DestInfo>
                 <Button
                   is_green={isdata}
-                  name="도착"
                   able={!isdata}
                   is_disabled={!isdata}
-                  height="100px"
+                  height="40px"
                   width="80px"
                   _onClick={() => {props.setShowMap(false)}}
-                />
+                ><P>선택</P></Button>
               </div>
             </InfoMap>
           )}
@@ -242,20 +252,26 @@ const InfoMap = styled.div`
   bottom: 0;
 `;
 
-const MarkerDetail = styled.div`
-  color: #000;
-  width: 150px;
-  height: 100px;
-  display: flex;
-  flex-direction: column;
-`;
+// const MarkerDetail = styled.div`
+// font-family: pretendard;
+// margin-bottom: 130px;
+// background: white;
+// padding: 10px;
+// border-radius: 7px;
+// `;
 
-const Here = styled.button`
+const DestInfo = styled.button`
   margin-top: auto;
-  width: fit-content;
-  margin-left: auto;
+  width: 80px;
+  height: 100%;
+  border-radius: 10px;
+  margin: 0px 5px 0px auto;
   border: 0px;
-  background: transparent;
+  background: #CCCCCC;
   padding: 5px;
 `
+const P = styled.p`
+font-weight: ${theme.fontWeight.semiBold};
+font-size: 14px;
+`;
 export default PlanSelectMap;

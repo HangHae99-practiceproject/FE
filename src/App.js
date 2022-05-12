@@ -19,9 +19,9 @@ import { setFCMToken } from "./redux/modules/user";
 import { useDispatch, useSelector } from "react-redux";
 
 //firebase
-import { messaging, app } from './firebase';
-import { deleteToken, getToken, getMessaging, onMessage } from 'firebase/messaging'
-import { onBackgroundMessage } from "firebase/messaging/sw";
+import { messaging } from './firebase';
+import { deleteToken, getToken} from 'firebase/messaging'
+
 //cookie
 import { getCookie, deleteCookie, setCookie } from "./shared/utils/Cookie";
 
@@ -68,6 +68,7 @@ function App() {
 
   return (
       <>
+        <GlobalStyle/>
         <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path="/login" element={<Login/>}/>
@@ -89,6 +90,7 @@ function App() {
 const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
+    font-family: pretendard;
   }
 
   /* http://meyerweb.com/eric/tools/css/reset/
@@ -113,7 +115,6 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     border: 0;
     font-size: 100%;
-    font: inherit;
     vertical-align: baseline;
   }
 
