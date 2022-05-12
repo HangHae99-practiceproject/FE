@@ -32,7 +32,6 @@ const Signup = (props) => {
         }
     };
 
-    //엔터 입력시
     const handleKeyPress = e => {
         if (e.key === 'Enter' && !e.shiftKey) {
             handleSignUp();
@@ -48,7 +47,6 @@ const Signup = (props) => {
         }, 1000)
         return 'failed...'
     }
-
 
     return (
         <>

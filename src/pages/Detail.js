@@ -11,21 +11,16 @@ const Detail = (props) => {
     const {planUrl} = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
     const user = useSelector(state => state.user.user.data)
     const plan = useSelector(state => state.plan.showplan)
-    useEffect(() => {
-        console.log('!!!')
-        dispatch(getOnePlan(planUrl))
-    }, [])
 
     const planDay = moment(plan?.planDate).format('YYYY년 MM월 DD일')
     const planTime = moment(plan?.planDate).format('hh:mm')
     const url = window.location.href.split("/")
     url[3] = 'details'
     const wsUrl = url.join("/")
-    // 공유 팝업 생성
-    const handle = () => {
+
+    const handleShared = () => {
         if (navigator.share) {
             navigator.share({
                 title: plan.planName,
@@ -38,6 +33,10 @@ const Detail = (props) => {
             alert("공유하기가 지원되지 않는 환경 입니다.")
         }
     }
+
+    useEffect(() => {
+        dispatch(getOnePlan(planUrl))
+    }, [])
 
     const handleModify = () => {
         if (user.nickname !== plan.writer) {
@@ -85,13 +84,12 @@ const Detail = (props) => {
                     <h2>선택하신 약속입니다</h2> : <h2>초대장</h2>
                 }
             </HeadLine>
+
             <ScheduleBox>
                 {user.nickname === plan.writer && (
                     <div style={{position: 'relative'}}>
-                        <button onClick={handleModify}>수정
-                        </button>
-                        <button onClick={deletePlanBtn}>삭제
-                        </button>
+                        <img src='icon-edit-40px.png' onClick={handleModify}/>
+                        <img src='icon-delete-40px.png' onClick={deletePlanBtn}/>
                     </div>
                 )}
                 <h3>{planDay}</h3>
@@ -111,7 +109,7 @@ const Detail = (props) => {
             </MapBox>
             <ButtonBox>
                 {plan.writer === user.nickname ?
-                    <button onClick={handle}>
+                    <button onClick={handleShared}>
                         공유하기
                     </button>
                     :
@@ -155,20 +153,26 @@ const ScheduleBox = styled.div`
   height: 35vh;
   margin: auto;
 
-  h3 {
-    padding: 10px 0 5px 10px;
+  h3: first-of-type {
+    padding: 16px 10px;
     font-size: 24px;
     font-weight: bold;
+  }
+  
+  h3 {
+    font-size: 24px;
+    font-weight: bold;
+    padding: 0 10px 16px 10px
   }
 
   p {
     padding: 10px;
-  }
+  };
 
-  button: first-of-type {
+  img: first-of-type {
     position: absolute;
     right: 42.67px;
-  } button {
+  } img {
     position: absolute;
     right: 0;
     margin: 8px;
@@ -198,7 +202,7 @@ const ButtonBox = styled.div`
     border: none;
     border-radius: 10px;
   }
-  
+
   button + button {
     margin-left: 10px;
   }

@@ -15,7 +15,7 @@ import {DropdownList} from "react-widgets/cjs";
 import {penaltyModel} from "../statics/penalty";
 
 const EditPlan = (props) => {
-    const {planId} = useParams()
+    const {planUrl} = useParams()
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -35,7 +35,7 @@ const EditPlan = (props) => {
     const planTime = formatTime(plan?.planDate)
 
     useEffect(() => {
-        dispatch(getOnePlan(planId))
+        dispatch(getOnePlan(planUrl))
     }, [])
 
     useEffect(() => {
@@ -54,7 +54,7 @@ const EditPlan = (props) => {
             })
             const hourData = hourModel.find((model) => model.value === calcHour.toString())
             const minuteData = minuteModel.find((model) => model.value === _minute.toString())
-            setHour(hourData.id)
+            setHour(hourData)
             setMinute(minuteData.id)
         }
     }, [plan])
@@ -80,13 +80,12 @@ const EditPlan = (props) => {
         setPenalty(e.target.value)
     }
 
-
     const editPlanBtn = () => {
         if ( !validModify() ) {
             return
         }
         const data = {
-            planId,
+            planId : planUrl,
             planName: name,
             planDate: `${formatDate(date)} ${formatTime(time)}`,
             location: place,

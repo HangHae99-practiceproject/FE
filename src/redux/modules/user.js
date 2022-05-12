@@ -14,12 +14,13 @@ const initialState = {
 export const signUp = createAsyncThunk(
     'user/signup',
     async ({data, navigate}, {rejectedWithValue}) => {
-        console.log(data)
+        // console.log(data)
         try {
             const res = await postApi('/user/signup', data, {
                 withCredentials: false,
             })
             console.log(res)
+            window.alert(res.data.message)
             navigate('/login')
             return {
                 data: res.data,
@@ -40,11 +41,12 @@ export const login = createAsyncThunk(
             const res = await postApi('/user/login', data, {
                 withCredentials: false,
             })
-            localStorage.setItem('token', res.headers.authorization);
-            setCookie(res.data.id, res.data.nickname);
-            navigate('/main');
+            localStorage.setItem('token', res.headers.authorization)
+            setCookie(res.data.id, res.data.nickname)
+            navigate('/main')
             return {
                 data: res.data,
+                status: res.status
             }
         } catch (err) {
             alert(err.response.data.exception)

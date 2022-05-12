@@ -54,14 +54,13 @@ const SetTime = ({setDate, setTime, clickHandler}) => {
 
     const handleNext = () => {
         if (!_date || !_time) {
-            alert('날짜 정해 임마')
+            alert('날짜를 정해 주세요')
             return
         }
         setDate(formatDate(_date))
         setTime(_time)
         clickHandler()
     }
-
 
 
     return (

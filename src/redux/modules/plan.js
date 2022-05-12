@@ -1,12 +1,14 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import {postApi, getApi, putApi, deleteApi} from "../../shared/api/client";
-
+import { getDatabase, ref, set } from "firebase/database";
+import { app } from '../../firebase'
 
 export const getPlan = createAsyncThunk(
     'plan/getPlan',
     async (userId, {rejectedWithValue}) => {
         try {
             const res = await getApi(`/member/list/${userId}/1`)
+            console.log(res)
             return res.data.data
         } catch (err) {
             // window.alert(err.response.data.message)
@@ -44,6 +46,21 @@ export const getOnePlan = createAsyncThunk(
     }
 )
 
+export const getHistoryPlan = createAsyncThunk(
+    'plan/getHistoryPlan',
+    async (_, {rejectedWithValue}) => {
+        try {
+            const res = await getApi('/member/history/1')
+            console.log(res)
+            return res.data
+        } catch (err) {
+            // window.alert(err.response.data.message)
+            console.log(err)
+            return rejectedWithValue(err.response)
+        }
+    }
+)
+
 export const addPlan = createAsyncThunk(
     'plan/addPlan',
     async ({data, navigate}, {rejectedWithValue}) => {
@@ -63,10 +80,9 @@ export const editPlan = createAsyncThunk(
     'plan/editPlan',
     async ({data, navigate}, {rejectedWithValue}) => {
         console.log(data)
-        const planId = data?.planId
-        console.log(planId)
+        console.log(data.planId)
         try {
-            const res = await putApi(`/member/list/${planId}`, data)
+            const res = await putApi(`/member/list/${data.planId}`, data)
             console.log(res)
             // navigate(`/detail/${planId}`)
             return res.data

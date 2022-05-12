@@ -12,7 +12,7 @@ const SetLocation = ({clickHandler, setPlace, place}) => {
 
     const handleNext = () => {
         if (!name) {
-            alert('장소 검색해서 선택해 임마')
+            alert('장소를 선택해 주세요')
             return
         }
         setPlace({name, address, lat, lng})
