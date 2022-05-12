@@ -10,10 +10,10 @@ import SockJS from "sockjs-client";
 const PlanSetName = props => {
   const dispatch = useDispatch();
   const userNick = document.cookie.split("=")[1];
-  const planName = useSelector(state => state.map.planName)
   const planId = useSelector(state => state.map.planId)
   const path = useParams();
-
+  const locationName = useSelector(state => state.map.locationName)
+  console.log(locationName)
   //웹소켓 방 주소로 약속 일정 ID 가져오기
   useEffect(() => {
     dispatch(getPlanId(path.url));
@@ -25,11 +25,10 @@ const PlanSetName = props => {
 
     return (
     <div>
-      <h1>약속정보</h1>
       <Plansocket
       userNick={userNick}
       planId={planId}
-      planName={planName}
+      locationName={locationName}
       path={path}
       client={ws}
       sock={sock}

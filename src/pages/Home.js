@@ -39,7 +39,7 @@ const Home = () => {
         <Button
           name={'이메일 로그인·회원가입하기'}
           _onClick={() => {
-            navigate('/signup', { replace: true });
+            navigate('/login', { replace: true });
           }}
           width="100%"
           heignt="40px"

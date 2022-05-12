@@ -1,7 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import {postApi, getApi, putApi, deleteApi} from "../../shared/api/client";
-import { getDatabase, ref, set } from "firebase/database";
-import { app } from '../../firebase'
+
 
 export const getPlan = createAsyncThunk(
     'plan/getPlan',
@@ -33,9 +32,9 @@ export const getMorePlan = createAsyncThunk(
 
 export const getOnePlan = createAsyncThunk(
     `plan/getOnePlan`,
-    async (planId, {rejectedWithValue}) => {
+    async (planUrl, {rejectedWithValue}) => {
         try {
-            const res = await getApi(`/member/list/${planId}`)
+            const res = await getApi(`/member/list/${planUrl}`)
             const {data} = res.data
             return data
         } catch (err) {
@@ -80,14 +79,14 @@ export const editPlan = createAsyncThunk(
 
 export const deletePlan = createAsyncThunk(
     'plan/deletePlan',
-    async ({planId, navigate}, {rejectedWithValue}) => {
+    async ({planUrl, navigate}, {rejectedWithValue}) => {
         // console.log(planId)
         try {
-            const res = await deleteApi(`/member/list/${planId}`)
+            const res = await deleteApi(`/member/list/${planUrl}`)
             console.log(res)
             // window.alert(res.data.message)
             navigate('/main')
-            return planId
+            return planUrl
         } catch (err) {
             console.log(err)
             return rejectedWithValue(err.response)

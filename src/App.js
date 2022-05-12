@@ -4,7 +4,7 @@ import { createGlobalStyle } from "styled-components";
 
 //pages
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Signup from "./pages/SignUp";
 import Main from "./pages/Main";
 import Detail from "./pages/Detail";
 import PastPlan from "./pages/PastPlan";
@@ -29,17 +29,9 @@ function App() {
     const dispatch = useDispatch();
     const islogin = localStorage.getItem('token') ? true : false;
     const userNick = document.cookie.split("=")[1];
-    const user = useSelector(state => state?.user?.user_info)
     const browsernoti = Notification.permission === 'granted' ? true : false;
 
   useEffect(() => {
-    // if (user.isNoticeAllowed !== undefined) {
-    //   // console.log('noti ', user);
-    //   if (browsernoti === user.isNoticeAllowed) {
-    //     // console.log('noti서로 같음', user.isNoticeAllowed);
-    //     return;
-    //   } else {
-        // console.log('noti서로 다름', user.isNoticeAllowed);
         if(islogin) {
           if (!browsernoti) {
           console.log('알람을 받을수 없다')
@@ -71,26 +63,8 @@ function App() {
           });
         }
         } return;
-      }
-  )
-  const messaging = getMessaging(app);
-  onMessage(messaging, (payload) => {
-    console.log('Message received. ', payload);
-  });
-
-//   onBackgroundMessage(messaging, (payload) => {
-//   console.log('[firebase-messaging-sw.js] Received background message ', payload);
-//   // Customize notification here
-//   const notificationTitle = 'Background Message Title';
-//   const notificationOptions = {
-//     body: 'Background Message body.',
-//     icon: '/firebase-logo.png'
-//   };
-
-//   self.registration.showNotification(notificationTitle,
-//     notificationOptions);
-// });
-
+      },
+  [islogin])
 
   return (
       <>
@@ -100,10 +74,10 @@ function App() {
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/add" element={<AddPlans/>}/>
           <Route path="/main" element={<Main/>}/>
-          <Route path="/detail/:planId" element={<Detail/>}/>
+          <Route path="/detail/:planUrl" element={<Detail/>}/>
           <Route path="/details/:url" element={<PlanSetName islogin={islogin} userNick={userNick} />} />
           <Route path="/past" element={<PastPlan/>}/>
-          <Route path="/edit/:planId" element={<EditPlan/>}/>
+          <Route path="/edit/:planUrl" element={<EditPlan/>}/>
           <Route path="/users/kakao/callback" element={<OAuthHandler/>}/>
         </Routes>
         <GlobalStyle/>

@@ -8,28 +8,29 @@ import moment from "moment";
 import Test from "./Test";
 
 const Detail = (props) => {
-    const {planId} = useParams();
+    const {planUrl} = useParams();
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const user = useSelector(state => state.user.user.data)
     const plan = useSelector(state => state.plan.showplan)
-
     useEffect(() => {
         console.log('!!!')
-        dispatch(getOnePlan(planId))
+        dispatch(getOnePlan(planUrl))
     }, [])
 
     const planDay = moment(plan?.planDate).format('YYYY년 MM월 DD일')
     const planTime = moment(plan?.planDate).format('hh:mm')
-
+    const url = window.location.href.split("/")
+    url[3] = 'details'
+    const wsUrl = url.join("/")
     // 공유 팝업 생성
     const handle = () => {
         if (navigator.share) {
             navigator.share({
                 title: plan.planName,
                 text: plan.planName,
-                url: window.location.href,
+                url: wsUrl
             })
                 .then(() => console.log('성공'))
                 .catch((err) => console.log(err))
@@ -43,7 +44,7 @@ const Detail = (props) => {
             window.alert('작성자만 수정 가능합니다.')
             return
         } else {
-            navigate(`/edit/${planId}`)
+            navigate(`/edit/${planUrl}`)
         }
     }
 
@@ -52,7 +53,7 @@ const Detail = (props) => {
             window.alert('작성자만 삭제 가능합니다.')
             return
         }
-        dispatch(deletePlan({planId, navigate}))
+        dispatch(deletePlan({planUrl, navigate}))
     }
 
     if ( !plan ) {
@@ -84,7 +85,6 @@ const Detail = (props) => {
                     <h2>선택하신 약속입니다</h2> : <h2>초대장</h2>
                 }
             </HeadLine>
-
             <ScheduleBox>
                 {user.nickname === plan.writer && (
                     <div style={{position: 'relative'}}>

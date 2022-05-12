@@ -23,8 +23,6 @@ const Main = (props) => {
     const totalPage = useSelector(state => state.plan.totalPage);
     const userData = useSelector(state => state.user.user?.data)
     const resetStore = useResetStore()
-    // console.log(planList)
-
     const [page, setPage] = useState(1)
 
     const [isOpen, setMenu] = useState(false);
@@ -155,7 +153,7 @@ const Main = (props) => {
                                 <div className='lists'
                                      key={idx}
                                      onClick={() => {
-                                         navigate(`/detail/${plan.planId}`)
+                                         navigate(`/detail/${plan.url}`)
                                      }}
                                 >
                                     <h3>{planDate}</h3>
