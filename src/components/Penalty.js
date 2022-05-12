@@ -15,6 +15,7 @@ const PenaltyItem = ({onClick, value, active}) => {
 }
 
 const Penalty = ({setPenalty, clickHandler}) => {
+
     const [selectedPenalty, setSelectedPenalty] = useState(0)
     const onClick = (id) => {
         setSelectedPenalty(selectedPenalty === id ? '' : id)
@@ -30,7 +31,7 @@ const Penalty = ({setPenalty, clickHandler}) => {
     }
 
     return (
-        <React.Fragment>
+        <>
             <Grid padding="16px">
                 <p
                     style={{
@@ -49,7 +50,6 @@ const Penalty = ({setPenalty, clickHandler}) => {
                 ))}
             </PenaltyBox>
 
-
             <Grid bottom="0" padding="16px">
                 <button
                     style={{
@@ -64,7 +64,7 @@ const Penalty = ({setPenalty, clickHandler}) => {
                     onClick={handleNext}>다음으로
                 </button>
             </Grid>
-        </React.Fragment>
+        </>
     )
 }
 

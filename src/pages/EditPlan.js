@@ -54,7 +54,7 @@ const EditPlan = (props) => {
             })
             const hourData = hourModel.find((model) => model.value === calcHour.toString())
             const minuteData = minuteModel.find((model) => model.value === _minute.toString())
-            setHour(hourData.id)
+            setHour(hourData)
             setMinute(minuteData.id)
         }
     }, [plan])
@@ -79,7 +79,6 @@ const EditPlan = (props) => {
     const changePenalty = (e) => {
         setPenalty(e.target.value)
     }
-
 
     const editPlanBtn = () => {
         if ( !validModify() ) {

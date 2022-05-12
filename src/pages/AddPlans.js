@@ -52,7 +52,6 @@ const AddPlans = (props) => {
             },
             penalty,
         }
-        console.log('data : ', data);
         dispatch(addPlan({data, navigate}));
     }
 

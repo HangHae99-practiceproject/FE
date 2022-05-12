@@ -2,7 +2,6 @@ import React, {useEffect} from "react";
 import {Route, Routes} from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 
-
 //pages
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";

@@ -1,18 +1,17 @@
 import React, {useState, useEffect} from "react";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import styled from "styled-components";
 import moment from "moment";
 import 'moment/locale/ko'
+import {useNavigate} from "react-router-dom";
 
 import {Text} from "../elements";
 import theme from "../Styles/theme";
+import useResetStore from "../hooks/useResetStore";
 import {BsBell} from "react-icons/bs";
-import {useNavigate} from "react-router-dom";
 
-import {useDispatch} from "react-redux";
 import {logout} from "../redux/modules/user";
 import {getMorePlan, getPlan, setLoading} from "../redux/modules/plan";
-import useResetStore from "../hooks/useResetStore";
 
 const Main = (props) => {
 
@@ -22,11 +21,10 @@ const Main = (props) => {
     const planList = useSelector(state => state.plan.plans);
     const totalPage = useSelector(state => state.plan.totalPage);
     const userData = useSelector(state => state.user.user?.data)
+
     const resetStore = useResetStore()
-    // console.log(planList)
 
     const [page, setPage] = useState(1)
-
     const [isOpen, setMenu] = useState(false);
 
     const logoutBtn = () => {
@@ -76,7 +74,6 @@ const Main = (props) => {
     const nowDate = moment()
         .format('YYYY년MM월DD일 dddd')
 
-
     if (!planList.length && loading === 'pending') {
         return 'loading...'
     }
@@ -88,16 +85,10 @@ const Main = (props) => {
     }
 
     return (
-        <div style={{backgroundColor: '#eee', minHeight: '100vh'}}>
+        <Container>
+            <img className='logo' src='61x61.png'/>
             <HeadBox>
-                <div style={{
-                    height: '100%',
-                    width: '40%',
-                    paddingRight: '8px',
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    alignItems: 'center',
-                }}>
+                <div className='hamburger-bell'>
                     <BsBell style={{
                         fontSize: "20px",
                         width: '30px',
@@ -124,9 +115,10 @@ const Main = (props) => {
                         </button>
                     </div>
                     <div className='member'>
-                        <img src='avtar-profile-edit.png'/>
-                        {/*<p>{document.cookie.split("=")[1]} 님</p>*/}
-                        <p>{userData?.nickname || '회원'} 님</p>
+                        <div className='member-img'>
+                            {userData && userData?.profileImg}
+                        </div>
+                        <p>{userData?.nickname || '손'} 님</p>
                     </div>
                     <div className='past-plan'
                          onClick={() => {
@@ -143,22 +135,24 @@ const Main = (props) => {
             </HeadBox>
 
             <UserInfo>
-                <p>{userData?.nickname || '회원'} 님</p>
+                <p>{userData?.nickname || '손'} 님</p>
                 <p>{nowDate} 입니다.</p>
             </UserInfo>
             <PlanList>
                 {planList.length > 0 ? (
                     <>
                         {planList.map((plan, idx) => {
-                            const planDate = moment(plan.planDate).format('YYYY년 MM월 DD일 hh:mm')
+                            const planDate = moment(plan.planDate).format('YYYY년 MM월 DD일')
+                            const planTime = moment(plan.planDate).format('hh시 mm분')
                             return (
                                 <div className='lists'
                                      key={idx}
                                      onClick={() => {
-                                         navigate(`/detail/${plan.planId}`)
+                                         navigate(`/detail/${plan.url}`)
                                      }}
                                 >
                                     <h3>{planDate}</h3>
+                                    <h3>{planTime}</h3>
                                     <p>{plan.planName}</p>
                                     <p>{plan.locationDetail?.name}</p>
                                     <p>{plan.penalty}</p>
@@ -170,12 +164,7 @@ const Main = (props) => {
                         }}>+</AddButton>
                     </>
                 ) : (
-                    <div style={{
-                        textAlign: "center",
-                        width: '100%',
-                        padding: '10px 0',
-                        marginTop: '20px',
-                    }}>
+                    <div className='no-list'>
                         <Text size="14px" color={theme.color.gray1}>
                             아직 약속이 없습니다!
                             <br style={{padding: '16px'}}/>
@@ -191,21 +180,39 @@ const Main = (props) => {
                     </div>
                 )}
             </PlanList>
-        </div>
+        </Container>
     )
 }
 
 export default Main
 
+const Container = styled.div`
+  background-color: #eee;
+  min-height: 100vh;
+  position:relative;
+  
+  .logo {
+    position: absolute;
+    left: 0;
+  }
+`
+
 const HeadBox = styled.div`
   background-color: #fff;
   width: 100%;
   height: 60px;
-  //margin-top: 10px;
-  //margin-bottom: 10px;
   padding: 10px 0;
   display: flex;
   justify-content: flex-end;
+  
+  .hamburger-bell {
+    height: 100%;
+    width: 40%;
+    padding-right: 8px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
 
   .hamburger-btn {
     border: 0;
@@ -273,6 +280,7 @@ const UserInfo = styled.div`
   background-color: #eee;
   width: 100%;
   padding: 10px 20px;
+  margin-bottom: 30px;
 
   p: first-of-type {
     font-weight: bold;
@@ -303,6 +311,7 @@ const ShowMenu = styled.div`
   }
 
   .member {
+    position: relative;
     width: 100%;
     height: 10%;
     border-radius: 10px;
@@ -314,9 +323,18 @@ const ShowMenu = styled.div`
     margin: 10px auto;
     cursor: pointer;
   }
+  
+  .member-img {
+    position: absolute;
+    top: -20%;
+    background-color: #eee;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+  }
 
   .member > p {
-    margin-top: 5px;
+    margin-top: 28px;
   }
 
   .past-plan {
@@ -345,7 +363,7 @@ const ShowMenu = styled.div`
 
 const PlanList = styled.div`
   padding: 0 30px;
-  margin-top: 30px;
+  margin-bottom: 30px;
   overflow: hidden;
   //text-align: center;
   overflow-y: scroll;
@@ -372,30 +390,41 @@ const PlanList = styled.div`
     background-color: #A1ED00;
     width: 100%;
     height: 25vh;
-    font-size: 24px;
+    font-size: 20px;
   }
 
   .lists:first-of-type > h3 {
-    font-size: 32px;
+    font-size: 24px;
   }
 
   .lists {
     background-color: white;
-    margin-top: 16px;
     width: 100%;
+    height: 20vh;
     border: 1px none #ddd;
     border-radius: 10px;
     padding: 16px 10px;
+    margin-bottom: 16px;
   }
 
   h3 {
-    padding-bottom: 16px;
+    padding-bottom: 8px;
     font-weight: bold;
     font-size: 20px;
   }
+  
+  h3 + h3 {
+    padding-bottom: 16px;
+  }
 
-  p + p {
-    margin-top: 8px;
+  p {
+    padding-bottom: 8px;
+  }
+  .no-list {
+    text-align: center;
+    width: 100%;
+    padding: 10px 0;
+    margin-top: 20px;
   }
 `
 

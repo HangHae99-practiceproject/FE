@@ -9,6 +9,7 @@ import Test from "./Test";
 
 const Detail = (props) => {
     const {planId} = useParams();
+    console.log(planId)
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -16,15 +17,13 @@ const Detail = (props) => {
     const plan = useSelector(state => state.plan.showplan)
 
     useEffect(() => {
-        console.log('!!!')
         dispatch(getOnePlan(planId))
     }, [])
 
     const planDay = moment(plan?.planDate).format('YYYY년 MM월 DD일')
     const planTime = moment(plan?.planDate).format('hh:mm')
 
-    // 공유 팝업 생성
-    const handle = () => {
+    const handleShared = () => {
         if (navigator.share) {
             navigator.share({
                 title: plan.planName,
@@ -88,10 +87,8 @@ const Detail = (props) => {
             <ScheduleBox>
                 {user.nickname === plan.writer && (
                     <div style={{position: 'relative'}}>
-                        <button onClick={handleModify}>수정
-                        </button>
-                        <button onClick={deletePlanBtn}>삭제
-                        </button>
+                        <img src='icon-edit-40px.png' onClick={handleModify}/>
+                        <img src='icon-delete-40px.png' onClick={deletePlanBtn}/>
                     </div>
                 )}
                 <h3>{planDay}</h3>
@@ -111,7 +108,7 @@ const Detail = (props) => {
             </MapBox>
             <ButtonBox>
                 {plan.writer === user.nickname ?
-                    <button onClick={handle}>
+                    <button onClick={handleShared}>
                         공유하기
                     </button>
                     :
@@ -155,20 +152,26 @@ const ScheduleBox = styled.div`
   height: 35vh;
   margin: auto;
 
-  h3 {
-    padding: 10px 0 5px 10px;
+  h3: first-of-type {
+    padding: 16px 10px;
     font-size: 24px;
     font-weight: bold;
   }
-
-  p {
-    padding: 10px;
+  
+  h3 {
+    font-size: 24px;
+    font-weight: bold;
+    padding: 0 10px 16px 10px
   }
+  
+  P {
+    padding: 10px;
+  };
 
-  button: first-of-type {
+  img: first-of-type {
     position: absolute;
     right: 42.67px;
-  } button {
+  } img {
     position: absolute;
     right: 0;
     margin: 8px;
