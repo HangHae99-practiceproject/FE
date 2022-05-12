@@ -9,9 +9,9 @@ import Test from "./Test";
 
 const Detail = (props) => {
     const {planUrl} = useParams();
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
     const user = useSelector(state => state.user.user.data)
     const plan = useSelector(state => state.plan.showplan)
     useEffect(() => {
