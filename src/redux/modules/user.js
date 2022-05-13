@@ -20,8 +20,7 @@ export const signUp = createAsyncThunk(
                 withCredentials: false,
             })
             console.log(res)
-            window.alert(res.data.message)
-            navigate('/login')
+            navigate('/complete')
             return {
                 data: res.data,
                 status: res.status
@@ -41,6 +40,7 @@ export const login = createAsyncThunk(
             const res = await postApi('/user/login', data, {
                 withCredentials: false,
             })
+            console.log(res)
             localStorage.setItem('token', res.headers.authorization)
             setCookie(res.data.id, res.data.nickname)
             navigate('/main')

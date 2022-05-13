@@ -17,7 +17,7 @@ const Home = () => {
             <img className='logo' src='logo-619.svg'/>
 
             <OnBoardingBox>
-                <img src='onBoarding.png'/>
+                <img src='Spread Love(Onboarding).png'/>
             </OnBoardingBox>
 
             <LoginDiv>

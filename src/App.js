@@ -4,7 +4,7 @@ import { createGlobalStyle } from "styled-components";
 
 //pages
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import SignUp from "./pages/SignUp";
 import Main from "./pages/Main";
 import Detail from "./pages/Detail";
 import PastPlan from "./pages/PastPlan";
@@ -24,6 +24,7 @@ import { deleteToken, getToken} from 'firebase/messaging'
 
 //cookie
 import { getCookie, deleteCookie, setCookie } from "./shared/utils/Cookie";
+import CompleteSignup from "./pages/CompleteSignup";
 
 function App() {
     const dispatch = useDispatch();
@@ -72,7 +73,8 @@ function App() {
         <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path="/login" element={<Login/>}/>
-          <Route path="/signup" element={<Signup/>}/>
+          <Route path="/signup" element={<SignUp/>}/>
+          <Route path="/complete" element={<CompleteSignup/>}/>
           <Route path="/add" element={<AddPlans/>}/>
           <Route path="/main" element={<Main/>}/>
           <Route path="/detail/:planUrl" element={<Detail/>}/>

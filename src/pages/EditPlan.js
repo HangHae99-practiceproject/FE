@@ -43,7 +43,8 @@ const EditPlan = (props) => {
             setName(plan.planName)
             setTime(formatTime(plan.planDate))
             setDate(plan.planDate)
-            setPenalty(plan.penalty)
+            const penaltyData = penaltyModel.find((model) => model.value === plan.penalty)
+            setPenalty(penaltyData)
             setPlace(plan.locationDetail)
             const momentDate = moment(plan.planDate)
             const _hour = momentDate.hour()
@@ -70,8 +71,8 @@ const EditPlan = (props) => {
     const changeName = (e) => {
         setName(e.target.value)
     }
-    const changePenalty = (e) => {
-        setPenalty(e.target.value)
+    const changePenalty = () => {
+        setPenalty(penaltyModel.value)
     }
 
     const editPlanBtn = () => {
@@ -79,7 +80,7 @@ const EditPlan = (props) => {
             return
         }
         const data = {
-            planId : planUrl,
+            planUrl,
             planName: name,
             planDate: `${formatDate(date)} ${formatTime(time)}`,
             location: place,
@@ -152,7 +153,7 @@ const EditPlan = (props) => {
             <InputBox>
                 <input
                     readOnly
-                    value={formatTime(time)}
+                    value={time}
                     placeholder={planTime}
                     onClick={handleEditTimeModal}
                 />
@@ -182,11 +183,8 @@ const EditPlan = (props) => {
                 {/*/>*/}
                 <DropdownList
                     style={{
-                        border: '1px solid #c4c4c4',
                         width: '100%',
-                        padding: '12px 12px',
                         margin: '14px auto 0 auto',
-                        borderRadius: '10px',
                         background: '#ffffff'}}
                     dataKey="id"
                     textField="value"

@@ -21,45 +21,45 @@ const Main = (props) => {
     const [meventSource, msetEventSource] = useState(undefined);
     let eventSource = undefined;
 
-    useEffect(() => {
-    console.log("매번 실행되는지");
-    console.log("listening", listening);
-
-    if (!listening) {
-      eventSource = new EventSource("http://localhost:3000/event"); //구독
-      msetEventSource(eventSource);
-      //Custom listener
-      // eventSource.addEventListener("Progress", (event) => {
-      //   const result = JSON.parse(event.data);
-      //   console.log("received:", result);
-      //   setData(result)
-      // });
-      console.log("eventSource", eventSource);
-      eventSource.onopen = event => {
-        console.log("connection opened");
-      };
-      eventSource.onmessage = event => {
-        console.log("result", event.data);
-        setData(old => [...old, event.data]);
-        setValue(event.data);
-      };
-
-      eventSource.onerror = event => {
-        console.log(event.target.readyState);
-        if (event.target.readyState === EventSource.CLOSED) {
-          console.log("eventsource closed (" + event.target.readyState + ")");
-        }
-        eventSource.close();
-      };
-
-        setListening(true);
-      }
-
-      return () => {
-        eventSource.close();
-        console.log("eventsource closed");
-      };
-    }, []);
+    // useEffect(() => {
+    // // console.log("매번 실행되는지");
+    // // console.log("listening", listening);
+    //
+    // if (!listening) {
+    //   eventSource = new EventSource("http://localhost:3000/event"); //구독
+    //   msetEventSource(eventSource);
+    //   //Custom listener
+    //   // eventSource.addEventListener("Progress", (event) => {
+    //   //   const result = JSON.parse(event.data);
+    //   //   console.log("received:", result);
+    //   //   setData(result)
+    //   // });
+    //   // console.log("eventSource", eventSource);
+    //   eventSource.onopen = event => {
+    //     // console.log("connection opened");
+    //   };
+    //   eventSource.onmessage = event => {
+    //     // console.log("result", event.data);
+    //     setData(old => [...old, event.data]);
+    //     setValue(event.data);
+    //   };
+    //
+    //   eventSource.onerror = event => {
+    //     // console.log(event.target.readyState);
+    //     if (event.target.readyState === EventSource.CLOSED) {
+    //       // console.log("eventsource closed (" + event.target.readyState + ")");
+    //     }
+    //     eventSource.close();
+    //   };
+    //
+    //     setListening(true);
+    //   }
+    //
+    //   return () => {
+    //     eventSource.close();
+    //     // console.log("eventsource closed");
+    //   };
+    // }, []);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -69,6 +69,8 @@ const Main = (props) => {
     const userData = useSelector(state => state.user.user?.data)
 
     const resetStore = useResetStore()
+
+    console.log(userData?.profileImg)
 
     const [page, setPage] = useState(1)
     const [isOpen, setMenu] = useState(false);
@@ -160,8 +162,10 @@ const Main = (props) => {
                         </button>
                     </div>
                     <div className='member'>
-                        <div className='member-img'>
-                            {userData && userData?.profileImg}
+                        <div className='member-img' style ={{
+                            backgroundImage: `url(${userData?.profileImg})`,
+                            backgroundSize: 'cover',
+                        }}>
                         </div>
                         <p>{userData?.nickname || '손'} 님</p>
                     </div>
@@ -204,9 +208,13 @@ const Main = (props) => {
                                 </div>
                             )
                         })}
-                        <AddButton onClick={() => {
+                        <img className='plus-icon' src='Plus.svg'
+                        onClick={() => {
                             navigate('/add')
-                        }}>+</AddButton>
+                        }}/>
+                        {/*<AddButton onClick={() => {*/}
+                        {/*    navigate('/add')*/}
+                        {/*}}>+</AddButton>*/}
                     </>
                 ) : (
                     <div className='no-list'>
@@ -265,16 +273,16 @@ const HeadBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     background-color: inherit;
     outline: none;
   }
 
   .menu-trigger {
     position: relative;
-    width: 20px;
-    height: 17.6px;
+    width: 30px;
+    height: 26.4px;
     cursor: pointer;
 
     &, span {
@@ -297,7 +305,7 @@ const HeadBox = styled.div`
     }
 
     span:nth-of-type(2) {
-      top: 7.7px;
+      top: 11.8px;
     }
 
     span:nth-of-type(3) {
@@ -308,7 +316,7 @@ const HeadBox = styled.div`
 
     &.active {
       span:nth-of-type(1) {
-        transform: translateY(7.8px) rotate(-45deg);
+        transform: translateY(11.6px) rotate(-45deg);
       }
 
       span:nth-of-type(2) {
@@ -316,7 +324,7 @@ const HeadBox = styled.div`
       }
 
       span:nth-of-type(3) {
-        transform: translateY(-7.8px) rotate(45deg);
+        transform: translateY(-11.6px) rotate(45deg);
       }
     }
   }
@@ -372,10 +380,10 @@ const ShowMenu = styled.div`
   
   .member-img {
     position: absolute;
-    top: -20%;
-    background-color: #eee;
-    width: 60px;
-    height: 60px;
+    top: -40%;
+    background-color: black;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
   }
 
@@ -473,25 +481,31 @@ const PlanList = styled.div`
     padding: 10px 0;
     margin-top: 20px;
   }
+  
+  .plus-icon {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+  }
 `
 
-const AddButton = styled.button`
-  background-color: #A1ED00;
-  color: black;
-  width: 50px;
-  height: 50px;
-  border: none;
-  border-radius: 50%;
-  font-size: 50px;
-  font-weight: lighter;
-  cursor: pointer;
-  position: fixed;
-  bottom: 15px;
-  right: 15px;
-
-  display: flex;
-  text-align: center;
-  justify-content: center;
-  //line-height: 50px;
-  line-height: 1;
-`
+// const AddButton = styled.button`
+//   background-color: #A1ED00;
+//   color: black;
+//   width: 50px;
+//   height: 50px;
+//   border: none;
+//   border-radius: 50%;
+//   font-size: 50px;
+//   font-weight: lighter;
+//   cursor: pointer;
+//   position: fixed;
+//   bottom: 15px;
+//   right: 15px;
+//
+//   display: flex;
+//   text-align: center;
+//   justify-content: center;
+//   //line-height: 50px;
+//   line-height: 1;
+// `

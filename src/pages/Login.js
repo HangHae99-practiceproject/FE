@@ -18,6 +18,9 @@ const Login = (props) => {
     const [pw, setPw] = useState('')
 
     const Login = () => {
+        if (username.length < 4 || username.length > 16) {
+            window.alert('아이디는 4~16자 입니다.')
+        }
         if (username === '' || pw === '') {
             window.alert('아이디, 비밀번호 모두 입력해주세요.');
         } else {
@@ -99,8 +102,9 @@ const Login = (props) => {
                         navigate('/signup')
                     }}>회원가입하기</p>
                 </SignupBox>
+
                 <LoginLogoBox>
-                    <img src='Login.png'/>
+                    <img src='party time(Log-in).png'/>
                 </LoginLogoBox>
             </Container>
         </>

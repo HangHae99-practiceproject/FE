@@ -5,8 +5,9 @@ import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
 
 import {getApi, postApi} from "../shared/api/client";
+import {BsChevronLeft} from "react-icons/bs";
 
-const Signup = (props) => {
+const SignUp = (props) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -50,97 +51,111 @@ const Signup = (props) => {
 
     return (
         <>
-            <Container>
-                <div>
-                    <h1 style={{
-                        fontWeight: 'bold',
-                        fontSize:'48px'}}
-                    >On it</h1>
-                </div>
-                <SignupText>
-                    <h2>회원가입</h2>
-                </SignupText>
+            <HeadLine>
+                <BsChevronLeft
+                    style={{
+                        position: 'absolute',
+                        padding: '20px 0',
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                        alignItems: 'flex-start'
+                    }}
+                    size="64px"
+                    cursor="pointer"
+                    onClick={() => {
+                        navigate(-1)
+                    }}
+                />
+                <h3>회원가입</h3>
+            </HeadLine>
 
-                <InputBox>
-                    <input
-                        value={username}
-                        placeholder='아이디를 입력하세요'
-                        onKeyPress={handleKeyPress}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                </InputBox>
+            <InputBox>
+                <p>아이디 입력</p>
+                <input
+                    value={username}
+                    placeholder='아이디를 입력하세요'
+                    onKeyPress={handleKeyPress}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+            </InputBox>
 
-                <InputBox>
-                    <input
-                        value={nickname}
-                        placeholder='닉네임을 입력하세요'
-                        onKeyPress={handleKeyPress}
-                        onChange={(e) => setNickname(e.target.value)}
-                    />
-                </InputBox>
+            <InputBox>
+                <p>닉네임 입력</p>
+                <input
+                    value={nickname}
+                    placeholder='닉네임을 입력하세요'
+                    onKeyPress={handleKeyPress}
+                    onChange={(e) => setNickname(e.target.value)}
+                />
+            </InputBox>
 
-                <InputBox>
-                    <input
-                        value={pw}
-                        placeholder='비밀번호를 입력하세요'
-                        type='password'
-                        onKeyPress={handleKeyPress}
-                        onChange={(e) => setPw(e.target.value)}
-                    />
-                </InputBox>
+            <InputBox>
+                <p>비밀번호 입력</p>
+                <input
+                    value={pw}
+                    placeholder='비밀번호를 입력하세요'
+                    type='password'
+                    onKeyPress={handleKeyPress}
+                    onChange={(e) => setPw(e.target.value)}
+                />
+            </InputBox>
 
-                <InputBox>
-                    <input
-                        value={pwCheck}
-                        placeholder='비밀번호를 다시 한번 입력하세요'
-                        type='password'
-                        onKeyPress={handleKeyPress}
-                        onChange={(e) => setPwCheck(e.target.value)}
-                    />
-                </InputBox>
+            <InputBox>
+                <p>비밀번호 재입력</p>
+                <input
+                    value={pwCheck}
+                    placeholder='비밀번호를 다시 한번 입력하세요'
+                    type='password'
+                    onKeyPress={handleKeyPress}
+                    onChange={(e) => setPwCheck(e.target.value)}
+                />
+            </InputBox>
 
-                <SignUpDiv>
-                    <button
-                        onClick={handleSignUp}
-                    >회원가입
-                    </button>
-                </SignUpDiv>
-            </Container>
+            <SignUpDiv>
+                <button
+                    onClick={handleSignUp}
+                >회원가입
+                </button>
+            </SignUpDiv>
         </>
     )
 }
 
-export default Signup
+export default SignUp
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 70vh;
-`
+const HeadLine = styled.div`
+  position: relative;
+  width: 100%;
+  text-align: center;
 
-const SignupText = styled.div`
-  width: 80%;
-  h2 {
-    color : #5A5A5A;
+  h3 {
     font-size: 24px;
     font-weight: bold;
-    padding: 16px 0;
+    padding-top: 20px;
+    padding-bottom: 50px;
   }
 `
 
 const InputBox = styled.div`
   display: flex;
+  flex-direction: column;
   width: 80%;
-  margin-bottom: 10px;
+  margin: 10px auto;
+  
+  p {
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 10px;
+  }
 
   input {
-    width: 100%;
-    height: 30px;
+    background-color: #eee;
     padding: 12px;
-    border: 1px solid #c4c4c4;
+    width: 100%;
+    height: 40px;
+    border: none;
     border-radius: 10px;
+    margin-bottom: 30px;
 
     &:focus {
       outline: none;
@@ -149,25 +164,28 @@ const InputBox = styled.div`
 `
 
 const SignUpDiv = styled.div`
+  position: absolute;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 80%;
-  margin-top: 15px;
+  width: 100%;
+  padding: 16px;
+  margin: 0 auto;
 
   button {
     width: 100%;
-    height: 30px;
+    height: 40px;
     border: none;
     border-radius: 10px;
     color: black;
     background-color: #A1ED00;
     cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
   }
 `
-
-
 
 
 // useEffect(() => {
