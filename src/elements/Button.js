@@ -137,7 +137,7 @@ const GreenButton = styled.button`
   ${props =>
     props.is_green
       ? `background-color:${theme.color.green};
-            color: ${theme.color.white};`
+            color: ${theme.color.black};`
       : `background-color:${theme.color.gray5};
             color: ${theme.color.gray1};
             `}
