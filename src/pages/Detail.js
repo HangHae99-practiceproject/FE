@@ -60,11 +60,7 @@ const Detail = (props) => {
     }
 
     return (
-        <div style={{
-            height: '100vh',
-            backgroundColor: '#eee'
-        }}
-        >
+        <Container>
             <HeadLine>
                 <BsChevronLeft
                     style={{
@@ -88,8 +84,8 @@ const Detail = (props) => {
             <ScheduleBox>
                 {user.nickname === plan.writer && (
                     <div style={{position: 'relative'}}>
-                        <img src='icon-edit-40px.png' onClick={handleModify}/>
-                        <img src='icon-delete-40px.png' onClick={deletePlanBtn}/>
+                        <img src='icon-edit-40px.svg' onClick={handleModify}/>
+                        <img src='icon-delete-40px.svg' onClick={deletePlanBtn}/>
                     </div>
                 )}
                 <h3>{planDay}</h3>
@@ -131,17 +127,21 @@ const Detail = (props) => {
                     )
                 }
             </ButtonBox>
-        </div>
+        </Container>
     )
 }
 
 export default Detail
 
+const Container = styled.div`
+  min-height: 100vh;
+  background-color: #eee;
+`
+
 const HeadLine = styled.div`
   position: relative;
   width: 100%;
   text-align: center;
-
   h2 {
     font-size: 24px;
     font-weight: bold;
@@ -157,23 +157,21 @@ const ScheduleBox = styled.div`
   width: 90%;
   height: 35vh;
   margin: auto;
-
+  
   h3: first-of-type {
     padding: 16px 10px;
     font-size: 24px;
     font-weight: bold;
   }
-  
+
   h3 {
     font-size: 24px;
     font-weight: bold;
     padding: 0 10px 16px 10px
   }
-
   p {
     padding: 10px;
   };
-
   img: first-of-type {
     position: absolute;
     right: 42.67px;
@@ -197,7 +195,6 @@ const ButtonBox = styled.div`
   width: 90%;
   margin: 20px auto;
   display: flex;
-
   button {
     background-color: #A1ED00;
     width: 100%;
@@ -207,7 +204,6 @@ const ButtonBox = styled.div`
     border: none;
     border-radius: 10px;
   }
-
   button + button {
     margin-left: 10px;
   }

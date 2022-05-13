@@ -70,12 +70,6 @@ const EditPlan = (props) => {
     const changeName = (e) => {
         setName(e.target.value)
     }
-    const changeTime = (e) => {
-        setTime(e.target.value)
-    }
-    const changeDate = (e) => {
-        setDate(e.target.value)
-    }
     const changePenalty = (e) => {
         setPenalty(e.target.value)
     }
@@ -93,7 +87,7 @@ const EditPlan = (props) => {
         }
         dispatch(editPlan({data, navigate}));
     }
-
+    
     const [editDateModal, setEditDateModal] = useState(false)
     const [editTimeModal, setEditTimeModal] = useState(false)
 
@@ -146,7 +140,6 @@ const EditPlan = (props) => {
                 <input
                     readOnly
                     value={formatDate(date)}
-                    onChange={changeDate}
                     placeholder={planDay}
                     onClick={handleEditDateModal}
                 />
@@ -159,8 +152,7 @@ const EditPlan = (props) => {
             <InputBox>
                 <input
                     readOnly
-                    value={time}
-                    onChange={changeTime}
+                    value={formatTime(time)}
                     placeholder={planTime}
                     onClick={handleEditTimeModal}
                 />
@@ -182,20 +174,27 @@ const EditPlan = (props) => {
                 />
             </InputBox>
 
-            <InputBox>
-                <input
-                    value={penalty}
-                    placeholder={plan.penalty}
-                    onChange={changePenalty}
-                />
-                {/*<DropdownList*/}
-                {/*    dataKey="id"*/}
-                {/*    textField="value"*/}
+            <DropBox>
+                {/*<input*/}
                 {/*    value={penalty}*/}
+                {/*    placeholder={plan.penalty}*/}
                 {/*    onChange={changePenalty}*/}
-                {/*    data={penaltyModel}*/}
                 {/*/>*/}
-            </InputBox>
+                <DropdownList
+                    style={{
+                        border: '1px solid #c4c4c4',
+                        width: '100%',
+                        padding: '12px 12px',
+                        margin: '14px auto 0 auto',
+                        borderRadius: '10px',
+                        background: '#ffffff'}}
+                    dataKey="id"
+                    textField="value"
+                    value={penalty}
+                    onChange={changePenalty}
+                    data={penaltyModel}
+                />
+            </DropBox>
 
             <Grid bottom="0" padding="16px">
                 <button
@@ -208,6 +207,7 @@ const EditPlan = (props) => {
                         color: 'black',
                         border: 'none',
                         borderRadius: '10px',
+                        cursor: "pointer",
                     }}>수정완료
                 </button>
             </Grid>
@@ -244,4 +244,10 @@ const InputBox = styled.div`
     border-radius: 10px;
     background: #ffffff;
   }
+`
+
+const DropBox = styled.div`
+  width: 90%;
+  margin: auto;
+  box-sizing: border-box;
 `

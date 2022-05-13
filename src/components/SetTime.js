@@ -101,13 +101,14 @@ const SetTime = ({setDate, setTime, clickHandler}) => {
             <Grid bottom="0" padding="16px">
                 <button
                     style={{
-                        backgroundColor: !_date || !_time ? '#eee' : '#A1ED00',
+                        backgroundColor: '#A1ED00',
                         width: '100%',
                         height: '100%',
                         padding: '12px',
                         color: 'black',
                         border: 'none',
                         borderRadius: '10px',
+                        opacity: !_date || !_time ? 0.3 : 1
                     }}
                     onClick={handleNext}>다음으로
                 </button>
@@ -115,5 +116,5 @@ const SetTime = ({setDate, setTime, clickHandler}) => {
         </React.Fragment>
     )
 }
-
+// !_date || !_time ? '#eee' : '#A1ED00'
 export default SetTime;
