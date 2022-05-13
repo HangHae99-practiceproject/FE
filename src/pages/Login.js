@@ -1,13 +1,14 @@
 import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import styled from "styled-components";
 
-import {login, setLoading, setUserName} from "../redux/modules/user";
+import {login, login2, setLoading, setUserName} from "../redux/modules/user";
 import {KAKAO_AUTH_URL} from "../service/OAuth";
 import {BsChevronLeft} from "react-icons/bs";
 
 const Login = (props) => {
+    const {join} = useParams();
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -18,17 +19,27 @@ const Login = (props) => {
     const [pw, setPw] = useState('')
 
     const Login = () => {
-        if (username.length < 4 || username.length > 16) {
-            window.alert('아이디는 4~16자 입니다.')
+        if (join) {
+            if (username === '' || pw === '') {
+                window.alert('아이디, 비밀번호 모두 입력해주세요.');
+            } else {
+                const loginData = {
+                    username,
+                    password: pw,
+                };
+                dispatch(login2({data: loginData, join, navigate}));
+            }
         }
-        if (username === '' || pw === '') {
-            window.alert('아이디, 비밀번호 모두 입력해주세요.');
-        } else {
-            const loginData = {
-                username,
-                password: pw,
-            };
-            dispatch(login({data: loginData, navigate}));
+        if(!join){
+            if (username === '' || pw === '') {
+                window.alert('아이디, 비밀번호 모두 입력해주세요.');
+            } else {
+                const loginData = {
+                    username,
+                    password: pw,
+                };
+                dispatch(login({data: loginData, navigate}));
+            }
         }
     };
 

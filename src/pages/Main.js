@@ -22,9 +22,9 @@ const Main = (props) => {
     let eventSource = undefined;
 
     // useEffect(() => {
-    // // console.log("매번 실행되는지");
-    // // console.log("listening", listening);
-    //
+    // console.log("매번 실행되는지");
+    // console.log("listening", listening);
+
     // if (!listening) {
     //   eventSource = new EventSource("http://localhost:3000/event"); //구독
     //   msetEventSource(eventSource);
@@ -34,30 +34,30 @@ const Main = (props) => {
     //   //   console.log("received:", result);
     //   //   setData(result)
     //   // });
-    //   // console.log("eventSource", eventSource);
+    //   console.log("eventSource", eventSource);
     //   eventSource.onopen = event => {
-    //     // console.log("connection opened");
+    //     console.log("connection opened");
     //   };
     //   eventSource.onmessage = event => {
-    //     // console.log("result", event.data);
+    //     console.log("result", event.data);
     //     setData(old => [...old, event.data]);
     //     setValue(event.data);
     //   };
-    //
+
     //   eventSource.onerror = event => {
-    //     // console.log(event.target.readyState);
+    //     console.log(event.target.readyState);
     //     if (event.target.readyState === EventSource.CLOSED) {
-    //       // console.log("eventsource closed (" + event.target.readyState + ")");
+    //       console.log("eventsource closed (" + event.target.readyState + ")");
     //     }
     //     eventSource.close();
     //   };
-    //
+
     //     setListening(true);
     //   }
-    //
+
     //   return () => {
     //     eventSource.close();
-    //     // console.log("eventsource closed");
+    //     console.log("eventsource closed");
     //   };
     // }, []);
 
@@ -69,8 +69,6 @@ const Main = (props) => {
     const userData = useSelector(state => state.user.user?.data)
 
     const resetStore = useResetStore()
-
-    console.log(userData?.profileImg)
 
     const [page, setPage] = useState(1)
     const [isOpen, setMenu] = useState(false);
@@ -209,12 +207,9 @@ const Main = (props) => {
                             )
                         })}
                         <img className='plus-icon' src='Plus.svg'
-                        onClick={() => {
-                            navigate('/add')
-                        }}/>
-                        {/*<AddButton onClick={() => {*/}
-                        {/*    navigate('/add')*/}
-                        {/*}}>+</AddButton>*/}
+                             onClick={() => {
+                                 navigate('/add')
+                             }}/>
                     </>
                 ) : (
                     <div className='no-list'>
@@ -258,7 +253,7 @@ const HeadBox = styled.div`
   padding: 10px 0;
   display: flex;
   justify-content: flex-end;
-  
+
   .hamburger-bell {
     height: 100%;
     width: 40%;
@@ -377,11 +372,11 @@ const ShowMenu = styled.div`
     margin: 10px auto;
     cursor: pointer;
   }
-  
+
   .member-img {
     position: absolute;
     top: -40%;
-    background-color: black;
+    background-color: #eee;
     width: 70px;
     height: 70px;
     border-radius: 50%;
@@ -467,7 +462,7 @@ const PlanList = styled.div`
     font-weight: bold;
     font-size: 20px;
   }
-  
+
   h3 + h3 {
     padding-bottom: 16px;
   }

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk'
 import styled from 'styled-components';
 import { dest_marker } from '../img';
+import { useNavigate } from 'react-router-dom';
 
 const Test = (props) => {
+    const nav = useNavigate();
     const [state, setState] = useState({
         center: {
             lat: props.lat,
@@ -46,6 +48,11 @@ const Test = (props) => {
                         {props.name}
                     </Dest>
                     </CustomOverlayMap>
+                    {props.ws ?
+                    <Share onClick={()=> nav(`/details/${props.ws}`)}>실시간 위치 공유</Share>
+                    :
+                    null
+                    }
             </Map>
         </>
     )
@@ -59,4 +66,15 @@ border-radius: 5px;
 margin-bottom: 110px;
 `;
 
+const Share = styled.button`
+position: absolute;
+left: 33%;
+right: 33%;
+bottom: 120px;
+z-index: 2;
+background: black;
+color: white;
+border: 0px;
+border-radius: 7px;
+`;
 export default Test;

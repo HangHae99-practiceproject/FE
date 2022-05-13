@@ -13,6 +13,7 @@ import Home from "./pages/Home";
 import PlanSetName from "./pages/PlanSetName";
 import EditPlan from "./pages/EditPlan";
 import OAuthHandler from "./service/OAuthHandler";
+import CompleteSignup from "./pages/CompleteSignup";
 
 //redux
 import { setFCMToken } from "./redux/modules/user";
@@ -24,7 +25,6 @@ import { deleteToken, getToken} from 'firebase/messaging'
 
 //cookie
 import { getCookie, deleteCookie, setCookie } from "./shared/utils/Cookie";
-import CompleteSignup from "./pages/CompleteSignup";
 
 function App() {
     const dispatch = useDispatch();
@@ -32,61 +32,62 @@ function App() {
     const userNick = document.cookie.split("=")[1];
     const browsernoti = Notification.permission === 'granted' ? true : false;
 
-  useEffect(() => {
-        if(islogin) {
-          if (!browsernoti) {
-          console.log('알람을 받을수 없다')
-          const data = {
-            token: '',
-          };
-          console.log(data)
-          getToken(messaging, {
-            vapidKey: "BLg2NeG06gdfa1DbdDn1E6VFSD8a82zuaxgPXS5drdMaqUSf_lY421iglOkbev53HaDsl2jkw5vxgMaA4b6wfug",
-          }).then(token => {
-            deleteToken(messaging).then(() => {
-              console.log('deleteFCMtoken');
-              localStorage.removeItem('FCMtoken');
-            });
-          });
-          dispatch(setFCMToken(data));
-          return;
-        } else {
-          console.log('noti 토큰 보냄');
-          getToken(messaging, {
-            vapidKey: "BLg2NeG06gdfa1DbdDn1E6VFSD8a82zuaxgPXS5drdMaqUSf_lY421iglOkbev53HaDsl2jkw5vxgMaA4b6wfug",
-          }).then(token => {
-            console.log(token);
-            localStorage.setItem('FCMtoken', token);
-            const data = {
-              token: localStorage.getItem('FCMtoken'),
-            };
-            dispatch(setFCMToken(data));
-          });
-        }
-        } return;
-      },
-  [islogin])
+    useEffect(() => {
+            if(islogin) {
+                if (!browsernoti) {
+                    console.log('알람을 받을수 없다')
+                    const data = {
+                        token: '',
+                    };
+                    console.log(data)
+                    getToken(messaging, {
+                        vapidKey: "BLg2NeG06gdfa1DbdDn1E6VFSD8a82zuaxgPXS5drdMaqUSf_lY421iglOkbev53HaDsl2jkw5vxgMaA4b6wfug",
+                    }).then(token => {
+                        deleteToken(messaging).then(() => {
+                            console.log('deleteFCMtoken');
+                            localStorage.removeItem('FCMtoken');
+                        });
+                    });
+                    dispatch(setFCMToken(data));
+                    return;
+                } else {
+                    console.log('noti 토큰 보냄');
+                    getToken(messaging, {
+                        vapidKey: "BLg2NeG06gdfa1DbdDn1E6VFSD8a82zuaxgPXS5drdMaqUSf_lY421iglOkbev53HaDsl2jkw5vxgMaA4b6wfug",
+                    }).then(token => {
+                        console.log(token);
+                        localStorage.setItem('FCMtoken', token);
+                        const data = {
+                            token: localStorage.getItem('FCMtoken'),
+                        };
+                        dispatch(setFCMToken(data));
+                    });
+                }
+            } return;
+        },
+        [islogin])
 
-  return (
-      <>
-        <GlobalStyle/>
-        <Routes>
-          <Route path='/' element={<Home/>}/>
-          <Route path="/login" element={<Login/>}/>
-          <Route path="/signup" element={<SignUp/>}/>
-          <Route path="/complete" element={<CompleteSignup/>}/>
-          <Route path="/add" element={<AddPlans/>}/>
-          <Route path="/main" element={<Main/>}/>
-          <Route path="/detail/:planUrl" element={<Detail/>}/>
-          <Route path="/details/:url" element={<PlanSetName islogin={islogin} userNick={userNick} />} />
-          <Route path="/past" element={<PastPlan/>}/>
-          <Route path="/edit/:planUrl" element={<EditPlan/>}/>
-          <Route path="/users/kakao/callback" element={<OAuthHandler/>}/>
-        </Routes>
-        <GlobalStyle/>
-      </>
-
-  );
+    return (
+        <>
+            <GlobalStyle/>
+            <Routes>
+                <Route path='/' element={<Home/>}/>
+                <Route path="/login" element={<Login/>}>
+                    <Route path=":join" element={<Login/>} />
+                </Route>
+                <Route path="/signup" element={<SignUp/>}/>
+                <Route path="/complete" element={<CompleteSignup/>}/>
+                <Route path="/add" element={<AddPlans/>}/>
+                <Route path="/main" element={<Main/>}/>
+                <Route path="/detail/:planUrl" element={<Detail/>}/>
+                <Route path="/details/:url" element={<PlanSetName islogin={islogin} userNick={userNick} />} />
+                <Route path="/past" element={<PastPlan/>}/>
+                <Route path="/edit/:planUrl" element={<EditPlan/>}/>
+                <Route path="/users/kakao/callback" element={<OAuthHandler/>}/>
+            </Routes>
+            <GlobalStyle/>
+        </>
+    );
 }
 
 const GlobalStyle = createGlobalStyle`

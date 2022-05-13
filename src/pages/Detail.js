@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {useNavigate, useParams} from "react-router-dom";
-import {editPlan, deletePlan, getOnePlan} from "../redux/modules/plan";
+import {editPlan, deletePlan, getOnePlan, joinPlan} from "../redux/modules/plan";
 import {useDispatch, useSelector} from "react-redux";
 import {BsChevronLeft} from "react-icons/bs";
 import moment from "moment";
@@ -11,21 +11,18 @@ const Detail = (props) => {
     const {planUrl} = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const user = useSelector(state => state.user.user.data)
+    const user = useSelector(state => state?.user?.user?.data)
     const plan = useSelector(state => state.plan.showplan)
-
+    console.log(plan)
+    const token = localStorage.getItem("token")
     const planDay = moment(plan?.planDate).format('YYYY년 MM월 DD일')
     const planTime = moment(plan?.planDate).format('hh:mm')
-    const url = window.location.href.split("/")
-    url[3] = 'details'
-    const wsUrl = url.join("/")
-
     const handleShared = () => {
         if (navigator.share) {
             navigator.share({
                 title: plan.planName,
                 text: plan.planName,
-                url: wsUrl
+                url: window.location.href
             })
                 .then(() => console.log('성공'))
                 .catch((err) => console.log(err))
@@ -35,6 +32,9 @@ const Detail = (props) => {
     }
 
     useEffect(() => {
+        if (!token){
+            navigate(`/login/${planUrl}`)
+        }
         dispatch(getOnePlan(planUrl))
     }, [])
 
@@ -73,7 +73,7 @@ const Detail = (props) => {
                     size="64px"
                     cursor="pointer"
                     onClick={() => {
-                        navigate(-1)
+                        navigate(`/main`)
                     }}
                 />
                 {plan.writer === user.nickname ?
@@ -98,6 +98,7 @@ const Detail = (props) => {
                 {plan.locationDetail ? (
                     <Test
                         {...plan.locationDetail}
+                        ws={planUrl}
                     />
                 ) : (
                     <div>loading...</div>
@@ -109,17 +110,21 @@ const Detail = (props) => {
                         공유하기
                     </button>
                     :
-                    <>
-                        <button>
-                            참석하기
-                        </button>
-                        <button
-                            onClick={() => {
-                                navigate('/main')
-                            }}>
-                            거절하기
-                        </button>
-                    </>
+                    ( plan.join ?
+                        null
+                        :
+                        <>
+                            <button onClick={()=> dispatch(joinPlan(planUrl))}>
+                                참석하기
+                            </button>
+                            <button
+                                onClick={() => {
+                                    navigate('/main')
+                                }}>
+                                거절하기
+                            </button>
+                        </>
+                    )
                 }
             </ButtonBox>
         </Container>
