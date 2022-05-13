@@ -86,13 +86,12 @@ const Main = (props) => {
 
     return (
         <Container>
-            <img className='logo' src='61x61.png'/>
+            <img className='logo' src='logo-619.svg' onClick={() => {navigate('/main')}}/>
             <HeadBox>
                 <div className='hamburger-bell'>
                     <BsBell style={{
-                        fontSize: "20px",
-                        width: '30px',
-                        height: '30px',
+                        width: '40px',
+                        height: '40px',
                         padding: "5px",
                         cursor: "pointer",
                     }}/>
@@ -193,7 +192,8 @@ const Container = styled.div`
   
   .logo {
     position: absolute;
-    left: 0;
+    left: 24px;
+    top: 20px;
   }
 `
 
@@ -294,7 +294,7 @@ const UserInfo = styled.div`
 
 const ShowMenu = styled.div`
   background-color: #ddd;
-  width: 40%;
+  width: 70%;
   //height: calc(100% - 40px);
   height: 100%;
   position: fixed;
@@ -312,7 +312,7 @@ const ShowMenu = styled.div`
 
   .member {
     position: relative;
-    width: 100%;
+    width: 80%;
     height: 10%;
     border-radius: 10px;
     background-color: #fff;
@@ -338,19 +338,19 @@ const ShowMenu = styled.div`
   }
 
   .past-plan {
-    width: 100%;
+    width: 80%;
     height: 6%;
     background-color: #fff;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
+    margin: 10px auto;
     cursor: pointer;
   }
 
   .logout {
-    width: 100%;
+    width: 80%;
     height: 6%;
     background-color: #fff;
     border-radius: 10px;
@@ -358,6 +358,7 @@ const ShowMenu = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    margin: 0 auto;
   }
 `
 

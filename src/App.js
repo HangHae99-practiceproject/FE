@@ -4,7 +4,7 @@ import { createGlobalStyle } from "styled-components";
 
 //pages
 import Login from "./pages/Login";
-import Signup from "./pages/SignUp";
+import Signup from "./pages/Signup";
 import Main from "./pages/Main";
 import Detail from "./pages/Detail";
 import PastPlan from "./pages/PastPlan";

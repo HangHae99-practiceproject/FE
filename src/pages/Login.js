@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 import {login, setLoading, setUserName} from "../redux/modules/user";
 import {KAKAO_AUTH_URL} from "../service/OAuth";
+import {BsChevronLeft} from "react-icons/bs";
 
 const Login = (props) => {
     const navigate = useNavigate()
@@ -49,16 +50,25 @@ const Login = (props) => {
     return (
         <>
             <Container>
-                <div>
-                    <h1 style={{
-                        fontWeight: 'bold',
-                        fontSize:'48px'}}
-                    >On it</h1>
-                </div>
-                <LoginText>
-                    <h2>로그인</h2>
-                </LoginText>
 
+                <HeadLine>
+                    <BsChevronLeft
+                        style={{
+                            position: 'absolute',
+                            padding: '20px 0',
+                            display: 'flex',
+                            justifyContent: 'flex-start',
+                            alignItems: 'flex-start'
+                        }}
+                        size="64px"
+                        cursor="pointer"
+                        onClick={() => {
+                            navigate(-1)
+                        }}
+                    />
+                </HeadLine>
+
+                <h3 className='login-text'>로그인</h3>
                 <InputBox>
                     <input
                         placeholder='아이디를 입력하세요'
@@ -76,28 +86,22 @@ const Login = (props) => {
                     />
                 </InputBox>
 
-                <LoginDiv>
+                <LoginBox>
                     <button
                         onClick={Login}
                     >로그인
                     </button>
-                </LoginDiv>
+                </LoginBox>
 
-                <SignUpDiv>
-                    <button
-                        onClick={() => {
-                            navigate('/signup')
-                        }}
-                    >회원가입
-                    </button>
-                </SignUpDiv>
-
-                <KakaoDiv>
-                    <a href={KAKAO_AUTH_URL}>
-                        카카오로 간편 로그인
-                    </a>
-                </KakaoDiv>
-
+                <SignupBox>
+                    <span>아직 회원이 아니신가요?</span>
+                    <p onClick={() => {
+                        navigate('/signup')
+                    }}>회원가입하기</p>
+                </SignupBox>
+                <LoginLogoBox>
+                    <img src='Login.png'/>
+                </LoginLogoBox>
             </Container>
         </>
     )
@@ -106,91 +110,89 @@ const Login = (props) => {
 export default Login
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 70vh;
-`
+  position: relative;
+  height: 100vh;
 
-const LoginText = styled.div`
-  width: 80%;
-  h2 {
-    color : #5A5A5A;
+  .login-text {
+    color: black;
     font-size: 24px;
     font-weight: bold;
-    padding: 16px 0;
+    padding: 130px 0 30px 40px;
   }
+`
+
+const HeadLine = styled.div`
+  position: relative;
+  width: 80%;
+  text-align: center;
 `
 
 const InputBox = styled.div`
   display: flex;
   width: 80%;
-  margin-bottom: 10px;
+  margin: 0 auto 20px auto;
 
   input {
+    background-color: #eee;
     padding: 12px;
     width: 100%;
-    height: 30px;
-    border: 1px solid #c4c4c4;
+    height: 40px;
+    border: none;
     border-radius: 10px;
   }
 `
-const LoginDiv = styled.div`
+const LoginBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 80%;
-  margin-top: 10px;
+  margin: 0 auto 30px auto;
 
   button {
     width: 100%;
-    height: 30px;
+    height: 40px;
     border: none;
     border-radius: 10px;
     color: black;
     background-color: #A1ED00;
     cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
   }
 `
 
-const SignUpDiv = styled.div`
+const SignupBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 80%;
-  margin-top: 15px;
+  width: 90%;
+  margin: 0 auto 15px auto;
 
-  button {
-    width: 100%;
-    height: 30px;
-    border: none;
-    border-radius: 10px;
-    color: black;
-    background-color: #A1ED00;
-    cursor: pointer;
-  }
-`
-
-const KakaoDiv = styled.div`
-  background-color: #A1ED00;
-  display: flex;
-  width: 80%;
-  margin-top: 15px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-
-  a {
-    width: 100%;
-    height: 30px;
-    color: black;
-    font-size: 12px;
+  span {
     display: flex;
-    align-items: center;
     justify-content: center;
-    text-decoration-line: none;
+    margin-bottom: 10px;
+    color: black;
+  }
+
+  p {
+    display: flex;
+    justify-content: center;
+    color: black;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: underline
+  }
+`
+
+const LoginLogoBox = styled.div`
+  width: 100%;
+  height: 40%;
+
+  img {
+    width: 100%;
+    height: 100%;
   }
 `

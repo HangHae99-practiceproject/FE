@@ -80,7 +80,6 @@ export const editPlan = createAsyncThunk(
     'plan/editPlan',
     async ({data, navigate}, {rejectedWithValue}) => {
         console.log(data)
-        console.log(data.planId)
         try {
             const res = await putApi(`/member/list/${data.planId}`, data)
             console.log(res)
