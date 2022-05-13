@@ -81,9 +81,6 @@ const AddPlans = (props) => {
                     {obj[comp]}
                     {/*{getContent()}*/}
                 </Grid>
-                {/* <Grid bottom="0" padding="16px" >
-                    <Button _onClick={clickHandler}>다음으로</Button>
-                </Grid> */}
             </React.Fragment>
         )
     }
@@ -153,5 +150,4 @@ const PlanDiv = styled.div`
     font-size: 20px;
     font-weight: bold;
   }
-  
 `

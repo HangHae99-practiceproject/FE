@@ -71,7 +71,9 @@ function App() {
         <GlobalStyle/>
         <Routes>
           <Route path='/' element={<Home/>}/>
-          <Route path="/login" element={<Login/>}/>
+          <Route path="/login" element={<Login/>}>
+            <Route path=":join" element={<Login/>} />
+          </Route>
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/add" element={<AddPlans/>}/>
           <Route path="/main" element={<Main/>}/>

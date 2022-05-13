@@ -55,6 +55,28 @@ export const login = createAsyncThunk(
     }
 )
 
+export const login2 = createAsyncThunk(
+    'user/login',
+    async ({data, join, navigate}, {rejectedWithValue}) => {
+        try {
+            const res = await postApi('/user/login', data, {
+                withCredentials: false,
+            })
+            localStorage.setItem('token', res.headers.authorization)
+            setCookie(res.data.id, res.data.nickname)
+            navigate(`/detail/${join}`)
+            return {
+                data: res.data,
+                status: res.status
+            }
+        } catch (err) {
+            alert(err.response.data.exception)
+            return rejectedWithValue(err.response)
+        }
+    }
+)
+
+
 export const logout = createAsyncThunk(
     'user/logout',
     async (navigate, {rejectedWithValue}) => {

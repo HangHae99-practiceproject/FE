@@ -12,7 +12,6 @@ import {BsBell} from "react-icons/bs";
 
 import {logout} from "../redux/modules/user";
 import {getMorePlan, getPlan, setLoading} from "../redux/modules/plan";
-
 const Main = (props) => {
     const [listening, setListening] = useState(false);
     const [data, setData] = useState([]);
@@ -21,45 +20,45 @@ const Main = (props) => {
     const [meventSource, msetEventSource] = useState(undefined);
     let eventSource = undefined;
 
-    useEffect(() => {
-    console.log("매번 실행되는지");
-    console.log("listening", listening);
+    // useEffect(() => {
+    // console.log("매번 실행되는지");
+    // console.log("listening", listening);
 
-    if (!listening) {
-      eventSource = new EventSource("http://localhost:3000/event"); //구독
-      msetEventSource(eventSource);
-      //Custom listener
-      // eventSource.addEventListener("Progress", (event) => {
-      //   const result = JSON.parse(event.data);
-      //   console.log("received:", result);
-      //   setData(result)
-      // });
-      console.log("eventSource", eventSource);
-      eventSource.onopen = event => {
-        console.log("connection opened");
-      };
-      eventSource.onmessage = event => {
-        console.log("result", event.data);
-        setData(old => [...old, event.data]);
-        setValue(event.data);
-      };
+    // if (!listening) {
+    //   eventSource = new EventSource("http://localhost:3000/event"); //구독
+    //   msetEventSource(eventSource);
+    //   //Custom listener
+    //   // eventSource.addEventListener("Progress", (event) => {
+    //   //   const result = JSON.parse(event.data);
+    //   //   console.log("received:", result);
+    //   //   setData(result)
+    //   // });
+    //   console.log("eventSource", eventSource);
+    //   eventSource.onopen = event => {
+    //     console.log("connection opened");
+    //   };
+    //   eventSource.onmessage = event => {
+    //     console.log("result", event.data);
+    //     setData(old => [...old, event.data]);
+    //     setValue(event.data);
+    //   };
 
-      eventSource.onerror = event => {
-        console.log(event.target.readyState);
-        if (event.target.readyState === EventSource.CLOSED) {
-          console.log("eventsource closed (" + event.target.readyState + ")");
-        }
-        eventSource.close();
-      };
+    //   eventSource.onerror = event => {
+    //     console.log(event.target.readyState);
+    //     if (event.target.readyState === EventSource.CLOSED) {
+    //       console.log("eventsource closed (" + event.target.readyState + ")");
+    //     }
+    //     eventSource.close();
+    //   };
 
-        setListening(true);
-      }
+    //     setListening(true);
+    //   }
 
-      return () => {
-        eventSource.close();
-        console.log("eventsource closed");
-      };
-    }, []);
+    //   return () => {
+    //     eventSource.close();
+    //     console.log("eventsource closed");
+    //   };
+    // }, []);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -236,7 +235,6 @@ const Container = styled.div`
   background-color: #eee;
   min-height: 100vh;
   position:relative;
-  
   .logo {
     position: absolute;
     left: 0;

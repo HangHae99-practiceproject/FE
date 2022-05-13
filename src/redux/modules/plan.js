@@ -1,14 +1,11 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import {postApi, getApi, putApi, deleteApi} from "../../shared/api/client";
-import { getDatabase, ref, set } from "firebase/database";
-import { app } from '../../firebase'
 
 export const getPlan = createAsyncThunk(
     'plan/getPlan',
     async (userId, {rejectedWithValue}) => {
         try {
             const res = await getApi(`/member/list/${userId}/1`)
-            console.log(res)
             return res.data.data
         } catch (err) {
             // window.alert(err.response.data.message)
@@ -76,6 +73,19 @@ export const addPlan = createAsyncThunk(
     }
 )
 
+export const joinPlan = createAsyncThunk(
+    'plan/joinPlan',
+    async (url, {rejectWithValue}) => {
+        try {
+            const res = await postApi(`/invitation/${url}`)
+            return res.data
+        } catch (err) {
+            console.log(err)
+            return rejectWithValue(err.response)
+        }
+    }
+)
+
 export const editPlan = createAsyncThunk(
     'plan/editPlan',
     async ({data, navigate}, {rejectedWithValue}) => {
@@ -109,6 +119,23 @@ export const deletePlan = createAsyncThunk(
         }
     }
 )
+
+export const setFCMTokenplan = createAsyncThunk(
+  'plan/setFCMTokenplan',
+  async (data, { rejectWithValue }) => {
+    const newdata = {
+      ...data,
+      planId: 1,
+    };
+    try {
+      return await postApi(`/api/fcm`, newdata)
+        .then(response => response.data.data);
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 
 const initialState = {
     plans: [],
@@ -173,6 +200,8 @@ export const planSlice = createSlice({
             .addCase(addPlan.fulfilled, (state, action) => {
 
             })
+            .addCase(joinPlan.fulfilled, (state, action) => {
+            })
             .addCase(editPlan.fulfilled, (state, action) => {
                 const data = {...state.showplan, ...action.payload}
                 state.showplan = data
@@ -182,6 +211,7 @@ export const planSlice = createSlice({
                 state.showplan = null
                 state.plans = state.plans.filter((plan) => plan.planId !== action.payload)
             })
+            .addCase(setFCMTokenplan.fulfilled, (state, action) => {});
     }
 })
 
