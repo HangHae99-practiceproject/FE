@@ -14,15 +14,12 @@ import Phone from './img/Phone.png'
 function App() {
     useEffect(() => {
         if (localStorage.getItem('FCMtoken')) {
-            console.log("이미 토큰이 발급됨!")
             return
         } else {
-            console.log("토큰 발급!")
             getToken(messaging, {
                 vapidKey: "BLg2NeG06gdfa1DbdDn1E6VFSD8a82zuaxgPXS5drdMaqUSf_lY421iglOkbev53HaDsl2jkw5vxgM" +
                     "aA4b6wfug"
             }).then(token => {
-                // console.log(token);
                 localStorage.setItem('FCMtoken', token);
             })
         }
@@ -101,7 +98,7 @@ const PhoneFrame = styled.div`
   position: relative;
   width: 375px;
   height: 812px;
-  
+
   @media (min-width: 360px) and (max-width: 768px) {
     width: 100%;
     height: 100%;

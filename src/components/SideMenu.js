@@ -20,11 +20,15 @@ const SideMenu = (props) => {
     const [isOpen, setMenu] = useState(false);
     const hidden = useRef(null);
 
+
+
     const logoutBtn = () => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('FCMtoken')
         resetStore()
         dispatch(logout(navigate))
+        localStorage.removeItem('FCMtoken')
+        setTimeout(() => {
+            localStorage.removeItem('token')
+        }, 50)
     };
 
     const toggleMenu = () => {

@@ -11,7 +11,6 @@ const FCMtoken = (props) => {
 
     useEffect(() => {
             if(localStorage.getItem('FCMtoken')) {
-                console.log('토큰 보냄!')
                 const data = {
                     token: localStorage.getItem('FCMtoken')
                 };

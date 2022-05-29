@@ -20,6 +20,7 @@ const Main = (props) => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
     const userData = useSelector(state => state.user.user_info)
+    const token = localStorage.getItem('token')
     const nowDate = dayjs()
         .format('YYYY년MM월DD일 dddd')
 
@@ -27,7 +28,7 @@ const Main = (props) => {
       if(userData){
         dispatch(updateUser())
       }
-      if(!localStorage.getItem('token')){
+      if(!token){
         Swal.fire({
           text: '로그인을 해주세요!',
           icon: 'error',
@@ -35,7 +36,7 @@ const Main = (props) => {
         })
         navigate('/login')
       }
-    }, [])
+    }, [userData?.profileImg])
 
     return (
         <Container>

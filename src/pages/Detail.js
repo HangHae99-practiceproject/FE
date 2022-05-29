@@ -135,10 +135,22 @@ const Detail = (props) => {
                 <h3>{planDay}</h3>
                 <h3>{planTime}</h3>
                 <p>{plan?.locationDetail?.name}</p>
-                <Penalty>
-                    <img className='bomb' alt='penalty icon' src={bomb}/>
-                    <span>{plan?.penalty}</span>
-                </Penalty>
+                <div style={{display: "flex"}}>
+                    <Penalty>
+                        <img className='bomb' alt='penalty icon' src={bomb}/>
+                        <span>{plan?.penalty}</span>
+                    </Penalty>
+                    {plan.participantList?.length > 1 ?
+                    <List>
+                        <Writer style={{backgroundImage: `url(${user.profileImg})`}}/>
+                        <Participants>
+                            <h5>+{plan.participantList?.length - 1}</h5>
+                        </Participants>
+                    </List>
+                    :
+                    null
+                    }
+                </div>
             </ScheduleBox>
             <MapBox>
                 {plan.locationDetail ? (
@@ -181,6 +193,39 @@ const Detail = (props) => {
 }
 
 export default Detail
+
+const List = styled.div`
+position: relative;
+display: flex;
+margin: 0px 16px 0px auto;
+justify-content: flex-end;
+`;
+
+const Writer = styled.div`
+display: flex;
+margin-right: 16px;
+width: 32px;
+height: 32px;
+background-size: cover;
+border-radius: 16px;
+`;
+
+const Participants = styled.div`
+position: absolute;
+width: 32px;
+height: 32px;
+background: ${theme.color.gray5};
+border-radius: 16px;
+
+ h5 {
+    position: absolute;
+    font-size: 12px;
+    font-color: #747474;
+    font-weight: 700;
+    left: 25%;
+    top: 33%;
+ }
+`;
 
 const Container = styled.div`
   height: 100%;
