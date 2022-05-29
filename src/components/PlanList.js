@@ -219,7 +219,7 @@ const List = styled.div`
 
   .first {
     background-color: ${theme.color.green};
-    width: 100%;
+    //width: 100%;
     border-radius: 10px;
     padding: 12px 16px;
     margin-bottom: 16px;
@@ -231,7 +231,7 @@ const List = styled.div`
 
   .lists {
     background-color: ${theme.color.white};
-    width: 100%;
+    //width: 100%;
     border: 1px none #ddd;
     border-radius: 10px;
     padding: 12px 16px;
