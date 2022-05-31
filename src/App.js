@@ -13,15 +13,19 @@ import Phone from './img/Phone.png'
 
 function App() {
     useEffect(() => {
-        if (localStorage.getItem('FCMtoken')) {
+        if (localStorage.getItem('FCMtoken') || !messaging ) {
             return
         } else {
-            getToken(messaging, {
-                vapidKey: "BLg2NeG06gdfa1DbdDn1E6VFSD8a82zuaxgPXS5drdMaqUSf_lY421iglOkbev53HaDsl2jkw5vxgM" +
-                    "aA4b6wfug"
-            }).then(token => {
-                localStorage.setItem('FCMtoken', token);
-            })
+            try {
+                getToken(messaging, {
+                    vapidKey: "BLg2NeG06gdfa1DbdDn1E6VFSD8a82zuaxgPXS5drdMaqUSf_lY421iglOkbev53HaDsl2jkw5vxgM" +
+                        "aA4b6wfug"
+                }).then(token => {
+                    localStorage.setItem('FCMtoken', token);
+                })
+            } catch ( error ) {
+                throw error
+            }
         }
     }, [])
     const isMobile = useIsMobile()

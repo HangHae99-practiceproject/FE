@@ -15,12 +15,10 @@ const PastPlan = (props) => {
     const [page, setPage] = useState(1)
 
     const pastPlan = useSelector(state => state.plan.plans)
-    // console.log(pastPlan)
+    console.log(pastPlan)
 
     useEffect(() => {
-        if (pastPlan?.status === 1) {
-            dispatch(getHistoryPlan(page))
-        }
+        dispatch(getHistoryPlan(page))
     }, [pastPlan])
 
     return (

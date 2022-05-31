@@ -7,6 +7,7 @@ import {logout} from "../redux/modules/user";
 import {useNavigate} from "react-router-dom";
 import {editPic} from "../img";
 import {ReactComponent as Logo} from '../img/icon/logo-619.svg'
+import Standard from '../img/icon/Standard.svg'
 import MobilePortal from "./MobilePortal";
 import {changePic} from "../redux/modules/user";
 import theme from "../styles/theme";
@@ -110,8 +111,8 @@ const SideMenu = (props) => {
                         <div className='link'
                              onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSdWEil2no-Yr36o5IdMrNLpLfgvt1DPUyUC3cPyQ72GFoBSPQ/viewform', '_blank')}
                         >
-                            <p>설문조사 참여하고 <br/> 선물 받아 가세요!</p>
                         </div>
+                        <img className='standard' alt='standard' src={Standard}/>
                     </ShowMenu>
                     <input
                         type="file"
@@ -276,24 +277,20 @@ const ShowMenu = styled.div`
   .button {
     width: 80%;
     height: 40px;
-    background-color: #fff;
+    background-color: ${theme.color.white};
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 10px auto;
+    margin: 20px auto;
     cursor: pointer;
   }
-
-  .link {
+  
+  .standard {
     width: 80%;
-    height: 40px;
-    background-color: ${theme.color.green};
-    border-radius: 10px;
+    margin: 20px auto;
     display: flex;
-    align-items: center;
     justify-content: center;
-    margin: 10px auto;
-    cursor: pointer;
+    align-items: center;
   }
 `

@@ -21,10 +21,15 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const messaging = getMessaging();
-onMessage(messaging, (payload) => {
-    console.log('Message received. ', payload);
-});
+let messaging
+try {
+    messaging = getMessaging();
+    onMessage(messaging, (payload) => {
+        console.log('Message received. ', payload);
+    });
+} catch ( error ) {
+    throw error
+}
 // if (messaging.isSupported()){
 // //알람 사용할건지 확인하는 대화상자
 // Notification
