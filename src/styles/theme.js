@@ -1,3 +1,5 @@
+import { css } from 'styled-components'
+
 const calRem = size => `${size / 16}rem`;
 
 const fontSize = {
@@ -25,33 +27,30 @@ const color = {
   // 가장 진한 색이 1이며, 숫자가 커질수록 점점 옅은 색으로 셋팅해두었습니다.
   gray1: '#5A5A5A',
   gray2: '#8C8C8C',
-  gray3: '#9E9E9E',
-  gray4: '#C4C4C4',
-  gray5: '#eee',
-  gray6: '#F8F8F8',
-  gray7: '#F5F5F5',
+  gray3: '#C4C4C4',
+  gray4: '#9E9E9E',
+  gray5: '#E9E9E9',
   orange: '#F84914',
   green: '#A1ED00',
-  green2: '#E6FFE2',
-  green3: '#73C496',
   black: '#292929',
   realblack: '#000000',
   white: '#fff',
-  red1: '#FF3030',
-  red2: '#FFF2F2',
-  BackGround: '#FBFBFB',
+  BackGround: '#363F4E',
+  mainBlue: '#5327ff',
+  mainMint: '#83ffca',
+  mainGray: '#dedfe0',
+  mint: '#bcffe2',
+  blue1: '#8689ff',
+  blue2: '#afb1ff',
+  blue3: '#d8d9ff',
+
   darkLine: '#3F4448',
   danger: '#ff8b6f',
 };
 
-export const DeviceSizes = {
-  mobile: 375,
-  laptop: 768
-}
-
 const deviceSizes = {
-  mobile: `${DeviceSizes.mobile}px`,
-  laptop: `${DeviceSizes.laptop}px`,
+  mobile: '360px',
+  laptop: '1024px',
 };
 
 const device = {
