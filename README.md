@@ -1,7 +1,6 @@
 <div align="center">
 
-# [On it] 실시간 위치 공유 기반 약속 생성 서비스
-## 온 세상을 잇다
+# [On it] 실시간 위치 공유 기반 약속 생성 서비스            
 
 ![Thumbnail](https://user-images.githubusercontent.com/101077108/171678579-8d562f5a-2ef1-4966-81d4-ae11d9bf0a77.png)
 
