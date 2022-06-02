@@ -18,8 +18,7 @@ function App() {
         } else {
             try {
                 getToken(messaging, {
-                    vapidKey: "BLg2NeG06gdfa1DbdDn1E6VFSD8a82zuaxgPXS5drdMaqUSf_lY421iglOkbev53HaDsl2jkw5vxgM" +
-                        "aA4b6wfug"
+                    vapidKey: process.env.REACT_APP_FIREBASE
                 }).then(token => {
                     localStorage.setItem('FCMtoken', token);
                 })

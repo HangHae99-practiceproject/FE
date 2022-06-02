@@ -9,7 +9,7 @@ import { getMessaging, onMessage} from 'firebase/messaging';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDTVH8fDXdgPh1vzMVd6_ihrSVCeYO6I4Q",
+  apiKey: process.env.REACT_APP_FIREBASE_API,
   authDomain: "onit-a1529.firebaseapp.com",
   projectId: "onit-a1529",
   storageBucket: "onit-a1529.appspot.com",
