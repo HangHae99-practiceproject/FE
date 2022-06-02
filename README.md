@@ -6,9 +6,9 @@
 
 
 ### `Description`
-* 실시간 위치 공유 기반 약속 생성 서비스
-> 친구들과의 약속 일정 관리            
-> 실시간 위치 공유 및 푸시 알림 서비스
+ 실시간 위치 공유 기반 약속 생성 서비스         
+ 친구들과의 약속 일정 관리            
+ 실시간 위치 공유 및 푸시 알림 서비스
 
 ### `Front-End Skill`
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
