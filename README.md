@@ -1,3 +1,5 @@
+<div align="center">
+
 # [On it] 실시간 위치 공유 기반 약속 생성 서비스
 ## 온 세상을 잇다
 
@@ -27,6 +29,8 @@
 ### `Service Demonstration Video`
 
 https://user-images.githubusercontent.com/101077108/171681910-c41d2fd9-7132-436c-99e9-58f783a31f92.mp4
+
+</div>      
 
 ### `On it Member`
 Front-End (React)  
