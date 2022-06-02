@@ -1,12 +1,15 @@
-<div align="center">
-
 # [On it] 실시간 위치 공유 기반 약속 생성 서비스
-### 온 세상을 잇다
+## 온 세상을 잇다
 
 ![Thumbnail](https://user-images.githubusercontent.com/101077108/171678579-8d562f5a-2ef1-4966-81d4-ae11d9bf0a77.png)
 
 
-### `FE Skill`
+### `Description`
+* 실시간 위치 공유 기반 약속 생성 서비스
+> 친구들과의 약속 일정 관리            
+> 실시간 위치 공유 및 푸시 알림 서비스
+
+### `Front-End Skill`
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
@@ -25,19 +28,15 @@
 
 https://user-images.githubusercontent.com/101077108/171681910-c41d2fd9-7132-436c-99e9-58f783a31f92.mp4
 
-[//]: # ([https://youtu.be/8PP4vEmwpkw]&#40;https://youtu.be/8PP4vEmwpkw&#41;)
-
-### `만든이`
-FE  
+### `On it Member`
+Front-End (React)  
 신민철 (https://github.com/alscjf2030)     
 김상윤 (https://github.com/tkddbs1008)
 
-BE      
+Back-End (Spring)      
 문현상 (https://github.com/bigtyno931128)        
 양지선 (https://github.com/zsoon96)
 
-Design      
+Designer (UX / UI)      
 박진희     
 한석민
-
-</div>
