@@ -1,9 +1,11 @@
-<div align="center">
 
 # [On it] 실시간 위치 공유 기반 약속 생성 서비스            
 
-![Thumbnail](https://user-images.githubusercontent.com/101077108/171678579-8d562f5a-2ef1-4966-81d4-ae11d9bf0a77.png)
+<img width="1200" alt="Thumbnail" src="https://user-images.githubusercontent.com/101077108/171771079-b093b623-5e04-4834-b3b7-d47133a36e05.png">
 
+### `Service Architechture`
+
+![Service Architechture](https://user-images.githubusercontent.com/101077108/171770071-48793399-092e-4016-bd6c-fbd32369e3e9.jpeg)
 
 ### `Description`
  실시간 위치 공유 기반 약속 생성 서비스         
@@ -29,7 +31,6 @@
 
 https://user-images.githubusercontent.com/101077108/171681910-c41d2fd9-7132-436c-99e9-58f783a31f92.mp4
 
-</div>      
 
 ### `On it Member`
 Front-End (React)  
