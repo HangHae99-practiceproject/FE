@@ -10,13 +10,13 @@ import { getMessaging, onMessage} from 'firebase/messaging';
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API,
-  authDomain: "onit-a1529.firebaseapp.com",
-  projectId: "onit-a1529",
-  storageBucket: "onit-a1529.appspot.com",
-  messagingSenderId: "738179248047",
-  appId: "1:738179248047:web:e52348a2b26ef46381495a",
-  measurementId: "G-4BH9SHC3SD",
-  databaseURL: "https://onit-a1529-default-rtdb.asia-southeast1.firebasedatabase.app",
+  authDomain: "onit-a8523.firebaseapp.com",
+  projectId: "onit-a8523",
+  storageBucket: "onit-a8523.appspot.com",
+  messagingSenderId: "855692695400",
+  appId: "1:855692695400:web:5c81f10e475bc9f40768dd",
+//   measurementId: "G-4BH9SHC3SD",
+//   databaseURL: "https://onit-a1529-default-rtdb.asia-southeast1.firebasedatabase.app",
 }
 
 // Initialize Firebase
